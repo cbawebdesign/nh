@@ -38,37 +38,7 @@ const PlanSelectionForm: React.FCC<{
           <EmbeddedStripeCheckout clientSecret={clientSecret as string} />
         </If>
 
-        <div className={'flex w-full flex-col space-y-8'}>
-          <PricingTable
-            CheckoutButton={(props) => {
-              return (
-                <CheckoutRedirectButton
-                  organizationId={organization.id}
-                  stripePriceId={props.stripePriceId}
-                  recommended={props.recommended}
-                  onCheckoutCreated={setClientSecret}
-                >
-                  <Trans
-                    i18nKey={'subscriptions:checkout'}
-                    defaults={'Checkout'}
-                  />
-                </CheckoutRedirectButton>
-              );
-            }}
-          />
-
-          <If condition={customerId}>
-            <div className={'flex flex-col space-y-2'}>
-              <BillingPortalRedirectButton customerId={customerId as string}>
-                <Trans i18nKey={'subscription:manageBilling'} />
-              </BillingPortalRedirectButton>
-
-              <span className={'text-xs text-gray-500 dark:text-gray-400'}>
-                <Trans i18nKey={'subscription:manageBillingDescription'} />
-              </span>
-            </div>
-          </If>
-        </div>
+    
       </IfHasPermissions>
     </div>
   );

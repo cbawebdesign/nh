@@ -1,9 +1,9 @@
 {
   "dashboardTabLabel": "Dashboard",
-  "organizationSettingsTabLabel": "Organization",
+  "organizationSettingsTabLabel": "Digital Alpha Funds",
   "settingsTabLabel": "Settings",
   "profileSettingsTabLabel": "Profile",
-  "subscriptionSettingsTabLabel": "Subscription",
+  "subscriptionSettingsTabLabel": "Notes",
   "emailAddress": "Email Address",
   "password": "Password",
   "modalConfirmationQuestion": "Are you sure you want to continue?",

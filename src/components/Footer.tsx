@@ -26,7 +26,6 @@ function Footer() {
 
               <div>
                 <p className={'text-sm text-gray-500 dark:text-gray-400'}>
-                  Add a short tagline about your product
                 </p>
               </div>
 
@@ -48,59 +47,22 @@ function Footer() {
           >
             <div>
               <div className={'flex flex-col space-y-4'}>
-                <Heading type={6}>About</Heading>
-
-                <FooterSectionList>
-                  <FooterLink>
-                    <Link href={'#'}>Who we are</Link>
-                  </FooterLink>
-                  <FooterLink>
-                    <Link href={'/blog'}>Blog</Link>
-                  </FooterLink>
-                  <FooterLink>
-                    <Link href={'/contact'}>Contact</Link>
-                  </FooterLink>
-                </FooterSectionList>
+              
               </div>
             </div>
 
             <div>
               <div className={'flex flex-col space-y-4'}>
-                <Heading type={6}>Product</Heading>
-
-                <FooterSectionList>
-                  <FooterLink>
-                    <Link href={'/docs'}>Documentation</Link>
-                  </FooterLink>
-                  <FooterLink>
-                    <Link href={'#'}>Help Center</Link>
-                  </FooterLink>
-                  <FooterLink>
-                    <Link href={'#'}>Changelog</Link>
-                  </FooterLink>
-                </FooterSectionList>
+              
               </div>
             </div>
 
             <div>
               <div className={'flex flex-col space-y-4'}>
-                <Heading type={6}>Legal</Heading>
-
-                <FooterSectionList>
-                  <FooterLink>
-                    <Link href={'#'}>Terms of Service</Link>
-                  </FooterLink>
-                  <FooterLink>
-                    <Link href={'#'}>Privacy Policy</Link>
-                  </FooterLink>
-                  <FooterLink>
-                    <Link href={'#'}>Cookie Policy</Link>
-                  </FooterLink>
-                </FooterSectionList>
+              
               </div>
             </div>
 
-            <NewsletterSignup />
           </div>
         </div>
       </Container>

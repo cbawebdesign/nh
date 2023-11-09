@@ -1,5 +1,5 @@
 {
-  "subscriptionTabSubheading": "Manage your Subscription and Billing Settings",
+  "subscriptionTabSubheading": "Digital Alpha Advisors LLC",
   "checkout": "Checkout",
   "manageBillingDescription": "Visit your Customer Portal to manage your subscription and billing.",
   "manageBilling": "Go to Customer Portal",
@@ -22,9 +22,9 @@
   "checkoutSuccessBackButton": "Proceed to App",
   "status": {
     "free": {
-      "label": "Free Plan",
-      "heading": "You're on a free plan",
-      "description": "You're on a free plan. You can upgrade to a paid plan at any time."
+      "label": "Admin",
+      "heading": "Admin Account",
+      "description": "Admin Account"
     },
     "active": {
       "label": "Active",

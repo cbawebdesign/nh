@@ -36,18 +36,18 @@ export const OrganizationInfoStep: React.FCC<{
     >
       <div className={'flex flex-col space-y-1.5'}>
         <Heading type={2}>Hi, {displayName}!</Heading>
-        <SubHeading>Let&apos;s create your organization.</SubHeading>
+        <SubHeading>Let&apos;s create your profile.</SubHeading>
       </div>
 
       <div className={'flex flex-1 flex-col space-y-4'}>
         <TextField>
           <TextField.Label>
-            Your organization&apos;s name
+            Your user&apos;s name
             <TextField.Input
               data-cy={'organization-name-input'}
               required
               name={'organization'}
-              placeholder={'Organization Name'}
+              placeholder={'User Name'}
             />
           </TextField.Label>
         </TextField>

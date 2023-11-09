@@ -14,6 +14,7 @@ import {
 } from '~/core/ui/Table';
 
 import { useUserSession } from '~/core/hooks/use-user-session';
+import { Title } from '@radix-ui/react-dialog';
 
 export default function DashboardDemo() {
   const mrr = useMemo(() => generateDemoData(), []);
@@ -29,6 +30,7 @@ export default function DashboardDemo() {
   return (
     <div className={'flex flex-col space-y-6 pb-36'}>
       <UserGreetings />
+      <p>IN DEVELOPMENT-DRAFT</p>
 
       <div
         className={
@@ -37,12 +39,12 @@ export default function DashboardDemo() {
         }
       >
         <Tile>
-          <Tile.Heading>Monthly Recurring Revenue</Tile.Heading>
+          <Tile.Heading>DAOF I</Tile.Heading>
 
           <Tile.Body>
             <div className={'flex justify-between'}>
               <Tile.Figure>{`$${mrr[1]}`}</Tile.Figure>
-              <Tile.Trend trend={'up'}>20%</Tile.Trend>
+              <Tile.Trend trend={'up'}>0%</Tile.Trend>
             </div>
 
             <Chart data={mrr[0]} />
@@ -50,7 +52,7 @@ export default function DashboardDemo() {
         </Tile>
 
         <Tile>
-          <Tile.Heading>Revenue</Tile.Heading>
+          <Tile.Heading>DAOF II</Tile.Heading>
 
           <Tile.Body>
             <div className={'flex justify-between'}>
@@ -63,7 +65,7 @@ export default function DashboardDemo() {
         </Tile>
 
         <Tile>
-          <Tile.Heading>Fees</Tile.Heading>
+          <Tile.Heading>DAF II</Tile.Heading>
 
           <Tile.Body>
             <div className={'flex justify-between'}>
@@ -76,7 +78,7 @@ export default function DashboardDemo() {
         </Tile>
 
         <Tile>
-          <Tile.Heading>New Customers</Tile.Heading>
+          <Tile.Heading>DAF II - Cash Reconciliation</Tile.Heading>
 
           <Tile.Body>
             <div className={'flex justify-between'}>
@@ -89,7 +91,7 @@ export default function DashboardDemo() {
         </Tile>
 
         <Tile>
-          <Tile.Heading>Visitors</Tile.Heading>
+          <Tile.Heading>Placeholder</Tile.Heading>
 
           <Tile.Body>
             <div className={'flex justify-between'}>
@@ -102,7 +104,7 @@ export default function DashboardDemo() {
         </Tile>
 
         <Tile>
-          <Tile.Heading>Returning Visitors</Tile.Heading>
+          <Tile.Heading>Placeholder</Tile.Heading>
 
           <Tile.Body>
             <div className={'flex justify-between'}>
@@ -115,7 +117,7 @@ export default function DashboardDemo() {
         </Tile>
 
         <Tile>
-          <Tile.Heading>Churn</Tile.Heading>
+          <Tile.Heading>Placeholder</Tile.Heading>
 
           <Tile.Body>
             <div className={'flex justify-between'}>
@@ -128,7 +130,7 @@ export default function DashboardDemo() {
         </Tile>
 
         <Tile>
-          <Tile.Heading>Support Tickets</Tile.Heading>
+          <Tile.Heading>Placeholder</Tile.Heading>
 
           <Tile.Body>
             <div className={'flex justify-between'}>
@@ -143,7 +145,7 @@ export default function DashboardDemo() {
 
       <div>
         <Tile>
-          <Tile.Heading>Active Users</Tile.Heading>
+          <Tile.Heading>Placeholder</Tile.Heading>
 
           <Tile.Body>
             <div className={'flex justify-between'}>
@@ -158,7 +160,7 @@ export default function DashboardDemo() {
 
       <div>
         <Tile>
-          <Tile.Heading>Customers</Tile.Heading>
+          <Tile.Heading>Placeholder</Tile.Heading>
 
           <Tile.Body>
             <CustomersTable></CustomersTable>
@@ -241,52 +243,52 @@ function CustomersTable() {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Customer</TableHead>
-          <TableHead>Plan</TableHead>
-          <TableHead>MRR</TableHead>
-          <TableHead>Logins</TableHead>
-          <TableHead>Status</TableHead>
+          <TableHead>Placeholder</TableHead>
+          <TableHead>Placeholder</TableHead>
+          <TableHead>Placeholder</TableHead>
+          <TableHead>Placeholder</TableHead>
+          <TableHead>Placeholder</TableHead>
         </TableRow>
       </TableHeader>
 
       <TableBody>
         <TableRow>
-          <TableCell>Pippin Oddo</TableCell>
-          <TableCell>Pro</TableCell>
-          <TableCell>$100.2</TableCell>
-          <TableCell>920</TableCell>
+          <TableCell>Placeholder</TableCell>
+          <TableCell>Placeholder</TableCell>
+          <TableCell>Placeholder</TableCell>
+          <TableCell>Placeholder</TableCell>
           <TableCell>
-            <Tile.Badge trend={'up'}>Healthy</Tile.Badge>
+            <Tile.Badge trend={'up'}>Placeholder</Tile.Badge>
           </TableCell>
         </TableRow>
 
         <TableRow>
-          <TableCell>Väinö Pánfilo</TableCell>
-          <TableCell>Basic</TableCell>
-          <TableCell>$40.6</TableCell>
-          <TableCell>300</TableCell>
+          <TableCell>Placeholder</TableCell>
+          <TableCell>Placeholder</TableCell>
+          <TableCell>Placeholder</TableCell>
+          <TableCell>Placeholder</TableCell>
           <TableCell>
-            <Tile.Badge trend={'stale'}>Possible Churn</Tile.Badge>
+            <Tile.Badge trend={'stale'}>Placeholder</Tile.Badge>
           </TableCell>
         </TableRow>
 
         <TableRow>
-          <TableCell>Giorgos Quinten</TableCell>
-          <TableCell>Pro</TableCell>
-          <TableCell>$2004.3</TableCell>
-          <TableCell>1000</TableCell>
+          <TableCell>Placeholder</TableCell>
+          <TableCell>Placeholder</TableCell>
+          <TableCell>Placeholder</TableCell>
+          <TableCell></TableCell>
           <TableCell>
-            <Tile.Badge trend={'up'}>Healthy</Tile.Badge>
+            <Tile.Badge trend={'up'}>Placeholder</Tile.Badge>
           </TableCell>
         </TableRow>
 
         <TableRow>
-          <TableCell>Adhelm Otis</TableCell>
-          <TableCell>Basic</TableCell>
-          <TableCell>$0</TableCell>
-          <TableCell>10</TableCell>
+          <TableCell>Placeholder</TableCell>
+          <TableCell>Placeholder</TableCell>
+          <TableCell>Placeholder</TableCell>
+          <TableCell>Placeholder</TableCell>
           <TableCell>
-            <Tile.Badge trend={'down'}>Churned</Tile.Badge>
+            <Tile.Badge trend={'down'}>Placeholder</Tile.Badge>
           </TableCell>
         </TableRow>
       </TableBody>
