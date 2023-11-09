@@ -49,7 +49,7 @@ const SiteNavigation = () => {
       </div>
 
       <div className={'ml-4 flex items-center lg:hidden'}>
-        <MobileDropdown />
+       
       </div>
     </>
   );
