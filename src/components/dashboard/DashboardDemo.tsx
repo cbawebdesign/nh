@@ -180,7 +180,7 @@ function UserGreetings() {
       <Heading type={4}>Welcome Back, {userDisplayName}</Heading>
 
       <p className={'text-gray-500 dark:text-gray-400'}>
-        <span>Here&apos;s what is happening in your SaaS</span>
+        <span>Here&apos;s what is happening in across your Funds</span>
       </p>
     </div>
   );
