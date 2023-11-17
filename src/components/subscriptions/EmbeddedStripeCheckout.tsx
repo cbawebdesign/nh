@@ -1,4 +1,3 @@
-import { loadStripe } from '@stripe/stripe-js';
 import { useState } from 'react';
 
 import {
@@ -29,7 +28,6 @@ if (!STRIPE_PUBLISHABLE_KEY) {
   );
 }
 
-const stripePromise = loadStripe(STRIPE_PUBLISHABLE_KEY);
 
 export default function EmbeddedStripeCheckout({
   clientSecret,
@@ -40,12 +38,7 @@ export default function EmbeddedStripeCheckout({
 }>) {
   return (
     <EmbeddedCheckoutPopup key={clientSecret} onClose={onClose}>
-      <EmbeddedCheckoutProvider
-        stripe={stripePromise}
-        options={{ clientSecret }}
-      >
-        <EmbeddedCheckout className={'EmbeddedCheckoutClassName'} />
-      </EmbeddedCheckoutProvider>
+
     </EmbeddedCheckoutPopup>
   );
 }
