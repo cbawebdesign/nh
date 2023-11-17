@@ -72,6 +72,7 @@ const configuration = {
     emailLinkSignIn: '/auth/link',
     onboarding: `/onboarding`,
     appHome: '/dashboard',
+    fundone: '/fundone',
     settings: {
       profile: '/settings/profile',
       authentication: '/settings/profile/authentication',

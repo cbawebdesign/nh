@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://localhost:3000</id>
     <title>Digital Alpha</title>
-    <updated>2023-11-09T09:54:41.160Z</updated>
+    <updated>2023-11-17T09:43:32.186Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <author>
         <name/>

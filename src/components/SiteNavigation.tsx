@@ -44,12 +44,11 @@ const SiteNavigation = () => {
             link={links.SignIn}
           />
 
-       
+         
         </NavigationMenu>
       </div>
 
       <div className={'ml-4 flex items-center lg:hidden'}>
-       
       </div>
     </>
   );

@@ -1,15 +1,53 @@
 import configuration from '~/configuration';
-import { Cog8ToothIcon, Squares2X2Icon } from '@heroicons/react/24/outline';
+import { Cog8ToothIcon, MagnifyingGlassPlusIcon, Squares2X2Icon } from '@heroicons/react/24/outline';
 
 const NAVIGATION_CONFIG = {
   items: [
+
+
     {
-      label: 'common:dashboardTabLabel',
-      path: configuration.paths.appHome,
+      label: 'common:daofonefllabel',
+      path: '/daofonefl',
       Icon: ({ className }: { className: string }) => {
-        return <Squares2X2Icon className={className} />;
+        return <MagnifyingGlassPlusIcon className={className} />;
       },
     },
+    {
+      label: 'common:daofonelabel',
+      path: '/daofone',
+      Icon: ({ className }: { className: string }) => {
+        return <MagnifyingGlassPlusIcon className={className} />;
+      },
+    },
+    {
+      label: 'common:daoftwofllabel',
+      path: '/daoftwofl',
+      Icon: ({ className }: { className: string }) => {
+        return <MagnifyingGlassPlusIcon className={className} />;
+      },
+    },
+    {
+      label: 'common:daoftwolabel',
+      path: '/daoftwo',
+      Icon: ({ className }: { className: string }) => {
+        return <MagnifyingGlassPlusIcon className={className} />;
+      },
+    },
+    {
+      label: 'common:daftwofllabel',
+      path: '/fundone',
+      Icon: ({ className }: { className: string }) => {
+        return <MagnifyingGlassPlusIcon className={className} />;
+      },
+    },
+    {
+      label: 'common:daftwolabel',
+      path: '/daftwo',
+      Icon: ({ className }: { className: string }) => {
+        return <MagnifyingGlassPlusIcon className={className} />;
+      },
+    },
+
     {
       label: 'common:settingsTabLabel',
       path: '/settings',
@@ -17,6 +55,7 @@ const NAVIGATION_CONFIG = {
         return <Cog8ToothIcon className={className} />;
       },
     },
+ 
   ],
 };
 

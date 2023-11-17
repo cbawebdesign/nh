@@ -1,0 +1,34 @@
+/* Add this class to the container div in your React code */
+.tablesContainer {
+  display: flex; /* Make the container a flex container */
+}
+
+/* You can remove these styles since we're handling the layout using flexbox */
+
+
+/* You can keep or remove this style based on your needs */
+.dataInputRow label {
+  /* Adjust if needed or remove */
+  margin-right: 10px;
+  text-align: left; /* Align label text */
+}
+
+/* Remove width since we're handling the layout using flexbox */
+.dataInput {
+  margin-right: 10px;
+  padding: 5px;
+  color: blue;
+}
+
+/* Keep this style as it's used to display rows as flex containers */
+.dataInputRow {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.tableTitle {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333; /* Adjust the color as needed */
+}
