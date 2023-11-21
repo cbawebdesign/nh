@@ -120,37 +120,43 @@ const StackedBarChart = () => {
     { name: 'Q4-2024P', Starlite: 5, UnitasGlobal: 10, WeLink: 8.0, FeesActual: 1.9, FeeReserve:5.6, DryPowder: 44.6 }
   ]);
   const handleDataChange = (page: string, key: keyof typeof chartData[0], value: string) => {
-    // Find the index of the selected data
+    // Find the index of the selected quarter
     const pageIndex = chartData.findIndex(item => item.name === page);
   
     if (pageIndex === -1) {
-      // Data for the selected page is not found
+      // Data for the selected quarter is not found
       return;
     }
   
     // Convert the value to a number
     const numericValue = parseFloat(value);
   
-    // Calculate the change in value for the selected key
+    // Get the current page data
     const currentPageData = chartData[pageIndex];
   
     if (!currentPageData) {
       return;
     }
   
-    // Convert the current value to a number
-    const currentValue = currentPageData[key] as number;
-  
     // Calculate the change in value
-    const changeInValue = numericValue - (currentValue || 0);
+    const changeInValue = numericValue - (currentPageData[key] as number);
   
-    // Update the selected key and 'DryPowder'
+    // Create a new array to update the state
     const updatedData = chartData.map((item, index) => {
       if (index === pageIndex) {
+        // Update the current quarter
         return {
           ...item,
           [key]: numericValue,
           DryPowder: (item.DryPowder || 0) - changeInValue,
+        };
+      } else if (index > pageIndex) {
+        // Update every subsequent quarter
+        const nextQuarterData = chartData[index];
+        return {
+          ...nextQuarterData,
+          [key]: (nextQuarterData[key] as number) + changeInValue,
+          DryPowder: (nextQuarterData.DryPowder || 0) - changeInValue,
         };
       }
       return item;
@@ -169,8 +175,9 @@ const StackedBarChart = () => {
   return (
 <div className={`flex flex-col space-y-6 pb-36 ${styles.tablesContainer}`}>
   {/* ... */}
-  <div className={`flex ${styles.tableWrapper}`}>
 
+  <div className={`flex ${styles.tableWrapper}`}>
+<h1>Inputs</h1>
     <div className={styles.table}>
       <Table>
         <TableHeader>
@@ -243,8 +250,8 @@ const StackedBarChart = () => {
         </TableBody>
       </Table>
     </div>
+<h1>Outputs</h1>
     <div className={styles.tableWrapper}>
-
 
     <div className={styles.table}>
       {/* Second table code */}
