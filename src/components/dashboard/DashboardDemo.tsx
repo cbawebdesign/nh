@@ -39,7 +39,7 @@ export default function DashboardDemo() {
         }
       >
         <Tile>
-          <Tile.Heading>Cummulative Fund Metrics</Tile.Heading>
+          <Tile.Heading>New Customers</Tile.Heading>
 
           <Tile.Body>
             <div className={'flex justify-between'}>
@@ -52,7 +52,7 @@ export default function DashboardDemo() {
         </Tile>
 
         <Tile>
-          <Tile.Heading>Portfolio Company Metrics</Tile.Heading>
+          <Tile.Heading>Existing Customers</Tile.Heading>
 
           <Tile.Body>
             <div className={'flex justify-between'}>
@@ -65,7 +65,7 @@ export default function DashboardDemo() {
         </Tile>
 
         <Tile>
-          <Tile.Heading>Placeholder</Tile.Heading>
+          <Tile.Heading>Outgoing Files</Tile.Heading>
 
           <Tile.Body>
             <div className={'flex justify-between'}>
@@ -78,7 +78,7 @@ export default function DashboardDemo() {
         </Tile>
 
         <Tile>
-          <Tile.Heading>Placeholder</Tile.Heading>
+          <Tile.Heading>Incoming Files</Tile.Heading>
 
           <Tile.Body>
             <div className={'flex justify-between'}>
