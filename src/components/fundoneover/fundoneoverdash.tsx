@@ -15,7 +15,7 @@ import {
 import { useUserSession } from '~/core/hooks/use-user-session';
 import { BarChart, Bar, CartesianGrid, YAxis, Tooltip, Legend } from 'recharts';
 
-import styles from './FundOneOver.module.css'; // Import your CSS file
+import styles from './fundoneover.module.css'; // Import your CSS file
 
 export default function FundOneOver() {
   const mrr = useMemo(() => generateDemoData(), []);
