@@ -202,130 +202,136 @@ const StackedBarChart = () => {
   
   // Inside your component
   const currentYear = new Date().getFullYear();
-  
   return (
-    <div className={`flex flex-col space-y-6 pb-36 ${styles.tablesContainer}`}>
-      <div className={`flex ${styles.tableWrapper}`}>
-        <h1>Inputs</h1>
-        <div className={styles.table}>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Quarter</TableHead>
-                <TableHead>Starlite</TableHead>
-                <TableHead>UnitasGlobal</TableHead>
-                <TableHead>WeLink</TableHead>
-                <TableHead>FeesActual</TableHead>
-                <TableHead>FeeReserve</TableHead>
-                <TableHead>DryPowder</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
+<div className={`flex flex-col space-y-6 pb-36 ${styles.tablesContainer}`}>
+  {/* ... */}
+
+  <div className={`flex ${styles.tableWrapper}`}>
+    <div>
+  <h1>Input: Incremental Deployment by Quarter</h1>
+    <div className={styles.table}>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Quarter</TableHead>
+            <TableHead>Starlite</TableHead>
+            <TableHead>UnitasGlobal</TableHead>
+            <TableHead>WeLink</TableHead>
+            <TableHead>FeesActual</TableHead>
+            <TableHead>FeeReserve</TableHead>
+            <TableHead>DryPowder</TableHead>
+
+          </TableRow>
+        </TableHeader>
+        <TableBody>
               {inputChartData.map((item, index) => (
-               <TableRow key={index}>
-               <TableCell>{item.name}</TableCell>
-               <TableCell>
-                 <input
-                   className={styles.dataInput}
-                   type="number"
-                   value={item.Starlite}
-                   onChange={(e) => handleDataChange(item.name, 'Starlite', e.target.value)}
+            <TableRow key={index}>
+              <TableCell>{item.name}</TableCell>
+              <TableCell>
+                <input
+                  className={styles.dataInput}
+                  type="number"
+                  value={item.Starlite}
+                  onChange={(e) => handleDataChange(item.name, 'Starlite', e.target.value)}
                    disabled={isPastQuarter(item.name, currentYear)}
-            
-                 />
-               </TableCell>
-               <TableCell>
-                 <input
-                   className={styles.dataInput}
-                   type="number"
-                   value={item.UnitasGlobal}
-                   onChange={(e) => handleDataChange(item.name, 'UnitasGlobal', e.target.value)}
-                   disabled={isPastQuarter(item.name, currentYear)}
-
-                 />
-               </TableCell>
-               <TableCell>
-                 <input
-                   className={styles.dataInput}
-                   type="number"
-                   value={item.WeLink}
-                   onChange={(e) => handleDataChange(item.name, 'WeLink', e.target.value)}
+                />
+              </TableCell>
+              <TableCell>
+                <input
+                  className={styles.dataInput}
+                  type="number"
+                  value={item.UnitasGlobal}
+                  onChange={(e) => handleDataChange(item.name, 'UnitasGlobal', e.target.value)}
                    disabled={isPastQuarter(item.name, currentYear)}
 
-                 />
-               </TableCell>
-               <TableCell>
-                 <input
-                   className={styles.dataInput}
-                   type="number"
-                   value={item.FeesActual}
-                   onChange={(e) => handleDataChange(item.name, 'FeesActual', e.target.value)}
+                />
+              </TableCell>
+              <TableCell>
+                <input
+                  className={styles.dataInput}
+                  type="number"
+                  value={item.WeLink}
+                  onChange={(e) => handleDataChange(item.name, 'WeLink', e.target.value)}
                    disabled={isPastQuarter(item.name, currentYear)}
 
-                 />
-               </TableCell>
-               <TableCell>
-                 <input
-                   className={styles.dataInput}
-                   type="number"
-                   value={item.FeeReserve}
-                   onChange={(e) => handleDataChange(item.name, 'FeeReserve', e.target.value)}
+                />
+              </TableCell>
+              <TableCell>
+                <input
+                  className={styles.dataInput}
+                  type="number"
+                  value={item.FeesActual}
+                  onChange={(e) => handleDataChange(item.name, 'FeesActual', e.target.value)}
+                   disabled={isPastQuarter(item.name, currentYear)}
+
+                />
+              </TableCell>
+              <TableCell>
+                <input
+                  className={styles.dataInput}
+                  type="number"
+                  value={item.FeeReserve}
+                  onChange={(e) => handleDataChange(item.name, 'FeeReserve', e.target.value)}
                    disabled={true}
 
-                 />
-               </TableCell>
-               <TableCell>
-                 <input
-                   className={styles.dataInput}
-                   type="number"
-                   value={item.DryPowder}
-                   onChange={(e) => handleDataChange(item.name, 'DryPowder', e.target.value)}
+                />
+              </TableCell>
+              <TableCell>
+                <input
+                  className={styles.dataInput}
+                  type="number"
+                  value={item.DryPowder}
+                  onChange={(e) => handleDataChange(item.name, 'DryPowder', e.target.value)}
                    disabled={true}
 
-                 />
-               </TableCell>
-                  {/* Repeat for other cells */}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      </div>
-      <div className={`flex ${styles.tableWrapper}`}>
-        <h1>Outputs</h1>
-        <div className={styles.table}>
-        <div className={`flex ${styles.tableWrapper}`}>
-       
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Quarter</TableHead>
-                <TableHead>Starlite</TableHead>
-                <TableHead>UnitasGlobal</TableHead>
-                <TableHead>WeLink</TableHead>
-                <TableHead>FeesActual</TableHead>
-                <TableHead>FeeReserve</TableHead>
-                <TableHead>DryPowder</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
+                />
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+    </div>
+    <div>
+    <h1>Outputs: Cumulative Deployment by Quarter</h1>
+    <div className={styles.tableWrapper}>
+
+    <div className={styles.table}>
+      {/* Second table code */}
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Quarter</TableHead>
+            <TableHead>Starlite</TableHead>
+            <TableHead>Unitas Global</TableHead>
+            <TableHead>WeLink</TableHead>
+            <TableHead>FeesActual</TableHead>
+            <TableHead>FeeReserve</TableHead>
+            <TableHead>DryPowder</TableHead>
+
+          </TableRow>
+        </TableHeader>
+        <TableBody>
               {cumulativeChartData.map((item, index) => (
-                <TableRow key={index}>
-                  <TableCell>{item.name}</TableCell>
-                  <TableCell>{item.Starlite}</TableCell>
-                  <TableCell>{item.UnitasGlobal}</TableCell>
-                  <TableCell>{item.WeLink}</TableCell>
-                  <TableCell>{item.FeesActual}</TableCell>
-                  <TableCell>{item.FeeReserve}</TableCell>
-                  <TableCell>{item.DryPowder}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-          </div>
-            
-        </div>
-      </div>
+            <TableRow key={index}>
+              <TableCell>{item.name}</TableCell>
+              <TableCell>{item.Starlite}</TableCell>
+              <TableCell>{item.UnitasGlobal}</TableCell>
+              <TableCell>{item.WeLink}</TableCell>
+              <TableCell>{item.FeesActual}</TableCell>
+              <TableCell>{item.FeeReserve}</TableCell>
+              <TableCell>{item.DryPowder}</TableCell>
+
+
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  </div>
+</div>
+      
+    </div>
       <ResponsiveContainer width="100%" height={650}>
       <BarChart data={cumulativeChartData}>
         <CartesianGrid strokeDasharray="3 3" />
@@ -356,6 +362,8 @@ const StackedBarChart = () => {
       </BarChart>
       
     </ResponsiveContainer>
+
+    
     </div>
   );
 }; 
