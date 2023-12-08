@@ -116,19 +116,19 @@ import React, { useMemo, useState } from 'react';
   
     const initialChartData: ChartDataItem[] = [
       { name: 'Q2-2021', Quantela: 1.27, PacketFabric: 0, Other: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 50.5 },
-      { name: 'Q3-2021', Quantela: 0, PacketFabric: 0, Other: 0, FeesActual: 1.9, FeeReserve: 6.9, DryPowder: 50.5 },
-      { name: 'Q4-2021', Quantela: 0, PacketFabric: 0, Other: 0, FeesActual: 1.9, FeeReserve: 6.9, DryPowder: 50.5 },
-      { name: 'Q1-2022', Quantela: 0, PacketFabric: 0, Other: 0, FeesActual: 1.9, FeeReserve: 6.9, DryPowder: 50.5 },
+      { name: 'Q3-2021', Quantela: 1.79, PacketFabric: 0, Other: .93, FeesActual: 1.9, FeeReserve: 6.9, DryPowder: 50.5 },
+      { name: 'Q4-2021', Quantela: 0, PacketFabric: 15.0, Other: 1.50, FeesActual: 1.9, FeeReserve: 6.9, DryPowder: 50.5 },
+      { name: 'Q1-2022', Quantela: 5.48, PacketFabric: 10.0, Other: .85, FeesActual: 1.9, FeeReserve: 6.9, DryPowder: 50.5 },
 
-      { name: 'Q2-2022', Quantela: 0, PacketFabric: 0, Other: 0, FeesActual: 1.9, FeeReserve: 6.9, DryPowder: 50.5 },
+      { name: 'Q2-2022', Quantela: 1.86, PacketFabric: 0, Other: 2.95, FeesActual: 1.9, FeeReserve: 6.9, DryPowder: 50.5 },
 
-      { name: 'Q3-2022', Quantela: 0, PacketFabric: 0, Other: 0, FeesActual: 1.9, FeeReserve: 6.9, DryPowder: 50.5 },
-      { name: 'Q4-2022', Quantela: 0, PacketFabric: 0, Other: 0, FeesActual: 1.9, FeeReserve: 6.9, DryPowder: 50.5 },
+      { name: 'Q3-2022', Quantela: 4.33, PacketFabric: 0, Other: 2.99, FeesActual: 1.9, FeeReserve: 6.9, DryPowder: 50.5 },
+      { name: 'Q4-2022', Quantela: 1.55, PacketFabric: 0, Other: 0, FeesActual: 1.9, FeeReserve: 6.9, DryPowder: 50.5 },
 
-      { name: 'Q1-2023', Quantela: 0, PacketFabric: 0, Other: 5.9, FeesActual: 1.9, FeeReserve: 6.9, DryPowder: 44.6 },
-      { name: 'Q2-2023', Quantela: 0, PacketFabric: 0, Other: 0, FeesActual: 1.9, FeeReserve: 6.9, DryPowder: 50.5 },
-      { name: 'Q3-2023', Quantela: 0, PacketFabric: 0, Other: 0, FeesActual: 1.9, FeeReserve: 6.9, DryPowder: 50.5 },
-      { name: 'Q4-2023', Quantela: 0, PacketFabric: 0, Other: 0, FeesActual: 1.9, FeeReserve: 6.9, DryPowder: 50.5 },
+      { name: 'Q1-2023', Quantela: 11.52, PacketFabric: 10.0, Other: 2.16, FeesActual: 1.9, FeeReserve: 6.9, DryPowder: 44.6 },
+      { name: 'Q2-2023', Quantela: 0, PacketFabric: 0, Other: 1.47, FeesActual: 1.9, FeeReserve: 6.9, DryPowder: 50.5 },
+      { name: 'Q3-2023', Quantela: 0, PacketFabric: 0, Other: 3.87, FeesActual: 1.9, FeeReserve: 6.9, DryPowder: 50.5 },
+      { name: 'Q4-2023', Quantela: 0, PacketFabric: 0, Other: .48, FeesActual: 1.9, FeeReserve: 6.9, DryPowder: 50.5 },
 
       { name: 'Q1-2024P', Quantela: 0, PacketFabric: 0, Other: 0, FeesActual: 1.9, FeeReserve:6.9 , DryPowder: 44.6 },
       { name: 'Q2-2024P', Quantela: 0, PacketFabric: 0, Other: 0, FeesActual: 1.9, FeeReserve: 6.9, DryPowder: 44.6 },

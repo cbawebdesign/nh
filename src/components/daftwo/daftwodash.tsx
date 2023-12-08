@@ -4,6 +4,8 @@
 
   import React, { useMemo, useState } from 'react';
   import { Line, ResponsiveContainer, LineChart, XAxis, LabelList } from 'recharts';
+  import { TooltipProps } from 'recharts';
+
   import Tile from '~/core/ui/Tile';
   import Heading from '~/core/ui/Heading';
   
@@ -17,9 +19,42 @@
   } from '~/core/ui/Table';
   
   import { useUserSession } from '~/core/hooks/use-user-session';
-  import { BarChart, Bar, CartesianGrid, YAxis, Tooltip, Legend } from 'recharts';
+  import { BarChart, Bar, CartesianGrid, YAxis, Tooltip, Legend} from 'recharts';
   
   import styles from './daftwo.module.css'; // Import your CSS file
+
+  interface TooltipDataItem {
+    name: string;
+    value: number;
+    color: string;
+  }
+  
+  // Define the payload as an array of TooltipDataItem
+  type TooltipPayload = TooltipDataItem[];
+  
+  const CustomTooltip: React.FC<{ active?: boolean; payload?: TooltipPayload; label?: string }> = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      // Cast payload to the defined type
+      const typedPayload = payload as TooltipPayload;
+  
+      const activePayload = typedPayload.find(p => p.value > 0);
+  
+      return (
+        <div className="custom-tooltip" style={{ backgroundColor: 'white', border: '1px solid #ccc', padding: '10px', borderRadius: '4px' }}>
+         <p><strong>{label}</strong></p>
+          {activePayload && (
+            <p style={{  color: activePayload.color }}>
+              {`${activePayload.name}: ${activePayload.value}`}
+            </p>
+          )}
+        </div>
+      );
+    }
+  
+    return null;
+  };
+  
+  
   
   export default function Daftwo() {
   
@@ -119,17 +154,18 @@
       DryPowder: number;
       Other: number;
     }
-  
+
+    
     const initialChartData: ChartDataItem[] = [
-      { name: 'Q4-2022', Other: 5, Element8: 10, WeLink: 2.2, DTIQ: 0, QWILTPS: 0, FeesActual: 1.9, Tarana: 0, RPMA:0, PFUNITASRS:0, FeeReserve: 5.6, DryPowder: 50.5 },
-      { name: 'Q1-2023', Other: 5, Element8: 10, WeLink: 2.2, DTIQ: 0, QWILTPS: 0, FeesActual: 1.9, Tarana: 0, RPMA:0, PFUNITASRS:0, FeeReserve: 5.6, DryPowder: 50.5 },
-      { name: 'Q2-2023', Other: 5, Element8: 10, WeLink: 2.2, DTIQ: 0, QWILTPS: 0, FeesActual: 1.9, Tarana: 0, RPMA:0, PFUNITASRS:0, FeeReserve: 5.6, DryPowder: 50.5 },
-      { name: 'Q3-2023', Other: 5, Element8: 10, WeLink: 2.2, DTIQ: 0, QWILTPS: 0, FeesActual: 1.9, Tarana: 0, RPMA:0, PFUNITASRS:0, FeeReserve: 5.6, DryPowder: 50.5 },
-      { name: 'Q4-2023', Other: 5, Element8: 10, WeLink: 2.2, DTIQ: 0, QWILTPS: 0, FeesActual: 1.9, Tarana: 0, RPMA:0, PFUNITASRS:0, FeeReserve: 5.6, DryPowder: 50.5 },
-      { name: 'Q1-2024P', Other: 5, Element8: 10, WeLink: 2.2, DTIQ: 0, QWILTPS: 0, FeesActual: 1.9, Tarana: 0, RPMA:0, PFUNITASRS:0, FeeReserve: 5.6, DryPowder: 50.5 },
-      { name: 'Q2-2024P', Other: 5, Element8: 10, WeLink: 2.2, DTIQ: 0, QWILTPS: 0, FeesActual: 1.9, Tarana: 0, RPMA:0, PFUNITASRS:0, FeeReserve: 5.6, DryPowder: 50.5 },
-      { name: 'Q3-2024P', Other: 5, Element8: 10, WeLink: 2.2, DTIQ: 0, QWILTPS: 0, FeesActual: 1.9, Tarana: 0, RPMA:0, PFUNITASRS:0, FeeReserve: 5.6, DryPowder: 50.5 },
-      { name: 'Q4-2024P', Other: 5, Element8: 10, WeLink: 2.2, DTIQ: 0, QWILTPS: 0, FeesActual: 1.9, Tarana: 0, RPMA:0, PFUNITASRS:0, FeeReserve: 5.6, DryPowder: 50.5 },
+      { name: 'Q4-2022', Other: 15.0, Element8: 0, WeLink: 67.8, DTIQ: 123.4, QWILTPS: 74.3, FeesActual: 1.9, Tarana: 0, RPMA:12.0, PFUNITASRS:198.9, FeeReserve: 105.6, DryPowder: 458.4 },
+      { name: 'Q1-2023', Other: 0, Element8: 0, WeLink: 16.5, DTIQ: 0, QWILTPS: 0.5, FeesActual: 1.9, Tarana: 0, RPMA:0, PFUNITASRS:0, FeeReserve: 105.6, DryPowder: 439.0 },
+      { name: 'Q2-2023', Other: 0, Element8: 20.0, WeLink: 13.5, DTIQ: 6.5, QWILTPS: 1.4, FeesActual: 1.9, Tarana: 40.0, RPMA:0, PFUNITASRS:0, FeeReserve: 105.6, DryPowder: 344.3 },
+      { name: 'Q3-2023', Other: 0, Element8: 59.9, WeLink: 5.1, DTIQ: 2.0, QWILTPS: 0.2, FeesActual: 1.9, Tarana: 0, RPMA:0, PFUNITASRS:0, FeeReserve: 105.6, DryPowder: 264.2 },
+      { name: 'Q4-2023', Other: 0, Element8: 30, WeLink: 1.2, DTIQ: 0, QWILTPS: 0.1, FeesActual: 1.9, Tarana: 0, RPMA:0, PFUNITASRS:0, FeeReserve: 105.5, DryPowder: 230.1 },
+      { name: 'Q1-2024P', Other: 0, Element8: 0, WeLink: 0, DTIQ: 0, QWILTPS: 0, FeesActual: 1.9, Tarana: 0, RPMA:0, PFUNITASRS:0, FeeReserve: 105.6, DryPowder: 230.1 },
+      { name: 'Q2-2024P', Other: 0, Element8: 0, WeLink: 0, DTIQ: 0, QWILTPS: 0, FeesActual: 1.9, Tarana: 0, RPMA:0, PFUNITASRS:0, FeeReserve: 105.6, DryPowder: 230.1 },
+      { name: 'Q3-2024P', Other: 0, Element8: 0, WeLink: 0, DTIQ: 0, QWILTPS: 0, FeesActual: 1.9, Tarana: 0, RPMA:0, PFUNITASRS:0, FeeReserve: 105.6, DryPowder: 230.1 },
+      { name: 'Q4-2024P', Other: 0, Element8: 0, WeLink: 0, DTIQ: 0, QWILTPS: 0, FeesActual: 1.9, Tarana: 0, RPMA:0, PFUNITASRS:0, FeeReserve: 105.6, DryPowder: 230.1 },
     ];
   
    
@@ -243,7 +279,6 @@
               <TableHead>RPMA</TableHead>
               <TableHead>PFUNITASRS</TableHead>
               <TableHead>FeesActual</TableHead>
-              <TableHead>FeeReserve</TableHead>
               <TableHead>DryPowder</TableHead>
   
             </TableRow>
@@ -376,7 +411,6 @@
               <TableHead>RPMA</TableHead>
               <TableHead>PFUNITASRS</TableHead>
               <TableHead>FeesActual</TableHead>
-              <TableHead>FeeReserve</TableHead>
               <TableHead>DryPowder</TableHead>
   
             </TableRow>
@@ -395,7 +429,6 @@
                 <TableCell>{item.PFUNITASRS}</TableCell>
 
                 <TableCell>{item.FeesActual}</TableCell>
-                <TableCell>{item.FeeReserve}</TableCell>
                 <TableCell>{item.DryPowder}</TableCell>
   
   
@@ -409,18 +442,20 @@
   
         
       </div>
-        <ResponsiveContainer width="100%" height={650}>
+        <ResponsiveContainer width="100%" height={800}>
         <BarChart data={cumulativeChartData}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
+        <CartesianGrid strokeDasharray="3 3" />
+  <XAxis dataKey="name" />
+  <YAxis />
+  <Tooltip content={<CustomTooltip />} cursor={{ fill: 'transparent' }} />
+  <Legend />
+
           <Bar dataKey="Other" stackId="a" fill="#8884d8">
-            <LabelList content={(props) => renderCustomizedLabel(props, 'Element8')} />
+            
           </Bar>
           <Bar dataKey="Element8" stackId="a" fill="#82ca9d">
             <LabelList content={(props) => renderCustomizedLabel(props, 'Element8')} />
+
           </Bar>
           <Bar dataKey="WeLink" stackId="a" fill="#0000FF">
             <LabelList content={(props) => renderCustomizedLabel(props, 'WeLink')} />
@@ -440,9 +475,7 @@
           <Bar dataKey="PFUNITASRS" stackId="a" fill="#0000FF">
             <LabelList content={(props) => renderCustomizedLabel(props, 'PFUNITASRS')} />
           </Bar>
-          <Bar dataKey="FeesActual" stackId="a" fill="#a52a2a">
-            <LabelList content={(props) => renderCustomizedLabel(props, 'FeesActual')} />
-          </Bar>
+       
           <Bar dataKey="FeeReserve" stackId="a" fill="#a52a2a">
             <LabelList content={(props) => renderCustomizedLabel(props, 'FeeReserve')} />
           </Bar>
