@@ -16,7 +16,7 @@ import React, { useMemo, useState } from 'react';
   } from '~/core/ui/Table';
   
   import { useUserSession } from '~/core/hooks/use-user-session';
-  import { BarChart, Bar, CartesianGrid, YAxis, Tooltip, Legend } from 'recharts';
+  import { BarChart, ComposedChart, Bar, CartesianGrid, YAxis, Tooltip, Legend } from 'recharts';
   
   import styles from './daofone.module.css'; // Import your CSS file
   
@@ -85,120 +85,213 @@ import React, { useMemo, useState } from 'react';
     index?: number;
   }
   
-  const CustomizedLabel: React.FC<LabelProps & { dataKey: string, chartData: any[] }> = ({ x = 0, y = 0, width = 0, index, dataKey, height, chartData }) => {
+  const CustomizedLabel: React.FC<LabelProps & { dataKey: string, chartData: any[] }> = ({ x = 0, y = 0, width = 0, index, height, dataKey, chartData }) => {
     const numX = typeof x === 'number' ? x : parseFloat(x || '0');
     const numY = typeof y === 'number' ? y : parseFloat(y || '0');
     const numWidth = typeof width === 'number' ? width : parseFloat(width || '0');
     const numericHeight = typeof height === 'number' ? height : parseFloat(height || '0');
     const validIndex = typeof index === 'number' && index >= 0;
-    const value = validIndex ? chartData[index][dataKey] : '';
+  
+    // Access the value using the dataKey
+    const value = validIndex && chartData[index] ? chartData[index][dataKey] : '';
+  
     const adjustedY = numY + numericHeight * 0.5;
     const fontSize = 12;
   
     return (
       <text x={numX + numWidth / 2} y={adjustedY} fill="#fff" textAnchor="middle" dominantBaseline="central" fontSize={fontSize}>
-        {validIndex ? `${dataKey}: ${value}` : ''}
+        {validIndex ? value : ''}
       </text>
     );
   };
-  
+ 
   const StackedBarChart = () => {
     // Assuming the type for a single data item
     interface ChartDataItem {
+      QuantelaOpCo: number;
+      DARSII: number,
+      LiquidRS: number,
+      StripeSCCIRS: number,
+      StarliteRS: number,
+
+      PacketFabricOpCo:number,
+      UnitasOpCo: number,
+      UnitasRS: number,
+      PFRSNewNetwork: number,
+
+
+      WeLinkRS: number,
+      EnergyBoxRS: number,
+      MDSLPRS: number,
+
       name: string;
-      Quantela:number;
+
+      QuantelaGroup: number;
+      PacketFabricGroup: number;
+      OtherGroup: number;
+
       PacketFabric:number;
-      Other:number;
       FeesActual: number;
       FeeReserve: number;
       DryPowder: number;
+      MOIC: number;
     }
   
     const initialChartData: ChartDataItem[] = [
-      { name: 'Q2-2021', Quantela: 1.27, PacketFabric: 0, Other: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 50.5 },
-      { name: 'Q3-2021', Quantela: 1.79, PacketFabric: 0, Other: .93, FeesActual: 1.9, FeeReserve: 6.9, DryPowder: 50.5 },
-      { name: 'Q4-2021', Quantela: 0, PacketFabric: 15.0, Other: 1.50, FeesActual: 1.9, FeeReserve: 6.9, DryPowder: 50.5 },
-      { name: 'Q1-2022', Quantela: 5.48, PacketFabric: 10.0, Other: .85, FeesActual: 1.9, FeeReserve: 6.9, DryPowder: 50.5 },
+      { name: 'Q2-2021', MOIC: -20, QuantelaOpCo: 0, QuantelaGroup: 0,DARSII: 1.27, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 0, PacketFabricGroup: 0, StarliteRS: 0, PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 0, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 91.6 },
+      { name: 'Q3-2021', MOIC: -15,QuantelaOpCo: 1.0, QuantelaGroup: 0,DARSII: 1.79, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 0, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 0.93, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 87.9 },
+      { name: 'Q4-2021', MOIC: -10, QuantelaOpCo: 0, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 0, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 3, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 12, WeLinkRS: 0,EnergyBoxRS: 1.50, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 71.4 },
+      { name: 'Q1-2022', MOIC: -5, QuantelaOpCo: 1.0, QuantelaGroup: 0,DARSII: .57, OtherGroup:0, LiquidRS: 3.91, StripeSCCIRS: 0, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 2, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 8, WeLinkRS: 0,EnergyBoxRS: 0.85, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 55.1 },
+      { name: 'Q2-2022', MOIC: 2,QuantelaOpCo: 0, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 1.86, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 2.95, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 50.3 },
+      { name: 'Q3-2022', MOIC: 5,QuantelaOpCo: 0, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 4.33, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 2.99, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 42.9 },
+      { name: 'Q4-2022', MOIC: 7, QuantelaOpCo: 1.55, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 0, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 0, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 41.4 },
+      { name: 'Q1-2023', MOIC: 9, QuantelaOpCo: 1.96, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 4.56, StripeSCCIRS: 0, StarliteRS: 5, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 2, UnitasRS: 8, PFRSNewNetwork: 0, WeLinkRS: 2.16,EnergyBoxRS: 0, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 17.7 },
+      { name: 'Q2-2023',MOIC: 9,  QuantelaOpCo: 0, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 0, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 1.04, MDSLPRS: 0.43, FeesActual: .38, FeeReserve: 6.9, DryPowder: 16.2 },
+      { name: 'Q3-2023',MOIC: 8, QuantelaOpCo: 0, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 0, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 1.15, MDSLPRS: 2.72, FeesActual: .38, FeeReserve: 6.9, DryPowder: 12.4 },
+      { name: 'Q4-2023',MOIC: 11,QuantelaOpCo: 0, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 0, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 0, MDSLPRS: 0.48, FeesActual: .38, FeeReserve: 6.9, DryPowder: 11.9 },
+      { name: 'Q1-2024P', MOIC: 11, QuantelaOpCo: 0, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 0, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 0, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 11.9 },
+      { name: 'Q2-2024P',MOIC: 11,  QuantelaOpCo: 0, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 0, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 0, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 11.9 },
+      { name: 'Q3-2024P',MOIC: 11,QuantelaOpCo: 0, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 0, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 0, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 11.9 },
+      { name: 'Q4-2024P', MOIC: 11,QuantelaOpCo: 0, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 0, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 0, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 11.9 },
 
-      { name: 'Q2-2022', Quantela: 1.86, PacketFabric: 0, Other: 2.95, FeesActual: 1.9, FeeReserve: 6.9, DryPowder: 50.5 },
-
-      { name: 'Q3-2022', Quantela: 4.33, PacketFabric: 0, Other: 2.99, FeesActual: 1.9, FeeReserve: 6.9, DryPowder: 50.5 },
-      { name: 'Q4-2022', Quantela: 1.55, PacketFabric: 0, Other: 0, FeesActual: 1.9, FeeReserve: 6.9, DryPowder: 50.5 },
-
-      { name: 'Q1-2023', Quantela: 11.52, PacketFabric: 10.0, Other: 2.16, FeesActual: 1.9, FeeReserve: 6.9, DryPowder: 44.6 },
-      { name: 'Q2-2023', Quantela: 0, PacketFabric: 0, Other: 1.47, FeesActual: 1.9, FeeReserve: 6.9, DryPowder: 50.5 },
-      { name: 'Q3-2023', Quantela: 0, PacketFabric: 0, Other: 3.87, FeesActual: 1.9, FeeReserve: 6.9, DryPowder: 50.5 },
-      { name: 'Q4-2023', Quantela: 0, PacketFabric: 0, Other: .48, FeesActual: 1.9, FeeReserve: 6.9, DryPowder: 50.5 },
-
-      { name: 'Q1-2024P', Quantela: 0, PacketFabric: 0, Other: 0, FeesActual: 1.9, FeeReserve:6.9 , DryPowder: 44.6 },
-      { name: 'Q2-2024P', Quantela: 0, PacketFabric: 0, Other: 0, FeesActual: 1.9, FeeReserve: 6.9, DryPowder: 44.6 },
-      { name: 'Q3-2024P', Quantela: 0, PacketFabric: 0, Other: 0, FeesActual: 1.9, FeeReserve: 6.9, DryPowder: 44.6 },
-      { name: 'Q4-2024P', Quantela: 0, PacketFabric: 0, Other: 0, FeesActual: 1.9, FeeReserve:6.9, DryPowder: 44.6 }    // ... other initial data
     ];
-  
-   
+    const initialLineData: { name: string, MOIC: number }[] = initialChartData.map(item => ({
+      name: item.name,
+      MOIC: item.MOIC
+    }));
+    
     const handleDataChange = (page: string, key: keyof ChartDataItem, value: string) => {
       const numericValue = parseFloat(value);
     
       // Find the index of the quarter being updated
       const pageIndex = inputChartData.findIndex(item => item.name === page);
-      const changeInValue = pageIndex !== -1 ? numericValue - (inputChartData[pageIndex][key] as number) : 0;
+      const updatedInputChartData = [...inputChartData];
+      
+      if (pageIndex !== -1) {
+        // Update the value for the current quarter
+        updatedInputChartData[pageIndex] = {
+          ...updatedInputChartData[pageIndex],
+          [key]: numericValue
+        };
     
-      // Update input chart data and adjust DryPowder for current and subsequent quarters
-      const updatedInputChartData = inputChartData.map((item, index) => {
-        if (index === pageIndex) {
-          // Change the key's value and DryPowder for the current quarter
-          return { ...item, [key]: numericValue, DryPowder: item.DryPowder - changeInValue };
-        } else if (index > pageIndex && key !== 'DryPowder' && key !== 'FeeReserve' && key !== 'FeesActual') {
-          // Only change DryPowder for subsequent quarters
-          return { ...item, DryPowder: item.DryPowder - changeInValue };
+        // Recalculate group sums for the updated quarter
+        updatedInputChartData[pageIndex] = calculateGroupSums([updatedInputChartData[pageIndex]])[0];
+    
+        // Adjust DryPowder for the current quarter
+        const changeInValue = numericValue - (inputChartData[pageIndex][key] as number);
+        updatedInputChartData[pageIndex].DryPowder -= changeInValue;
+    
+        // Adjust DryPowder for subsequent quarters
+        for (let i = pageIndex + 1; i < updatedInputChartData.length; i++) {
+          updatedInputChartData[i].DryPowder -= changeInValue;
         }
-        return item;
-      });
+      }
     
-      // Calculate the cumulative data for the output table
+      // Recalculate cumulative data for the output table
       const newCumulativeChartData = calculateCumulativeOutputData(updatedInputChartData);
     
       // Update the state for both input and output chart data
       setInputChartData(updatedInputChartData);
       setCumulativeChartData(newCumulativeChartData);
     };
-    
+    const calculateGroupSums = (data: ChartDataItem[]): ChartDataItem[] => {
+      return data.map(item => ({
+        ...item,
+        QuantelaGroup: item.QuantelaOpCo + item.DARSII + item.LiquidRS + item.StripeSCCIRS + item.StarliteRS,
+        PacketFabricGroup: item.PacketFabric + item.PacketFabricOpCo + item.UnitasOpCo + item.UnitasRS + item.PFRSNewNetwork,
+        OtherGroup: item.WeLinkRS + item.EnergyBoxRS + item.MDSLPRS,
+      }));
+    };
     // The function to calculate cumulative data for the output table
     const calculateCumulativeOutputData = (inputData: ChartDataItem[]) => {
-      let cumulativeValues: ChartDataItem = { 
-        name: '', 
-        PacketFabric: 0, 
-        Quantela: 0, 
-        Other: 0, 
+      let cumulativeValues: ChartDataItem = {
+        name: '',
+        // Assume default values for all individual fields
+        // Initialize cumulative sums for groups
+        QuantelaGroup: 0,
+        PacketFabricGroup: 0,
+        OtherGroup: 0,
         FeesActual: inputData[0]?.FeesActual || 0,
-        FeeReserve: inputData[0]?.FeeReserve || 0, 
-        DryPowder: inputData[0]?.DryPowder || 0 
+        FeeReserve: inputData[0]?.FeeReserve || 0,
+        DryPowder: inputData[0]?.DryPowder || 0,
+        QuantelaOpCo: 0,
+        DARSII: 0,
+        LiquidRS: 0,
+        StripeSCCIRS: 0,
+        StarliteRS: 0,
+        PacketFabricOpCo: 0,
+        UnitasOpCo: 0,
+        UnitasRS: 0,
+        PFRSNewNetwork: 0,
+        WeLinkRS: 0,
+        EnergyBoxRS: 0,
+        MDSLPRS: 0,
+        PacketFabric: 0,
+        MOIC: 0,
       };
-  
-      return inputData.map(item => {
-        return {
-          name: item.name,
-          PacketFabric: parseFloat((cumulativeValues.PacketFabric += item.PacketFabric).toFixed(1)),
-          Quantela: parseFloat((cumulativeValues.Quantela += item.Quantela).toFixed(1)),
-          Other: parseFloat((cumulativeValues.Other += item.Other).toFixed(1)),
     
-          FeesActual: item.FeesActual,
-          FeeReserve: item.FeeReserve,
-          DryPowder: item.DryPowder
+      // Calculate cumulative values, including group sums
+      return inputData.map(item => {
+        // Update cumulative sums for each group
+        parseFloat((cumulativeValues.QuantelaGroup += item.QuantelaOpCo + item.DARSII + item.LiquidRS + item.StripeSCCIRS + item.StarliteRS).toFixed(1));
+        cumulativeValues.OtherGroup += item.WeLinkRS + item.EnergyBoxRS + item.MDSLPRS;
+        cumulativeValues.PacketFabricGroup += item.PacketFabricOpCo + item.UnitasOpCo + item.UnitasRS + item.PFRSNewNetwork;
+        cumulativeValues.QuantelaOpCo += item.QuantelaOpCo;
+        cumulativeValues.DARSII += item.DARSII;
+        cumulativeValues.LiquidRS += item.LiquidRS;
+        cumulativeValues.StarliteRS += item.StarliteRS;
+        cumulativeValues.StripeSCCIRS += item.StripeSCCIRS;
+        cumulativeValues.PacketFabricOpCo += item.PacketFabricOpCo;
+        cumulativeValues.UnitasOpCo += item.UnitasRS;
+        cumulativeValues.UnitasRS += item.UnitasRS;
+        cumulativeValues.PFRSNewNetwork += item.PFRSNewNetwork;
+        cumulativeValues.WeLinkRS += item.WeLinkRS;
+        cumulativeValues.EnergyBoxRS += item.EnergyBoxRS;
+        cumulativeValues.MDSLPRS += item.MDSLPRS;
+    
+        // Return new item with cumulative values
+        return {
+          ...item,
+          QuantelaGroup: parseFloat((cumulativeValues.QuantelaGroup).toFixed(1)),
+          PacketFabricGroup: parseFloat((cumulativeValues.PacketFabricGroup).toFixed(1)),
+          OtherGroup: parseFloat((cumulativeValues.OtherGroup).toFixed(1)),
+          FeesActual: cumulativeValues.FeesActual,
+          FeeReserve: cumulativeValues.FeeReserve,
+          DryPowder: parseFloat((item.DryPowder).toFixed(1)),
+          
+          QuantelaOpCo: cumulativeValues.QuantelaOpCo,
+          DARSII: cumulativeValues.DARSII,
+          LiquidRS: parseFloat((cumulativeValues.LiquidRS).toFixed(1)),
+          StarliteRS: cumulativeValues.StarliteRS,
+          StripeSCCIRS: cumulativeValues.StripeSCCIRS,
+          PacketFabricOpCo: cumulativeValues.PacketFabricOpCo,
+          UnitasOpCo: cumulativeValues.UnitasOpCo,
+          UnitasRS: cumulativeValues.UnitasRS,
+          PFRSNewNetwork: cumulativeValues.PFRSNewNetwork,
+          WeLinkRS: cumulativeValues.WeLinkRS,
+          EnergyBoxRS: parseFloat((cumulativeValues.EnergyBoxRS).toFixed(1)),
+          MDSLPRS: parseFloat((cumulativeValues.MDSLPRS).toFixed(1)),
+          MOIC: item.MOIC
+
+
+
+
+
+
+
+
+
+
         };
       });
     };
-    const [inputChartData, setInputChartData] = useState<ChartDataItem[]>([...initialChartData]);
-    const [cumulativeChartData, setCumulativeChartData] = useState<ChartDataItem[]>(calculateCumulativeOutputData([...initialChartData]));
-    
-      
       // In your handleDataChange function, call this after updating input data
-      
-  
-    const renderCustomizedLabel = (props: LabelProps, dataKey: keyof ChartDataItem) => {
-      return <CustomizedLabel {...props} dataKey={dataKey} chartData={cumulativeChartData} />;
-    };
+      const [inputChartData, setInputChartData] = useState<ChartDataItem[]>(calculateGroupSums(initialChartData));
+      const [cumulativeChartData, setCumulativeChartData] = useState<ChartDataItem[]>(calculateCumulativeOutputData(inputChartData));
+    
+      const renderCustomizedLabel = (props: LabelProps, dataKey: keyof ChartDataItem) => {
+        return <CustomizedLabel {...props} dataKey={dataKey} chartData={cumulativeChartData} />;
+      };
     function getCurrentQuarter() {
       const date = new Date();
       const month = date.getMonth();
@@ -217,8 +310,7 @@ import React, { useMemo, useState } from 'react';
     // Inside your component
     const currentYear = new Date().getFullYear();
     return (
-  <div className={`flex flex-col space-y-6 pb-36 ${styles.tablesContainer}`}>
-    {/* ... */}
+<div className={`flex flex-col space-y-4 pb-36 justify-start ${styles.tablesContainer}`}>    {/* ... */}
   
     <div className={`flex ${styles.tableWrapper}`}>
       <div>
@@ -226,12 +318,72 @@ import React, { useMemo, useState } from 'react';
       <div className={styles.table}>
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>Quarter</TableHead>
-              <TableHead>PacketFabric</TableHead>
-              <TableHead>Quantela</TableHead>
-              <TableHead>Other</TableHead>
-              <TableHead>FeesActual</TableHead>
+          <TableRow>
+    <TableHead colSpan={1}></TableHead> {/* Empty Cell for Quarter Column */}
+    <TableHead colSpan={6} style={{ position: 'relative' }}> {/* Span for WeLink Columns */}
+      <div style={{
+        position: 'absolute', 
+        top: 0, 
+        left: 0, 
+        right: 0, 
+        textAlign: 'center', 
+        borderBottom: '2px solid black'
+      }}>
+        Quantela
+      </div>
+    </TableHead>
+    <TableHead colSpan={5} style={{ position: 'relative' }}> {/* Span for WeLink Columns */}
+      <div style={{
+        position: 'absolute', 
+        top: 0, 
+        left: 0, 
+        right: 0, 
+        textAlign: 'center', 
+        borderBottom: '2px solid black'
+      }}>
+        Packet Fabric Group
+      </div>
+    </TableHead>
+    <TableHead colSpan={4} style={{ position: 'relative' }}> {/* Span for WeLink Columns */}
+      <div style={{
+        position: 'absolute', 
+        top: 0, 
+        left: 0, 
+        right: 0, 
+        textAlign: 'center', 
+        borderBottom: '2px solid black'
+      }}>
+        Other Group
+      </div>
+    </TableHead>
+
+    <TableHead colSpan={3}></TableHead> {/* Span for the rest of the columns */}
+  </TableRow>
+  <TableRow>
+
+                <TableHead>Quarter</TableHead>
+              
+              <TableHead>Quantela OpCo</TableHead>
+              <TableHead>DA RS II</TableHead>
+              <TableHead>Liquid RS</TableHead>
+              <TableHead>Starlite RS</TableHead>
+              <TableHead>Stripe SCCI RS</TableHead>
+              <TableHead style={{  borderRight: '2px solid black' }}>QuantelaGroup</TableHead>
+
+              <TableHead>PacketFabric OpCo</TableHead>
+              <TableHead>Unitas OpCo</TableHead>
+              <TableHead>Unitas RS</TableHead>
+              <TableHead>PF RS New Network</TableHead>
+              <TableHead style={{  borderRight: '2px solid black' }}> PF Group</TableHead>
+
+              <TableHead>WeLinkRS</TableHead>
+              <TableHead>EnergyBox RS</TableHead>
+              <TableHead>MDSLP RS</TableHead>
+              <TableHead style={{  borderRight: '2px solid black' }}> Other Group</TableHead>
+
+
+              <TableHead>Fees Actual</TableHead>
+
               <TableHead>FeeReserve</TableHead>
               <TableHead>DryPowder</TableHead>
   
@@ -241,12 +393,13 @@ import React, { useMemo, useState } from 'react';
                 {inputChartData.map((item, index) => (
               <TableRow key={index}>
                 <TableCell>{item.name}</TableCell>
+           
                 <TableCell>
                   <input
                     className={styles.dataInput}
                     type="number"
-                    value={item.PacketFabric}
-                    onChange={(e) => handleDataChange(item.name, 'PacketFabric', e.target.value)}
+                    value={item.QuantelaOpCo}
+                    onChange={(e) => handleDataChange(item.name, 'QuantelaOpCo', e.target.value)}
                      disabled={isPastQuarter(item.name, currentYear)}
                   />
                 </TableCell>
@@ -254,20 +407,127 @@ import React, { useMemo, useState } from 'react';
                   <input
                     className={styles.dataInput}
                     type="number"
-                    value={item.Quantela}
-                    onChange={(e) => handleDataChange(item.name, 'Quantela', e.target.value)}
+                    value={item.DARSII}
+                    onChange={(e) => handleDataChange(item.name, 'DARSII', e.target.value)}
                      disabled={isPastQuarter(item.name, currentYear)}
-  
                   />
                 </TableCell>
                 <TableCell>
                   <input
                     className={styles.dataInput}
                     type="number"
-                    value={item.Other}
-                    onChange={(e) => handleDataChange(item.name, 'Other', e.target.value)}
+                    value={item.LiquidRS}
+                    onChange={(e) => handleDataChange(item.name, 'LiquidRS', e.target.value)}
                      disabled={isPastQuarter(item.name, currentYear)}
-  
+                  />
+                </TableCell>
+                <TableCell>
+                  <input
+                    className={styles.dataInput}
+                    type="number"
+                    value={item.StarliteRS}
+                    onChange={(e) => handleDataChange(item.name, 'StarliteRS', e.target.value)}
+                     disabled={isPastQuarter(item.name, currentYear)}
+                  />
+                </TableCell>
+                
+                <TableCell>
+                  <input
+                    className={styles.dataInput}
+                    type="number"
+                    value={item.StripeSCCIRS}
+                    onChange={(e) => handleDataChange(item.name, 'StripeSCCIRS', e.target.value)}
+                     disabled={isPastQuarter(item.name, currentYear)}
+                  />
+                </TableCell>
+                <TableCell style={{  borderRight: '2px solid black' }}>
+                  <input
+                    className={styles.dataInput}
+                    type="number"
+                    value={item.QuantelaGroup}
+                    onChange={(e) => handleDataChange(item.name, 'QuantelaGroup', e.target.value)}
+                     disabled={isPastQuarter(item.name, currentYear)}
+                  />
+                </TableCell>
+                <TableCell>
+                  <input
+                    className={styles.dataInput}
+                    type="number"
+                    value={item.PacketFabricOpCo}
+                    onChange={(e) => handleDataChange(item.name, 'PacketFabricOpCo', e.target.value)}
+                     disabled={isPastQuarter(item.name, currentYear)}
+                  />
+                </TableCell>
+                <TableCell>
+                  <input
+                    className={styles.dataInput}
+                    type="number"
+                    value={item.UnitasOpCo}
+                    onChange={(e) => handleDataChange(item.name, 'UnitasOpCo', e.target.value)}
+                     disabled={isPastQuarter(item.name, currentYear)}
+                  />
+                </TableCell>
+                <TableCell>
+                  <input
+                    className={styles.dataInput}
+                    type="number"
+                    value={item.UnitasRS}
+                    onChange={(e) => handleDataChange(item.name, 'UnitasRS', e.target.value)}
+                     disabled={isPastQuarter(item.name, currentYear)}
+                  />
+                </TableCell>
+                <TableCell>
+                  <input
+                    className={styles.dataInput}
+                    type="number"
+                    value={item.PFRSNewNetwork}
+                    onChange={(e) => handleDataChange(item.name, 'PFRSNewNetwork', e.target.value)}
+                     disabled={isPastQuarter(item.name, currentYear)}
+                  />
+                </TableCell>
+                <TableCell style={{  borderRight: '2px solid black' }}>
+                  <input
+                    className={styles.dataInput}
+                    type="number"
+                    value={item.PacketFabricGroup}
+                    onChange={(e) => handleDataChange(item.name, 'PacketFabricGroup', e.target.value)}
+                     disabled={isPastQuarter(item.name, currentYear)}
+                  />
+                </TableCell>
+                <TableCell>
+                  <input
+                    className={styles.dataInput}
+                    type="number"
+                    value={item.WeLinkRS}
+                    onChange={(e) => handleDataChange(item.name, 'WeLinkRS', e.target.value)}
+                     disabled={isPastQuarter(item.name, currentYear)}
+                  />
+                </TableCell>
+                <TableCell>
+                  <input
+                    className={styles.dataInput}
+                    type="number"
+                    value={item.EnergyBoxRS}
+                    onChange={(e) => handleDataChange(item.name, 'EnergyBoxRS', e.target.value)}
+                     disabled={isPastQuarter(item.name, currentYear)}
+                  />
+                </TableCell>
+                <TableCell>
+                  <input
+                    className={styles.dataInput}
+                    type="number"
+                    value={item.MDSLPRS}
+                    onChange={(e) => handleDataChange(item.name, 'MDSLPRS', e.target.value)}
+                     disabled={isPastQuarter(item.name, currentYear)}
+                  />
+                </TableCell>
+                <TableCell style={{  borderRight: '2px solid black' }}>
+                  <input
+                    className={styles.dataInput}
+                    type="number"
+                    value={item.OtherGroup}
+                    onChange={(e) => handleDataChange(item.name, 'OtherGroup', e.target.value)}
+                     disabled={isPastQuarter(item.name, currentYear)}
                   />
                 </TableCell>
                 <TableCell>
@@ -306,6 +566,39 @@ import React, { useMemo, useState } from 'react';
         </Table>
       </div>
       </div>
+      
+       
+      
+      </div>
+      <div style={{ position: 'relative',height: '550px' }}>
+      <ResponsiveContainer width="100%" height="100%" className="chartContainer">
+    <ComposedChart  data={cumulativeChartData}>
+      <XAxis dataKey="name" />
+      <YAxis yAxisId="left" />
+      <YAxis yAxisId="right" orientation="right" />
+      <Bar yAxisId="left" dataKey="QuantelaGroup" stackId="a" fill="#89CFF0">
+      <LabelList content={(props) => <CustomizedLabel {...props} dataKey="QuantelaGroup" chartData={cumulativeChartData} />} />
+    </Bar>
+    <Bar yAxisId="left" dataKey="PacketFabricGroup" stackId="a" fill="#7393B3">
+      <LabelList content={(props) => <CustomizedLabel {...props} dataKey="PacketFabricGroup" chartData={cumulativeChartData} />} />
+    </Bar>
+    <Bar yAxisId="left" dataKey="OtherGroup" stackId="a" fill="#191970">
+      <LabelList content={(props) => <CustomizedLabel {...props} dataKey="OtherGroup" chartData={cumulativeChartData} />} />
+    </Bar>
+    <Bar yAxisId="left" dataKey="FeesActual" stackId="a" fill="#a52a2a">
+      <LabelList content={(props) => <CustomizedLabel {...props} dataKey="FeesActual" chartData={cumulativeChartData} />} />
+    </Bar>
+    <Bar yAxisId="left" dataKey="FeeReserve" stackId="a" fill="#a52a2a">
+      <LabelList content={(props) => <CustomizedLabel {...props} dataKey="FeeReserve" chartData={cumulativeChartData} />} />
+    </Bar>
+    <Bar yAxisId="left" dataKey="DryPowder" stackId="a" fill="#D2B48C">
+      <LabelList content={(props) => <CustomizedLabel {...props} dataKey="DryPowder" chartData={cumulativeChartData} />} />
+    </Bar>      
+    <Line yAxisId="right" type="monotone" dataKey="MOIC" stroke="#ff0000" strokeWidth={2} activeDot={{ r: 8 }} />      <Tooltip />
+    </ComposedChart>
+  </ResponsiveContainer>
+</div>
+     
       <div>
       <h1>Outputs: Cumulative Deployment by Quarter</h1>
       <div className={styles.tableWrapper}>
@@ -314,11 +607,73 @@ import React, { useMemo, useState } from 'react';
         {/* Second table code */}
         <Table>
           <TableHeader>
-            <TableRow>
-            <TableHead>Quarter</TableHead>
-              <TableHead>PacketFabric</TableHead>
-              <TableHead>Quantela</TableHead>
-              <TableHead>Other</TableHead>
+          <TableRow>
+    <TableHead colSpan={1}></TableHead> {/* Empty Cell for Quarter Column */}
+    <TableHead colSpan={6} style={{ position: 'relative' }}> {/* Span for WeLink Columns */}
+      <div style={{
+        position: 'absolute', 
+        top: 0, 
+        left: 0, 
+        right: 0, 
+        textAlign: 'center', 
+        borderBottom: '2px solid black'
+      }}>
+        Quantela
+      </div>
+    </TableHead>
+    <TableHead colSpan={5} style={{ position: 'relative' }}> {/* Span for WeLink Columns */}
+      <div style={{
+        position: 'absolute', 
+        top: 0, 
+        left: 0, 
+        right: 0, 
+        textAlign: 'center', 
+        borderBottom: '2px solid black'
+      }}>
+        Packet Fabric Group
+      </div>
+    </TableHead>
+    <TableHead colSpan={4} style={{ position: 'relative' }}> {/* Span for WeLink Columns */}
+      <div style={{
+        position: 'absolute', 
+        top: 0, 
+        left: 0, 
+        right: 0, 
+        textAlign: 'center', 
+        borderBottom: '2px solid black'
+      }}>
+        Other Group
+      </div>
+    </TableHead>
+
+    <TableHead colSpan={3}></TableHead> {/* Span for the rest of the columns */}
+  </TableRow>
+    <TableRow>            <TableHead>Quarter</TableHead>
+              
+            <TableHead>Quantela OpCo</TableHead>
+              <TableHead>DA RS II</TableHead>
+              <TableHead>Liquid RS</TableHead>
+              <TableHead>Starlite RS</TableHead>
+              <TableHead>Stripe SCCI RS</TableHead>
+              <TableHead style={{  borderRight: '2px solid black' }}>
+QuantelaGroup</TableHead>
+
+
+              <TableHead>PacketFabric OpCo</TableHead>
+              <TableHead>Unitas OpCo</TableHead>
+              <TableHead>Unitas RS</TableHead>
+              <TableHead>PF RS New Network</TableHead>
+              <TableHead style={{  borderRight: '2px solid black' }}> PF Group</TableHead>
+
+
+              <TableHead>WeLinkRS</TableHead>
+              <TableHead>EnergyBox RS</TableHead>
+              <TableHead>MDSLP RS</TableHead>
+              <TableHead style={{  borderRight: '2px solid black' }}> Other Group</TableHead>
+
+
+
+
               <TableHead>FeesActual</TableHead>
               <TableHead>FeeReserve</TableHead>
               <TableHead>DryPowder</TableHead>
@@ -329,9 +684,25 @@ import React, { useMemo, useState } from 'react';
                 {cumulativeChartData.map((item, index) => (
               <TableRow key={index}>
                 <TableCell>{item.name}</TableCell>
-                <TableCell>{item.PacketFabric}</TableCell>
-                <TableCell>{item.Quantela}</TableCell>
-                <TableCell>{item.Other}</TableCell>
+                <TableCell>{item.QuantelaOpCo}</TableCell>
+                <TableCell>{item.DARSII}</TableCell>
+                <TableCell>{item.LiquidRS}</TableCell>
+                <TableCell>{item.StarliteRS}</TableCell>
+                <TableCell>{item.StripeSCCIRS}</TableCell>
+                 <TableCell  style={{  borderRight: '2px solid black'}}>{ item.QuantelaGroup}</TableCell>
+
+                 <TableCell>{item.PacketFabricOpCo}</TableCell>
+                 <TableCell>{item.UnitasOpCo}</TableCell>
+                 <TableCell>{item.UnitasRS}</TableCell>
+                 <TableCell>{item.PFRSNewNetwork}</TableCell>
+                <TableCell  style={{  borderRight: '2px solid black' }}>{item.PacketFabricGroup}</TableCell>
+
+
+                <TableCell>{item.WeLinkRS}</TableCell>
+                <TableCell>{item.EnergyBoxRS}</TableCell>
+                <TableCell>{item.MDSLPRS}</TableCell>
+                <TableCell  style={{  borderRight: '2px solid black' }}>{item.OtherGroup}</TableCell>
+
                 <TableCell>{item.FeesActual}</TableCell>
                 <TableCell>{item.FeeReserve}</TableCell>
                 <TableCell>{item.DryPowder}</TableCell>
@@ -345,39 +716,6 @@ import React, { useMemo, useState } from 'react';
     </div>
   </div>
         
-      </div>
-        <ResponsiveContainer width="100%" height={650}>
-        <BarChart data={cumulativeChartData}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Bar dataKey="PacketFabric" stackId="a" fill="#8884d8">
-            <LabelList content={(props) => renderCustomizedLabel(props, 'PacketFabric')} />
-          </Bar>
-          <Bar dataKey="Quantela" stackId="a" fill="#82ca9d">
-            <LabelList content={(props) => renderCustomizedLabel(props, 'Quantela')} />
-          </Bar>
-          <Bar dataKey="Other" stackId="a" fill="#0000FF">
-            <LabelList content={(props) => renderCustomizedLabel(props, 'Other')} />
-          </Bar>
-          <Bar dataKey="FeesActual" stackId="a" fill="#a52a2a">
-            <LabelList content={(props) => renderCustomizedLabel(props, 'FeesActual')} />
-          </Bar>
-          <Bar dataKey="FeeReserve" stackId="a" fill="#a52a2a">
-            <LabelList content={(props) => renderCustomizedLabel(props, 'FeeReserve')} />
-          </Bar>
-        
-          <Bar dataKey="DryPowder" stackId="a" fill="#A020F0">
-            <LabelList content={(props) => renderCustomizedLabel(props, 'DryPowder')} />
-          </Bar>
-        
-        </BarChart>
-        
-      </ResponsiveContainer>
-  
-      
       </div>
     );
   }; 

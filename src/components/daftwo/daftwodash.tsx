@@ -1,11 +1,8 @@
 
 
 
-
-  import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
   import { Line, ResponsiveContainer, LineChart, XAxis, LabelList } from 'recharts';
-  import { TooltipProps } from 'recharts';
-
   import Tile from '~/core/ui/Tile';
   import Heading from '~/core/ui/Heading';
   
@@ -19,42 +16,9 @@
   } from '~/core/ui/Table';
   
   import { useUserSession } from '~/core/hooks/use-user-session';
-  import { BarChart, Bar, CartesianGrid, YAxis, Tooltip, Legend} from 'recharts';
+  import { BarChart, Bar, CartesianGrid, YAxis, Tooltip, Legend } from 'recharts';
   
   import styles from './daftwo.module.css'; // Import your CSS file
-
-  interface TooltipDataItem {
-    name: string;
-    value: number;
-    color: string;
-  }
-  
-  // Define the payload as an array of TooltipDataItem
-  type TooltipPayload = TooltipDataItem[];
-  
-  const CustomTooltip: React.FC<{ active?: boolean; payload?: TooltipPayload; label?: string }> = ({ active, payload, label }) => {
-    if (active && payload && payload.length) {
-      // Cast payload to the defined type
-      const typedPayload = payload as TooltipPayload;
-  
-      const activePayload = typedPayload.find(p => p.value > 0);
-  
-      return (
-        <div className="custom-tooltip" style={{ backgroundColor: 'white', border: '1px solid #ccc', padding: '10px', borderRadius: '4px' }}>
-         <p><strong>{label}</strong></p>
-          {activePayload && (
-            <p style={{  color: activePayload.color }}>
-              {`${activePayload.name}: ${activePayload.value}`}
-            </p>
-          )}
-        </div>
-      );
-    }
-  
-    return null;
-  };
-  
-  
   
   export default function Daftwo() {
   
@@ -66,7 +30,7 @@
         <div>
           <Tile>
           <Tile.Heading>
-    <span style={{ color: '#0000FF' }}>DAF II Capital Deployment</span>
+    <span style={{ color: '#0000FF' }}>DAOF I Capital Deployment</span>
   </Tile.Heading>           <Tile.Body>
               <StackedBarChart />
             </Tile.Body>
@@ -121,126 +85,215 @@
     index?: number;
   }
   
-  const CustomizedLabel: React.FC<LabelProps & { dataKey: string, chartData: any[] }> = ({ x = 0, y = 0, width = 0, index, dataKey, height, chartData }) => {
+  const CustomizedLabel: React.FC<LabelProps & { dataKey: string, chartData: any[] }> = ({ x = 0, y = 0, width = 0, index, height, dataKey, chartData }) => {
     const numX = typeof x === 'number' ? x : parseFloat(x || '0');
     const numY = typeof y === 'number' ? y : parseFloat(y || '0');
     const numWidth = typeof width === 'number' ? width : parseFloat(width || '0');
     const numericHeight = typeof height === 'number' ? height : parseFloat(height || '0');
     const validIndex = typeof index === 'number' && index >= 0;
-    const value = validIndex ? chartData[index][dataKey] : '';
+  
+    // Access the value using the dataKey
+    const value = validIndex && chartData[index] ? chartData[index][dataKey] : '';
+  
     const adjustedY = numY + numericHeight * 0.5;
     const fontSize = 12;
   
     return (
       <text x={numX + numWidth / 2} y={adjustedY} fill="#fff" textAnchor="middle" dominantBaseline="central" fontSize={fontSize}>
-        {validIndex ? `${dataKey}: ${value}` : ''}
+        {validIndex ? value : ''}
       </text>
     );
   };
-  
+ 
   const StackedBarChart = () => {
     // Assuming the type for a single data item
     interface ChartDataItem {
+
+
+      WeLinkGroup: number,
+      WeLinkRS: number,
+      WeLinkOpCo: number,
+
+      DTIQGroup: number,
+      DTIQOpCo: number,
+      DTIQRS: number,
+
+      E8Group: number,
+      E8OpCo: number,
+      E8RS: number,
+
+      QwiltPSGroup:number,
+      Qwilt: number,
+      PS: number,
+
+      RPMA: number,
+
+      PFUnitasRS: number,
+
+      BCTVRS: number,
+
+      Tarana: number,
+
+      OtherGroup:number,
+      BCTVTS: number,
+      ShareCare: number,
+
+
       name: string;
-      Element8: number;
-      WeLink: number;
-      DTIQ: number;
-      QWILTPS: number;
-      Tarana: number;
-      PFUNITASRS:number;
-      RPMA: number;
+
       FeesActual: number;
       FeeReserve: number;
       DryPowder: number;
-      Other: number;
     }
-
-    
+  
     const initialChartData: ChartDataItem[] = [
-      { name: 'Q4-2022', Other: 15.0, Element8: 0, WeLink: 67.8, DTIQ: 123.4, QWILTPS: 74.3, FeesActual: 1.9, Tarana: 0, RPMA:12.0, PFUNITASRS:198.9, FeeReserve: 105.6, DryPowder: 458.4 },
-      { name: 'Q1-2023', Other: 0, Element8: 0, WeLink: 16.5, DTIQ: 0, QWILTPS: 0.5, FeesActual: 1.9, Tarana: 0, RPMA:0, PFUNITASRS:0, FeeReserve: 105.6, DryPowder: 439.0 },
-      { name: 'Q2-2023', Other: 0, Element8: 20.0, WeLink: 13.5, DTIQ: 6.5, QWILTPS: 1.4, FeesActual: 1.9, Tarana: 40.0, RPMA:0, PFUNITASRS:0, FeeReserve: 105.6, DryPowder: 344.3 },
-      { name: 'Q3-2023', Other: 0, Element8: 59.9, WeLink: 5.1, DTIQ: 2.0, QWILTPS: 0.2, FeesActual: 1.9, Tarana: 0, RPMA:0, PFUNITASRS:0, FeeReserve: 105.6, DryPowder: 264.2 },
-      { name: 'Q4-2023', Other: 0, Element8: 30, WeLink: 1.2, DTIQ: 0, QWILTPS: 0.1, FeesActual: 1.9, Tarana: 0, RPMA:0, PFUNITASRS:0, FeeReserve: 105.5, DryPowder: 230.1 },
-      { name: 'Q1-2024P', Other: 0, Element8: 0, WeLink: 0, DTIQ: 0, QWILTPS: 0, FeesActual: 1.9, Tarana: 0, RPMA:0, PFUNITASRS:0, FeeReserve: 105.6, DryPowder: 230.1 },
-      { name: 'Q2-2024P', Other: 0, Element8: 0, WeLink: 0, DTIQ: 0, QWILTPS: 0, FeesActual: 1.9, Tarana: 0, RPMA:0, PFUNITASRS:0, FeeReserve: 105.6, DryPowder: 230.1 },
-      { name: 'Q3-2024P', Other: 0, Element8: 0, WeLink: 0, DTIQ: 0, QWILTPS: 0, FeesActual: 1.9, Tarana: 0, RPMA:0, PFUNITASRS:0, FeeReserve: 105.6, DryPowder: 230.1 },
-      { name: 'Q4-2024P', Other: 0, Element8: 0, WeLink: 0, DTIQ: 0, QWILTPS: 0, FeesActual: 1.9, Tarana: 0, RPMA:0, PFUNITASRS:0, FeeReserve: 105.6, DryPowder: 230.1 },
+      
+      { name: 'Q4-2022', Tarana: 0, WeLinkGroup: 0, WeLinkRS: 22.7,WeLinkOpCo: 45.1, DTIQGroup:0, DTIQOpCo: 123.4, DTIQRS: 0, E8Group: 0, E8OpCo:0,E8RS: 0, QwiltPSGroup: 0, Qwilt: 10, PS: 64.3, OtherGroup: 0, BCTVTS: 0,ShareCare: 15, RPMA: 12, PFUnitasRS: 198.9, BCTVRS:0.4,FeesActual: .38, FeeReserve: 105.6, DryPowder: 458.4 },
+      { name: 'Q1-2023', Tarana: 0, WeLinkGroup: 0, WeLinkRS: 0,WeLinkOpCo: 16.5, DTIQGroup:0, DTIQOpCo: 0, DTIQRS: 0, E8Group: 0, E8OpCo:0,E8RS: 0, QwiltPSGroup: 0, Qwilt: 0, PS: 0.5, OtherGroup: 0, BCTVTS: 0,ShareCare: 0, RPMA: 0, PFUnitasRS: 0, BCTVRS:2.4,FeesActual: .38, FeeReserve: 105.6, DryPowder: 439 },
+      { name: 'Q2-2023', Tarana: 40,WeLinkGroup: 0, WeLinkRS: 0,WeLinkOpCo: 13.5, DTIQGroup:0, DTIQOpCo: 5, DTIQRS: 1.5, E8Group: 0, E8OpCo:20,E8RS: 0, QwiltPSGroup: 0, Qwilt: 0, PS: 1.4, OtherGroup: 0, BCTVTS: 0,ShareCare: 0, RPMA: 0, PFUnitasRS: 0, BCTVRS:13.3,FeesActual: .38, FeeReserve: 105.6, DryPowder: 344.3 },
+      { name: 'Q3-2023', Tarana: 0, WeLinkGroup: 0, WeLinkRS: 3.1,WeLinkOpCo: 2.0, DTIQGroup:0, DTIQOpCo: 0, DTIQRS: 2, E8Group: 0, E8OpCo:4.1,E8RS: 55.8, QwiltPSGroup: 0, Qwilt: 0, PS: 0.2, OtherGroup: 0, BCTVTS: 0,ShareCare: 0, RPMA: 0, PFUnitasRS: 10, BCTVRS:3.0,FeesActual: .38, FeeReserve: 105.6, DryPowder: 264.2 },
+      { name: 'Q4-2023', Tarana: 0, WeLinkGroup: 0, WeLinkRS: 0,WeLinkOpCo: 1.2, DTIQGroup:0, DTIQOpCo: 0, DTIQRS: 0, E8Group: 0, E8OpCo:22.5,E8RS: 7.5, QwiltPSGroup: 0, Qwilt: 0, PS: 0.1, OtherGroup: 0, BCTVTS: 0,ShareCare: 0, RPMA: 0, PFUnitasRS: 0, BCTVRS:2.8,FeesActual: .38, FeeReserve: 105.6, DryPowder: 230.1},
+      { name: 'Q1-2024P', Tarana: 0, WeLinkGroup: 0, WeLinkRS: 0,WeLinkOpCo: 0, DTIQGroup:0, DTIQOpCo: 0, DTIQRS: 0, E8Group: 0, E8OpCo:0,E8RS: 0, QwiltPSGroup: 0, Qwilt: 0, PS: 0, OtherGroup: 0, BCTVTS: 0,ShareCare: 0, RPMA: 0, PFUnitasRS: 0, BCTVRS:0,FeesActual: .38, FeeReserve: 105.6, DryPowder: 230.1 },
+      { name: 'Q2-2024P', Tarana: 0, WeLinkGroup: 0, WeLinkRS: 0,WeLinkOpCo: 0, DTIQGroup:0, DTIQOpCo: 0, DTIQRS: 0, E8Group: 0, E8OpCo:0,E8RS: 0, QwiltPSGroup: 0, Qwilt: 0, PS: 0, OtherGroup: 0, BCTVTS: 0,ShareCare: 0, RPMA: 0, PFUnitasRS: 0, BCTVRS:0,FeesActual: .38, FeeReserve: 105.6, DryPowder: 230.1 },
+      { name: 'Q3-2024P', Tarana: 0, WeLinkGroup: 0, WeLinkRS: 0,WeLinkOpCo: 0, DTIQGroup:0, DTIQOpCo: 0, DTIQRS: 0, E8Group: 0, E8OpCo:0,E8RS: 0, QwiltPSGroup: 0, Qwilt: 0, PS: 0, OtherGroup: 0, BCTVTS: 0,ShareCare: 0, RPMA: 0, PFUnitasRS: 0, BCTVRS:0,FeesActual: .38, FeeReserve: 105.6, DryPowder: 230.1 },
+      { name: 'Q4-2024P', Tarana: 0, WeLinkGroup: 0, WeLinkRS: 0,WeLinkOpCo: 0, DTIQGroup:0, DTIQOpCo: 0, DTIQRS: 0, E8Group: 0, E8OpCo:0,E8RS: 0, QwiltPSGroup: 0, Qwilt: 0, PS: 0, OtherGroup: 0, BCTVTS: 0,ShareCare: 0, RPMA: 0, PFUnitasRS: 0, BCTVRS:0,FeesActual: .38, FeeReserve: 105.6, DryPowder: 230.1 },
+
+
     ];
   
-   
+    
     const handleDataChange = (page: string, key: keyof ChartDataItem, value: string) => {
       const numericValue = parseFloat(value);
     
       // Find the index of the quarter being updated
       const pageIndex = inputChartData.findIndex(item => item.name === page);
-      const changeInValue = pageIndex !== -1 ? numericValue - (inputChartData[pageIndex][key] as number) : 0;
+      const updatedInputChartData = [...inputChartData];
+      
+      if (pageIndex !== -1) {
+        // Update the value for the current quarter
+        updatedInputChartData[pageIndex] = {
+          ...updatedInputChartData[pageIndex],
+          [key]: numericValue
+        };
     
-      // Update input chart data and adjust DryPowder for current and subsequent quarters
-      const updatedInputChartData = inputChartData.map((item, index) => {
-        if (index === pageIndex) {
-          // Change the key's value and DryPowder for the current quarter
-          return { ...item, [key]: numericValue, DryPowder: item.DryPowder - changeInValue };
-        } else if (index > pageIndex && key !== 'DryPowder' && key !== 'FeeReserve' && key !== 'FeesActual') {
-          // Only change DryPowder for subsequent quarters
-          return { ...item, DryPowder: item.DryPowder - changeInValue };
+        // Recalculate group sums for the updated quarter
+        updatedInputChartData[pageIndex] = calculateGroupSums([updatedInputChartData[pageIndex]])[0];
+    
+        // Adjust DryPowder for the current quarter
+        const changeInValue = numericValue - (inputChartData[pageIndex][key] as number);
+        updatedInputChartData[pageIndex].DryPowder -= changeInValue;
+    
+        // Adjust DryPowder for subsequent quarters
+        for (let i = pageIndex + 1; i < updatedInputChartData.length; i++) {
+          updatedInputChartData[i].DryPowder -= changeInValue;
         }
-        return item;
-      });
+      }
     
-      // Calculate the cumulative data for the output table
+      // Recalculate cumulative data for the output table
       const newCumulativeChartData = calculateCumulativeOutputData(updatedInputChartData);
     
       // Update the state for both input and output chart data
       setInputChartData(updatedInputChartData);
       setCumulativeChartData(newCumulativeChartData);
     };
-    
+    const calculateGroupSums = (data: ChartDataItem[]): ChartDataItem[] => {
+      return data.map(item => ({
+        ...item,
+        WeLinkGroup: item.WeLinkRS + item.WeLinkOpCo,
+        DTIQGroup: item.DTIQOpCo + item.DTIQRS,
+        E8Group: item.E8OpCo + item.E8RS,
+        QwiltPSGroup: item.Qwilt + item.PS,
+        OtherGroup: item.BCTVTS + item.ShareCare
+      }));
+    };
     // The function to calculate cumulative data for the output table
     const calculateCumulativeOutputData = (inputData: ChartDataItem[]) => {
-      let cumulativeValues: ChartDataItem = { 
-        name: '', 
-        Other: 0, 
-        Element8: 0, 
-        WeLink: 0, 
-        DTIQ: 0,
-        QWILTPS: 0,
-        Tarana:0,
-        RPMA: 0,
-        PFUNITASRS: 0,
+      let cumulativeValues: ChartDataItem = {
+        name: '',
+        // Assume default values for all individual fields
+        // Initialize cumulative sums for groups
+        OtherGroup: 0,
         FeesActual: inputData[0]?.FeesActual || 0,
-        FeeReserve: inputData[0]?.FeeReserve || 0, 
-        DryPowder: inputData[0]?.DryPowder || 0 
+        FeeReserve: inputData[0]?.FeeReserve || 0,
+        DryPowder: inputData[0]?.DryPowder || 0,
+        WeLinkGroup: 0,
+        WeLinkRS: 0,
+        WeLinkOpCo: 0,
+        DTIQGroup: 0,
+        DTIQOpCo: 0,
+        DTIQRS: 0,
+        E8Group: 0,
+        E8OpCo: 0,
+        E8RS: 0,
+        QwiltPSGroup: 0,
+        Qwilt: 0,
+        PS: 0,
+        RPMA: 0,
+        PFUnitasRS: 0,
+        BCTVRS: 0,
+        BCTVTS: 0,
+        ShareCare: 0,
+        Tarana:0
       };
-  
+    
+      // Calculate cumulative values, including group sums
       return inputData.map(item => {
+        // Update cumulative sums for each group
+        parseFloat((cumulativeValues.WeLinkGroup += item.WeLinkRS + item.WeLinkOpCo).toFixed(1));
+        cumulativeValues.DTIQGroup += item.DTIQOpCo + item.DTIQRS;
+        cumulativeValues.E8Group += item.E8OpCo + item.E8RS;
+        cumulativeValues.QwiltPSGroup += item.Qwilt + item.PS;
+        cumulativeValues.OtherGroup += item.BCTVTS + item.ShareCare;
+cumulativeValues.WeLinkRS += item.WeLinkRS;
+cumulativeValues.PFUnitasRS += item.PFUnitasRS;
+cumulativeValues.WeLinkOpCo += item.WeLinkOpCo;
+cumulativeValues.DTIQOpCo += item.DTIQOpCo;
+cumulativeValues.DTIQRS += item.DTIQRS;
+cumulativeValues.E8OpCo += item.E8OpCo;
+cumulativeValues.E8RS += item.E8RS;
+cumulativeValues.PS += item.PS;
+cumulativeValues.Qwilt += item.Qwilt;
+cumulativeValues.BCTVTS += item.BCTVTS;
+cumulativeValues.ShareCare += item.ShareCare;
+cumulativeValues.RPMA += item.RPMA;
+cumulativeValues.BCTVRS += item.BCTVRS;
+cumulativeValues.Tarana += item.Tarana;
+        // Return new item with cumulative values
         return {
-          name: item.name,
-          Other: parseFloat((cumulativeValues.Other += item.Other).toFixed(1)),
-          Element8: parseFloat((cumulativeValues.Element8 += item.Element8).toFixed(1)),
-          WeLink: parseFloat((cumulativeValues.WeLink += item.WeLink).toFixed(1)),
-          DTIQ: parseFloat((cumulativeValues.DTIQ += item.DTIQ).toFixed(1)),
-          Tarana: parseFloat((cumulativeValues.Tarana += item.Tarana).toFixed(1)),
-          RPMA: parseFloat((cumulativeValues.RPMA += item.RPMA).toFixed(1)),
-          PFUNITASRS: parseFloat((cumulativeValues.PFUNITASRS += item.PFUNITASRS).toFixed(1)),
-          QWILTPS: parseFloat((cumulativeValues.QWILTPS += item.QWILTPS).toFixed(1)),
+          ...item,
+          WeLinkGroup: parseFloat((cumulativeValues.WeLinkGroup).toFixed(1)),
+          DTIQGroup: parseFloat((cumulativeValues.DTIQGroup).toFixed(1)),
+          E8Group: parseFloat((cumulativeValues.E8Group).toFixed(1)),
+          QwiltPSGroup: parseFloat((cumulativeValues.QwiltPSGroup).toFixed(1)),
+          OtherGroup: parseFloat((cumulativeValues.OtherGroup).toFixed(1)),
+WeLinkRS: cumulativeValues.WeLinkRS,
+PFUnitasRS: cumulativeValues.PFUnitasRS,
+WeLinkOpCo: cumulativeValues.WeLinkOpCo,
+DTIQOpCo: cumulativeValues.DTIQOpCo,
+DTIQRS: cumulativeValues.DTIQRS,
+E8OpCo: cumulativeValues.E8OpCo,
+E8RS: cumulativeValues.E8RS,
+PS: cumulativeValues.PS,
+Qwilt: cumulativeValues.Qwilt,
+BCTVTS: cumulativeValues.BCTVTS,
+ShareCare: cumulativeValues.ShareCare,
+RPMA: cumulativeValues.RPMA,
+BCTVRS: parseFloat((cumulativeValues.BCTVRS).toFixed(1)),
+Tarana: cumulativeValues.Tarana,
+          FeesActual: cumulativeValues.FeesActual,
+          FeeReserve: cumulativeValues.FeeReserve,
+          DryPowder: parseFloat((item.DryPowder).toFixed(1)),
 
-          FeesActual: item.FeesActual,
-          FeeReserve: item.FeeReserve,
-          DryPowder: item.DryPowder
         };
       });
     };
-    const [inputChartData, setInputChartData] = useState<ChartDataItem[]>([...initialChartData]);
-    const [cumulativeChartData, setCumulativeChartData] = useState<ChartDataItem[]>(calculateCumulativeOutputData([...initialChartData]));
-    
-      
       // In your handleDataChange function, call this after updating input data
-      
-  
-    const renderCustomizedLabel = (props: LabelProps, dataKey: keyof ChartDataItem) => {
-      return <CustomizedLabel {...props} dataKey={dataKey} chartData={cumulativeChartData} />;
-    };
+      const [inputChartData, setInputChartData] = useState<ChartDataItem[]>(calculateGroupSums(initialChartData));
+      const [cumulativeChartData, setCumulativeChartData] = useState<ChartDataItem[]>(calculateCumulativeOutputData(inputChartData));
+    
+      const renderCustomizedLabel = (props: LabelProps, dataKey: keyof ChartDataItem) => {
+        return <CustomizedLabel {...props} dataKey={dataKey} chartData={cumulativeChartData} />;
+      };
     function getCurrentQuarter() {
       const date = new Date();
       const month = date.getMonth();
@@ -259,26 +312,115 @@
     // Inside your component
     const currentYear = new Date().getFullYear();
     return (
-  <div className={`flex flex-col space-y-6 pb-36 ${styles.tablesContainer}`}>
-    {/* ... */}
-  
-    <div className={`flex ${styles.tableWrapper}`}>
+      <div className={`flex flex-col space-y-4 pb-36 justify-start ${styles.tablesContainer}`}>    {/* ... */}
+        
+          <div className={`flex ${styles.tableWrapper}`}>
       <div>
-  <h1>Input: Incremental Deployment by Quarter</h1>
+      <h1>Input: Incremental Deployment by Quarter</h1>
       <div className={styles.table}>
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>Quarter</TableHead>
-              <TableHead>Other</TableHead>
-              <TableHead>Element8</TableHead>
-              <TableHead>WeLink</TableHead>
-              <TableHead>DTIQ</TableHead>
-              <TableHead>QWILTPS</TableHead>
-              <TableHead>Tarana</TableHead>
+          <TableRow>
+    <TableHead colSpan={1}></TableHead> {/* Empty Cell for Quarter Column */}
+    <TableHead colSpan={3} style={{ position: 'relative' }}> {/* Span for WeLink Columns */}
+      <div style={{
+        position: 'absolute', 
+        top: 0, 
+        left: 0, 
+        right: 0, 
+        textAlign: 'center', 
+        borderBottom: '2px solid black'
+      }}>
+        WeLink
+      </div>
+    </TableHead>
+    <TableHead colSpan={3} style={{ position: 'relative' }}> {/* Span for WeLink Columns */}
+      <div style={{
+        position: 'absolute', 
+        top: 0, 
+        left: 0, 
+        right: 0, 
+        textAlign: 'center', 
+        borderBottom: '2px solid black'
+      }}>
+        DTIQ
+      </div>
+    </TableHead>
+    <TableHead colSpan={3} style={{ position: 'relative' }}> {/* Span for WeLink Columns */}
+      <div style={{
+        position: 'absolute', 
+        top: 0, 
+        left: 0, 
+        right: 0, 
+        textAlign: 'center', 
+        borderBottom: '2px solid black'
+      }}>
+        E8
+      </div>
+    </TableHead>
+    <TableHead colSpan={3} style={{ position: 'relative' }}> {/* Span for WeLink Columns */}
+      <div style={{
+        position: 'absolute', 
+        top: 0, 
+        left: 0, 
+        right: 0, 
+        textAlign: 'center', 
+        borderBottom: '2px solid black'
+      }}>
+        Qwilt/PS
+      </div>
+    </TableHead>
+    <TableHead colSpan={3} style={{ position: 'relative' }}> {/* Span for WeLink Columns */}
+      <div style={{
+        position: 'absolute', 
+        top: 0, 
+        left: 0, 
+        right: 0, 
+        textAlign: 'center', 
+        borderBottom: '2px solid black'
+      }}>
+        Other
+      </div>
+    </TableHead>
+    <TableHead colSpan={3}></TableHead> {/* Span for the rest of the columns */}
+  </TableRow>
+  <TableRow>
+                
+                <TableHead>Quarter</TableHead>
+
+              <TableHead>WeLink RS</TableHead>
+              <TableHead>WeLink OpCo</TableHead>
+              <TableHead style={{  borderRight: '2px solid black' }}>WeLink Group</TableHead> {/* Apply the border style here */}
+
+              <TableHead>DTIQ OpCo</TableHead>
+              <TableHead>DTIQ RS</TableHead>
+              <TableHead style={{  borderRight: '2px solid black' }}>DTIQ Group</TableHead>
+
+              <TableHead>E8 OpCo</TableHead>
+              <TableHead>E8 RS</TableHead>
+              <TableHead style={{  borderRight: '2px solid black' }}>E8 Group</TableHead>
+
+
+              <TableHead>Qwilt</TableHead>
+              <TableHead>PS</TableHead>
+              <TableHead style={{  borderRight: '2px solid black' }}>Qwilt/PS Group</TableHead>
+
+
+              <TableHead>BCTVTS</TableHead>
+              <TableHead>ShareCare</TableHead>
+              <TableHead style={{  borderRight: '2px solid black' }}>Other Group</TableHead>
+
+
               <TableHead>RPMA</TableHead>
-              <TableHead>PFUNITASRS</TableHead>
-              <TableHead>FeesActual</TableHead>
+
+              <TableHead>PF Unitas RS</TableHead>
+
+              <TableHead>BCTV RS</TableHead>
+
+              <TableHead>Tarana</TableHead>
+
+
+              <TableHead>FeeReserve</TableHead>
               <TableHead>DryPowder</TableHead>
   
             </TableRow>
@@ -287,12 +429,13 @@
                 {inputChartData.map((item, index) => (
               <TableRow key={index}>
                 <TableCell>{item.name}</TableCell>
+           
                 <TableCell>
                   <input
                     className={styles.dataInput}
                     type="number"
-                    value={item.Other}
-                    onChange={(e) => handleDataChange(item.name, 'Other', e.target.value)}
+                    value={item.WeLinkRS}
+                    onChange={(e) => handleDataChange(item.name, 'WeLinkRS', e.target.value)}
                      disabled={isPastQuarter(item.name, currentYear)}
                   />
                 </TableCell>
@@ -300,50 +443,126 @@
                   <input
                     className={styles.dataInput}
                     type="number"
-                    value={item.Element8}
-                    onChange={(e) => handleDataChange(item.name, 'Element8', e.target.value)}
+                    value={item.WeLinkOpCo}
+                    onChange={(e) => handleDataChange(item.name, 'WeLinkOpCo', e.target.value)}
                      disabled={isPastQuarter(item.name, currentYear)}
-  
+                  />
+                </TableCell>
+                <TableCell style={{  borderRight: '2px solid black'}}>
+                  <input
+                    className={styles.dataInput}
+                    type="number"
+                    value={item.WeLinkGroup}
+                    onChange={(e) => handleDataChange(item.name, 'WeLinkGroup', e.target.value)}
+                     disabled={isPastQuarter(item.name, currentYear)}
                   />
                 </TableCell>
                 <TableCell>
                   <input
                     className={styles.dataInput}
                     type="number"
-                    value={item.WeLink}
-                    onChange={(e) => handleDataChange(item.name, 'WeLink', e.target.value)}
+                    value={item.DTIQOpCo}
+                    onChange={(e) => handleDataChange(item.name, 'DTIQOpCo', e.target.value)}
                      disabled={isPastQuarter(item.name, currentYear)}
-  
                   />
                 </TableCell>
                 <TableCell>
                   <input
                     className={styles.dataInput}
                     type="number"
-                    value={item.DTIQ}
-                    onChange={(e) => handleDataChange(item.name, 'DTIQ', e.target.value)}
+                    value={item.DTIQRS}
+                    onChange={(e) => handleDataChange(item.name, 'DTIQRS', e.target.value)}
                      disabled={isPastQuarter(item.name, currentYear)}
-  
+                  />
+                </TableCell>
+                <TableCell style={{  borderRight: '2px solid black'}}>
+                  <input
+                    className={styles.dataInput}
+                    type="number"
+                    value={item.DTIQGroup}
+                    onChange={(e) => handleDataChange(item.name, 'DTIQGroup', e.target.value)}
+                     disabled={isPastQuarter(item.name, currentYear)}
                   />
                 </TableCell>
                 <TableCell>
                   <input
                     className={styles.dataInput}
                     type="number"
-                    value={item.QWILTPS}
-                    onChange={(e) => handleDataChange(item.name, 'QWILTPS', e.target.value)}
+                    value={item.E8OpCo}
+                    onChange={(e) => handleDataChange(item.name, 'E8OpCo', e.target.value)}
                      disabled={isPastQuarter(item.name, currentYear)}
-  
                   />
                 </TableCell>
                 <TableCell>
                   <input
                     className={styles.dataInput}
                     type="number"
-                    value={item.Tarana}
-                    onChange={(e) => handleDataChange(item.name, 'Tarana', e.target.value)}
+                    value={item.E8RS}
+                    onChange={(e) => handleDataChange(item.name, 'E8RS', e.target.value)}
                      disabled={isPastQuarter(item.name, currentYear)}
-  
+                  />
+                </TableCell>
+                <TableCell style={{  borderRight: '2px solid black'}}>
+                  <input
+                    className={styles.dataInput}
+                    type="number"
+                    value={item.E8Group}
+                    onChange={(e) => handleDataChange(item.name, 'E8Group', e.target.value)}
+                     disabled={isPastQuarter(item.name, currentYear)}
+                  />
+                </TableCell>
+                <TableCell>
+                  <input
+                    className={styles.dataInput}
+                    type="number"
+                    value={item.Qwilt}
+                    onChange={(e) => handleDataChange(item.name, 'Qwilt', e.target.value)}
+                     disabled={isPastQuarter(item.name, currentYear)}
+                  />
+                </TableCell>
+                <TableCell>
+                  <input
+                    className={styles.dataInput}
+                    type="number"
+                    value={item.PS}
+                    onChange={(e) => handleDataChange(item.name, 'PS', e.target.value)}
+                     disabled={isPastQuarter(item.name, currentYear)}
+                  />
+                </TableCell>
+                <TableCell style={{  borderRight: '2px solid black'}}>
+                  <input
+                    className={styles.dataInput}
+                    type="number"
+                    value={item.QwiltPSGroup}
+                    onChange={(e) => handleDataChange(item.name, 'QwiltPSGroup', e.target.value)}
+                     disabled={isPastQuarter(item.name, currentYear)}
+                  />
+                </TableCell>
+                <TableCell>
+                  <input
+                    className={styles.dataInput}
+                    type="number"
+                    value={item.BCTVTS}
+                    onChange={(e) => handleDataChange(item.name, 'BCTVTS', e.target.value)}
+                     disabled={isPastQuarter(item.name, currentYear)}
+                  />
+                </TableCell>
+                <TableCell>
+                  <input
+                    className={styles.dataInput}
+                    type="number"
+                    value={item.ShareCare}
+                    onChange={(e) => handleDataChange(item.name, 'ShareCare', e.target.value)}
+                     disabled={isPastQuarter(item.name, currentYear)}
+                  />
+                </TableCell>
+                <TableCell style={{  borderRight: '2px solid black'}}>
+                  <input
+                    className={styles.dataInput}
+                    type="number"
+                    value={item.OtherGroup}
+                    onChange={(e) => handleDataChange(item.name, 'OtherGroup', e.target.value)}
+                     disabled={isPastQuarter(item.name, currentYear)}
                   />
                 </TableCell>
                 <TableCell>
@@ -353,19 +572,36 @@
                     value={item.RPMA}
                     onChange={(e) => handleDataChange(item.name, 'RPMA', e.target.value)}
                      disabled={isPastQuarter(item.name, currentYear)}
-  
                   />
                 </TableCell>
                 <TableCell>
                   <input
                     className={styles.dataInput}
                     type="number"
-                    value={item.PFUNITASRS}
-                    onChange={(e) => handleDataChange(item.name, 'PFUNITASRS', e.target.value)}
+                    value={item.PFUnitasRS}
+                    onChange={(e) => handleDataChange(item.name, 'PFUnitasRS', e.target.value)}
                      disabled={isPastQuarter(item.name, currentYear)}
-  
                   />
                 </TableCell>
+                <TableCell>
+                  <input
+                    className={styles.dataInput}
+                    type="number"
+                    value={item.BCTVRS}
+                    onChange={(e) => handleDataChange(item.name, 'BCTVRS', e.target.value)}
+                     disabled={isPastQuarter(item.name, currentYear)}
+                  />
+                </TableCell>
+                <TableCell>
+                  <input
+                    className={styles.dataInput}
+                    type="number"
+                    value={item.Tarana}
+                    onChange={(e) => handleDataChange(item.name, 'Tarana', e.target.value)}
+                     disabled={isPastQuarter(item.name, currentYear)}
+                  />
+                </TableCell>
+             
                 <TableCell>
                   <input
                     className={styles.dataInput}
@@ -392,43 +628,197 @@
         </Table>
       </div>
       </div>
+      
+       
+      
+      </div>
+      <ResponsiveContainer width="100%" height={650}>
+        <BarChart data={cumulativeChartData}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+      
+          <Bar dataKey="WeLinkGroup" stackId="a" fill="#8884d8">
+          <LabelList content={(props) => <CustomizedLabel {...props} dataKey="WeLinkGroup" chartData={cumulativeChartData} />} />
+          </Bar>
+          <Bar dataKey="DTIQGroup" stackId="a" fill="#8884d8">
+          <LabelList content={(props) => <CustomizedLabel {...props} dataKey="DTIQGroup" chartData={cumulativeChartData} />} />
+          </Bar>
+          <Bar dataKey="E8Group" stackId="a" fill="#8884d8">
+          <LabelList content={(props) => <CustomizedLabel {...props} dataKey="E8Group" chartData={cumulativeChartData} />} />
+          </Bar>
+          <Bar dataKey="QwiltPSGroup" stackId="a" fill="#a52a2a">
+          <LabelList content={(props) => <CustomizedLabel {...props} dataKey="QwiltPSGroup" chartData={cumulativeChartData} />} />
+          </Bar>
+          <Bar dataKey="OtherGroup" stackId="a" fill="#a52a2a">
+          <LabelList content={(props) => <CustomizedLabel {...props} dataKey="OtherGroup" chartData={cumulativeChartData} />} />
+          </Bar>       
+          <Bar dataKey="RPMA" stackId="a" fill="#89CFF0">
+          <LabelList content={(props) => <CustomizedLabel {...props} dataKey="RPMA" chartData={cumulativeChartData} />} />
+          </Bar>
+          <Bar dataKey="PFUnitasRS" stackId="a" fill="#7393B3">
+          <LabelList content={(props) => <CustomizedLabel {...props} dataKey="PFUnitasRS" chartData={cumulativeChartData} />} />
+          </Bar>
+          <Bar dataKey="BCTVRS" stackId="a" fill="#191970">
+          <LabelList content={(props) => <CustomizedLabel {...props} dataKey="BCTVRS" chartData={cumulativeChartData} />} />
+          </Bar>
+          <Bar dataKey="Tarana" stackId="a" fill="#a52a2a">
+          <LabelList content={(props) => <CustomizedLabel {...props} dataKey="Tarana" chartData={cumulativeChartData} />} />
+          </Bar>
+        
+          <Bar dataKey="FeeReserve" stackId="a" fill="#a52a2a">
+          <LabelList content={(props) => <CustomizedLabel {...props} dataKey="FeeReserve" chartData={cumulativeChartData} />} />
+          </Bar>
+        
+          <Bar dataKey="DryPowder" stackId="a" fill="#D2B48C">
+          <LabelList content={(props) => <CustomizedLabel {...props} dataKey="DryPowder" chartData={cumulativeChartData} />} />
+          </Bar>
+        
+        </BarChart>
+        
+      </ResponsiveContainer>
+  
       <div>
-  <h1>Outputs: Cumulative Deployment by Quarter</h1>
+      <h1>Outputs: Cumulative Deployment by Quarter</h1>
       <div className={styles.tableWrapper}>
   
       <div className={styles.table}>
         {/* Second table code */}
         <Table>
-          <TableHeader>
-            <TableRow>
-            <TableHead>Quarter</TableHead>
-              <TableHead>Other</TableHead>
-              <TableHead>Element8</TableHead>
-              <TableHead>WeLink</TableHead>
-              <TableHead>DTIQ</TableHead>
-              <TableHead>QWILTPS</TableHead>
-              <TableHead>Tarana</TableHead>
-              <TableHead>RPMA</TableHead>
-              <TableHead>PFUNITASRS</TableHead>
-              <TableHead>FeesActual</TableHead>
-              <TableHead>DryPowder</TableHead>
-  
-            </TableRow>
-          </TableHeader>
+        <TableHeader>
+  <TableRow>
+    <TableHead colSpan={1}></TableHead> {/* Empty Cell for Quarter Column */}
+    <TableHead colSpan={3} style={{ position: 'relative' }}> {/* Span for WeLink Columns */}
+      <div style={{
+        position: 'absolute', 
+        top: 0, 
+        left: 0, 
+        right: 0, 
+        textAlign: 'center', 
+        borderBottom: '2px solid black'
+      }}>
+        WeLink
+      </div>
+    </TableHead>
+    <TableHead colSpan={3} style={{ position: 'relative' }}> {/* Span for WeLink Columns */}
+      <div style={{
+        position: 'absolute', 
+        top: 0, 
+        left: 0, 
+        right: 0, 
+        textAlign: 'center', 
+        borderBottom: '2px solid black'
+      }}>
+        DTIQ
+      </div>
+    </TableHead>
+    <TableHead colSpan={3} style={{ position: 'relative' }}> {/* Span for WeLink Columns */}
+      <div style={{
+        position: 'absolute', 
+        top: 0, 
+        left: 0, 
+        right: 0, 
+        textAlign: 'center', 
+        borderBottom: '2px solid black'
+      }}>
+        E8
+      </div>
+    </TableHead>
+    <TableHead colSpan={3} style={{ position: 'relative' }}> {/* Span for WeLink Columns */}
+      <div style={{
+        position: 'absolute', 
+        top: 0, 
+        left: 0, 
+        right: 0, 
+        textAlign: 'center', 
+        borderBottom: '2px solid black'
+      }}>
+        Qwilt/PS
+      </div>
+    </TableHead>
+    <TableHead colSpan={3} style={{ position: 'relative' }}> {/* Span for WeLink Columns */}
+      <div style={{
+        position: 'absolute', 
+        top: 0, 
+        left: 0, 
+        right: 0, 
+        textAlign: 'center', 
+        borderBottom: '2px solid black'
+      }}>
+        Other
+      </div>
+    </TableHead>
+    <TableHead colSpan={3}></TableHead> {/* Span for the rest of the columns */}
+  </TableRow>
+    <TableRow>
+      <TableHead>Quarter</TableHead>
+
+      <TableHead>WeLink RS</TableHead>
+      <TableHead>WeLink OpCo</TableHead>
+      <TableHead style={{  borderRight: '2px solid black' }}>WeLink Group</TableHead> {/* Apply the border style here */}
+
+      <TableHead>DTIQ OpCo</TableHead>
+      <TableHead>DTIQ RS</TableHead>
+     <TableHead style={{  borderRight: '2px solid black' }}>DTIQ Group</TableHead>
+
+
+     <TableHead>E8 OpCo</TableHead>
+     <TableHead>E8 RS</TableHead>
+      <TableHead style={{  borderRight: '2px solid black' }}>E8 Group</TableHead>
+      
+      <TableHead>Qwilt</TableHead>
+      <TableHead>PS</TableHead>
+      <TableHead style={{  borderRight: '2px solid black' }}>Qwilt/PS Group</TableHead>
+
+      <TableHead>BCTV TS</TableHead>
+      <TableHead>ShareCare</TableHead>
+
+      <TableHead style={{  borderRight: '2px solid black' }}>Other Group</TableHead>
+
+
+      <TableHead>RPMA</TableHead>
+      <TableHead>PF Unitas RS</TableHead>
+      <TableHead>BCTV RS</TableHead>
+      <TableHead>Tarana</TableHead>
+
+      <TableHead>FeeReserve</TableHead>
+      <TableHead>DryPowder</TableHead>
+    </TableRow>
+  </TableHeader>
           <TableBody>
                 {cumulativeChartData.map((item, index) => (
               <TableRow key={index}>
                 <TableCell>{item.name}</TableCell>
-                <TableCell>{item.Other}</TableCell>
-                <TableCell>{item.Element8}</TableCell>
-                <TableCell>{item.WeLink}</TableCell>
-                <TableCell>{item.DTIQ}</TableCell>
-                <TableCell>{item.QWILTPS}</TableCell>
-                <TableCell>{item.Tarana}</TableCell>
-                <TableCell>{item.RPMA}</TableCell>
-                <TableCell>{item.PFUNITASRS}</TableCell>
 
-                <TableCell>{item.FeesActual}</TableCell>
+                <TableCell>{item.WeLinkRS}</TableCell>
+                <TableCell>{item.WeLinkOpCo}</TableCell>
+                <TableCell style={{  borderRight: '2px solid black'}}>{item.WeLinkGroup}</TableCell>
+
+                <TableCell>{item.DTIQOpCo}</TableCell>
+                <TableCell>{item.DTIQRS}</TableCell>
+                <TableCell style={{  borderRight: '2px solid black'}}>{item.DTIQGroup}</TableCell>
+
+                <TableCell>{item.E8OpCo}</TableCell>
+                <TableCell>{item.E8RS}</TableCell>
+                <TableCell style={{  borderRight: '2px solid black'}}>{item.E8Group}</TableCell>
+
+              <TableCell>{item.Qwilt}</TableCell>
+              <TableCell>{item.PS}</TableCell>
+                <TableCell style={{  borderRight: '2px solid black'}}>{item.QwiltPSGroup}</TableCell>
+
+                <TableCell>{item.BCTVTS}</TableCell>
+                <TableCell>{item.ShareCare}</TableCell>
+                <TableCell style={{  borderRight: '2px solid black'}}>{item.OtherGroup}</TableCell>
+
+
+                <TableCell>{item.RPMA}</TableCell>
+                <TableCell>{item.PFUnitasRS}</TableCell>
+                <TableCell>{item.BCTVRS}</TableCell>
+                <TableCell>{item.Tarana}</TableCell>
+
+                <TableCell>{item.FeeReserve}</TableCell>
                 <TableCell>{item.DryPowder}</TableCell>
   
   
@@ -438,57 +828,8 @@
         </Table>
       </div>
     </div>
-    </div>
-  
+  </div>
         
-      </div>
-        <ResponsiveContainer width="100%" height={800}>
-        <BarChart data={cumulativeChartData}>
-        <CartesianGrid strokeDasharray="3 3" />
-  <XAxis dataKey="name" />
-  <YAxis />
-  <Tooltip content={<CustomTooltip />} cursor={{ fill: 'transparent' }} />
-  <Legend />
-
-          <Bar dataKey="Other" stackId="a" fill="#8884d8">
-            
-          </Bar>
-          <Bar dataKey="Element8" stackId="a" fill="#82ca9d">
-            <LabelList content={(props) => renderCustomizedLabel(props, 'Element8')} />
-
-          </Bar>
-          <Bar dataKey="WeLink" stackId="a" fill="#0000FF">
-            <LabelList content={(props) => renderCustomizedLabel(props, 'WeLink')} />
-          </Bar>
-          <Bar dataKey="DTIQ" stackId="a" fill="#0000FF">
-            <LabelList content={(props) => renderCustomizedLabel(props, 'DTIQ')} />
-          </Bar>
-          <Bar dataKey="QWILTPS" stackId="a" fill="#0000FF">
-            <LabelList content={(props) => renderCustomizedLabel(props, 'QWILTPS')} />
-          </Bar>
-          <Bar dataKey="Tarana" stackId="a" fill="#0000FF">
-            <LabelList content={(props) => renderCustomizedLabel(props, 'Tarana')} />
-          </Bar>
-          <Bar dataKey="RPMA" stackId="a" fill="#0000FF">
-            <LabelList content={(props) => renderCustomizedLabel(props, 'RPMA')} />
-          </Bar>
-          <Bar dataKey="PFUNITASRS" stackId="a" fill="#0000FF">
-            <LabelList content={(props) => renderCustomizedLabel(props, 'PFUNITASRS')} />
-          </Bar>
-       
-          <Bar dataKey="FeeReserve" stackId="a" fill="#a52a2a">
-            <LabelList content={(props) => renderCustomizedLabel(props, 'FeeReserve')} />
-          </Bar>
-        
-          <Bar dataKey="DryPowder" stackId="a" fill="#A020F0">
-            <LabelList content={(props) => renderCustomizedLabel(props, 'DryPowder')} />
-          </Bar>
-        
-        </BarChart>
-        
-      </ResponsiveContainer>
-  
-      
       </div>
     );
   }; 
