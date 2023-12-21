@@ -154,16 +154,16 @@ const StackedBarChart = () => {
         <YAxis />
         <Tooltip />
         <Legend />
-        <Bar dataKey="Investments" stackId="a" fill="#8884d8">
+        <Bar dataKey="Investments" stackId="a" fill="#191970">
           <LabelList content={(props) => renderCustomizedLabel(props, 'Investments')} />
         </Bar>
-        <Bar dataKey="Fees" stackId="a" fill="#82ca9d">
+        <Bar dataKey="Fees" stackId="a" fill="#a52a2a">
           <LabelList content={(props) => renderCustomizedLabel(props, 'Fees')} />
         </Bar>
-        <Bar dataKey="FeeReserve" stackId="a" fill="#0000FF">
+        <Bar dataKey="FeeReserve" stackId="a" fill="#a52a2a">
           <LabelList content={(props) => renderCustomizedLabel(props, 'FeeReserve')} />
         </Bar>
-        <Bar dataKey="DryPowder" stackId="a" fill="#A020F0">
+        <Bar dataKey="DryPowder" stackId="a" fill="#D2B48C">
           <LabelList content={(props) => renderCustomizedLabel(props, 'DryPowder')} />
         </Bar>
       </BarChart>

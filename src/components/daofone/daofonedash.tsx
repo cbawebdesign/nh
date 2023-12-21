@@ -106,6 +106,9 @@ import React, { useMemo, useState } from 'react';
   };
  
   const StackedBarChart = () => {
+
+    const [showLine1, setShowLine1] = useState(true);
+  const [showLine2, setShowLine2] = useState(true);
     // Assuming the type for a single data item
     interface ChartDataItem {
       QuantelaOpCo: number;
@@ -135,29 +138,31 @@ import React, { useMemo, useState } from 'react';
       FeeReserve: number;
       DryPowder: number;
       MOIC: number;
+      IRR: number;
     }
   
     const initialChartData: ChartDataItem[] = [
-      { name: 'Q2-2021', MOIC: -20, QuantelaOpCo: 0, QuantelaGroup: 0,DARSII: 1.27, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 0, PacketFabricGroup: 0, StarliteRS: 0, PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 0, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 91.6 },
-      { name: 'Q3-2021', MOIC: -15,QuantelaOpCo: 1.0, QuantelaGroup: 0,DARSII: 1.79, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 0, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 0.93, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 87.9 },
-      { name: 'Q4-2021', MOIC: -10, QuantelaOpCo: 0, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 0, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 3, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 12, WeLinkRS: 0,EnergyBoxRS: 1.50, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 71.4 },
-      { name: 'Q1-2022', MOIC: -5, QuantelaOpCo: 1.0, QuantelaGroup: 0,DARSII: .57, OtherGroup:0, LiquidRS: 3.91, StripeSCCIRS: 0, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 2, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 8, WeLinkRS: 0,EnergyBoxRS: 0.85, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 55.1 },
-      { name: 'Q2-2022', MOIC: 2,QuantelaOpCo: 0, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 1.86, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 2.95, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 50.3 },
-      { name: 'Q3-2022', MOIC: 5,QuantelaOpCo: 0, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 4.33, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 2.99, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 42.9 },
-      { name: 'Q4-2022', MOIC: 7, QuantelaOpCo: 1.55, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 0, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 0, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 41.4 },
-      { name: 'Q1-2023', MOIC: 9, QuantelaOpCo: 1.96, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 4.56, StripeSCCIRS: 0, StarliteRS: 5, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 2, UnitasRS: 8, PFRSNewNetwork: 0, WeLinkRS: 2.16,EnergyBoxRS: 0, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 17.7 },
-      { name: 'Q2-2023',MOIC: 9,  QuantelaOpCo: 0, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 0, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 1.04, MDSLPRS: 0.43, FeesActual: .38, FeeReserve: 6.9, DryPowder: 16.2 },
-      { name: 'Q3-2023',MOIC: 8, QuantelaOpCo: 0, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 0, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 1.15, MDSLPRS: 2.72, FeesActual: .38, FeeReserve: 6.9, DryPowder: 12.4 },
-      { name: 'Q4-2023',MOIC: 11,QuantelaOpCo: 0, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 0, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 0, MDSLPRS: 0.48, FeesActual: .38, FeeReserve: 6.9, DryPowder: 11.9 },
-      { name: 'Q1-2024P', MOIC: 11, QuantelaOpCo: 0, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 0, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 0, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 11.9 },
-      { name: 'Q2-2024P',MOIC: 11,  QuantelaOpCo: 0, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 0, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 0, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 11.9 },
-      { name: 'Q3-2024P',MOIC: 11,QuantelaOpCo: 0, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 0, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 0, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 11.9 },
-      { name: 'Q4-2024P', MOIC: 11,QuantelaOpCo: 0, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 0, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 0, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 11.9 },
+      { name: 'Q2-2021', IRR: -20, MOIC: -20, QuantelaOpCo: 0, QuantelaGroup: 0,DARSII: 1.27, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 0, PacketFabricGroup: 0, StarliteRS: 0, PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 0, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 91.6 },
+      { name: 'Q3-2021', IRR: -15,MOIC: -15,QuantelaOpCo: 1.0, QuantelaGroup: 0,DARSII: 1.79, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 0, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 0.93, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 87.9 },
+      { name: 'Q4-2021', IRR: -10,MOIC: -10, QuantelaOpCo: 0, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 0, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 3, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 12, WeLinkRS: 0,EnergyBoxRS: 1.50, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 71.4 },
+      { name: 'Q1-2022', IRR: -5,MOIC: -5, QuantelaOpCo: 1.0, QuantelaGroup: 0,DARSII: .57, OtherGroup:0, LiquidRS: 3.91, StripeSCCIRS: 0, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 2, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 8, WeLinkRS: 0,EnergyBoxRS: 0.85, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 55.1 },
+      { name: 'Q2-2022', IRR: 2,MOIC: 2,QuantelaOpCo: 0, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 1.86, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 2.95, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 50.3 },
+      { name: 'Q3-2022', IRR: 5,MOIC: 5,QuantelaOpCo: 0, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 4.33, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 2.99, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 42.9 },
+      { name: 'Q4-2022', IRR: 7,MOIC: 7, QuantelaOpCo: 1.55, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 0, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 0, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 41.4 },
+      { name: 'Q1-2023', IRR: 9,MOIC: 9, QuantelaOpCo: 1.96, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 4.56, StripeSCCIRS: 0, StarliteRS: 5, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 2, UnitasRS: 8, PFRSNewNetwork: 0, WeLinkRS: 2.16,EnergyBoxRS: 0, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 17.7 },
+      { name: 'Q2-2023', IRR: 9, MOIC: 9,  QuantelaOpCo: 0, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 0, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 1.04, MDSLPRS: 0.43, FeesActual: .38, FeeReserve: 6.9, DryPowder: 16.2 },
+      { name: 'Q3-2023',IRR: 8,MOIC: 8, QuantelaOpCo: 0, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 0, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 1.15, MDSLPRS: 2.72, FeesActual: .38, FeeReserve: 6.9, DryPowder: 12.4 },
+      { name: 'Q4-2023', IRR: 11,MOIC: 11,QuantelaOpCo: 0, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 0, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 0, MDSLPRS: 0.48, FeesActual: .38, FeeReserve: 6.9, DryPowder: 11.9 },
+      { name: 'Q1-2024P', IRR: 11,MOIC: 11, QuantelaOpCo: 0, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 0, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 0, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 11.9 },
+      { name: 'Q2-2024P',IRR: 11,MOIC: 11,  QuantelaOpCo: 0, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 0, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 0, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 11.9 },
+      { name: 'Q3-2024P',IRR: 11,MOIC: 11,QuantelaOpCo: 0, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 0, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 0, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 11.9 },
+      { name: 'Q4-2024P', IRR: 11,MOIC: 11,QuantelaOpCo: 0, QuantelaGroup: 0,DARSII: 0, OtherGroup:0, LiquidRS: 0, StripeSCCIRS: 0, StarliteRS: 0, PacketFabricGroup:0,PacketFabric: 0, PacketFabricOpCo: 0, UnitasOpCo: 0, UnitasRS: 0, PFRSNewNetwork: 0, WeLinkRS: 0,EnergyBoxRS: 0, MDSLPRS: 0, FeesActual: .38, FeeReserve: 6.9, DryPowder: 11.9 },
 
     ];
-    const initialLineData: { name: string, MOIC: number }[] = initialChartData.map(item => ({
+    const initialLineData: { name: string, IRR: number,MOIC: number }[] = initialChartData.map(item => ({
       name: item.name,
-      MOIC: item.MOIC
+      MOIC: item.MOIC,
+      IRR: item.IRR
     }));
     
     const handleDataChange = (page: string, key: keyof ChartDataItem, value: string) => {
@@ -228,6 +233,7 @@ import React, { useMemo, useState } from 'react';
         MDSLPRS: 0,
         PacketFabric: 0,
         MOIC: 0,
+        IRR: 0,
       };
     
       // Calculate cumulative values, including group sums
@@ -271,7 +277,8 @@ import React, { useMemo, useState } from 'react';
           WeLinkRS: cumulativeValues.WeLinkRS,
           EnergyBoxRS: parseFloat((cumulativeValues.EnergyBoxRS).toFixed(1)),
           MDSLPRS: parseFloat((cumulativeValues.MDSLPRS).toFixed(1)),
-          MOIC: item.MOIC
+          MOIC: item.MOIC,
+          IRR: item.IRR
 
 
 
@@ -571,6 +578,9 @@ import React, { useMemo, useState } from 'react';
       
       </div>
       <div style={{ position: 'relative',height: '550px' }}>
+        <input type="checkbox" checked={showLine1} onChange={() => setShowLine1(!showLine1)} /> Show IRR
+      <input type="checkbox" checked={showLine2} onChange={() => setShowLine2(!showLine2)} /> Show MOIC
+
       <ResponsiveContainer width="100%" height="100%" className="chartContainer">
     <ComposedChart  data={cumulativeChartData}>
       <XAxis dataKey="name" />
@@ -594,7 +604,10 @@ import React, { useMemo, useState } from 'react';
     <Bar yAxisId="left" dataKey="DryPowder" stackId="a" fill="#D2B48C">
       <LabelList content={(props) => <CustomizedLabel {...props} dataKey="DryPowder" chartData={cumulativeChartData} />} />
     </Bar>      
-    <Line yAxisId="right" type="monotone" dataKey="MOIC" stroke="#ff0000" strokeWidth={2} activeDot={{ r: 8 }} />      <Tooltip />
+    <Line yAxisId="right" type="monotone" dataKey="IRR" stroke={showLine1 ? "#ff0000" : "none"} strokeWidth={2} activeDot={{ r: 8 }} />    <Tooltip />
+    <Line yAxisId="right" type="monotone" dataKey="MOIC" stroke={showLine2 ? "#00FFFF" : "none"} strokeWidth={2} activeDot={{ r: 8 }} />    <Tooltip />
+
+
     </ComposedChart>
   </ResponsiveContainer>
 </div>

@@ -35,7 +35,7 @@ const NAVIGATION_CONFIG = {
     },
     {
       label: 'common:daftwofllabel',
-      path: '/fundone',
+      path: '/daftwofl',
       Icon: ({ className }: { className: string }) => {
         return <MagnifyingGlassPlusIcon className={className} />;
       },

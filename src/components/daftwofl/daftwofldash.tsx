@@ -205,11 +205,11 @@ const StackedBarChart = () => {
           <Tooltip />
           <Legend />
           <Bar dataKey="Starlite" stackId="a" fill="#8884d8" />
-          <Bar dataKey="UnitasGlobal" stackId="a" fill="#82ca9d" />
-          <Bar dataKey="WeLink" stackId="a" fill="#ffc658" />
+          <Bar dataKey="UnitasGlobal" stackId="a" fill="#89CFF0" />
+          <Bar dataKey="WeLink" stackId="a" fill="#191970" />
           <Bar dataKey="FeesActual" stackId="a" fill="#a52a2a" />
-          <Bar dataKey="FeeReserve" stackId="a" fill="#0000FF" />
-          <Bar dataKey="DryPowder" stackId="a" fill="#A020F0" />
+          <Bar dataKey="FeeReserve" stackId="a" fill="#a52a2a" />
+          <Bar dataKey="DryPowder" stackId="a" fill="#D2B48C" />
         </BarChart>
       </ResponsiveContainer>
     </div>
