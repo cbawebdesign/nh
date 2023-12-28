@@ -584,8 +584,9 @@ import React, { useMemo, useState } from 'react';
       <ResponsiveContainer width="100%" height="100%" className="chartContainer">
     <ComposedChart  data={cumulativeChartData}>
       <XAxis dataKey="name" />
-      <YAxis yAxisId="left" />
-      <YAxis yAxisId="right" orientation="right" />
+      <YAxis yAxisId="left" label={{ value: 'Millions Deployed', angle: -90, position: 'insideLeft' }} />
+<YAxis yAxisId="right" orientation="right" label={{ value: 'Gross and Net IRR', angle: 90, position: 'insideRight' }} />
+      <Legend />
       <Bar yAxisId="left" dataKey="QuantelaGroup" stackId="a" fill="#89CFF0">
       <LabelList content={(props) => <CustomizedLabel {...props} dataKey="QuantelaGroup" chartData={cumulativeChartData} />} />
     </Bar>
