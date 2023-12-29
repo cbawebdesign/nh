@@ -71,7 +71,7 @@ const configuration = {
     signUp: '/auth/sign-up',
     emailLinkSignIn: '/auth/link',
     onboarding: `/onboarding`,
-    appHome: '/dashboard',
+    appHome: '/fundoneover',
     fundone: '/fundone',
     settings: {
       profile: '/settings/profile',
