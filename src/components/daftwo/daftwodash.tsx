@@ -231,7 +231,7 @@ import { LargeNumberLike } from 'crypto';
         DTIQGroup: item.DTIQOpCo + item.DTIQRS,
         E8Group: item.E8OpCo + item.E8RS,
         QwiltPSGroup: item.Qwilt + item.PS,
-        OtherGroup: item.BCTVTS + item.ShareCare
+        OtherGroup: item.BCTVRS + item.ShareCare
       }));
     };
     // The function to calculate cumulative data for the output table
@@ -443,8 +443,9 @@ Tarana: cumulativeValues.Tarana,
               <TableHead style={{  borderRight: '2px solid black' }}>Qwilt/PS Group</TableHead>
 
 
-              <TableHead>BCTVTS</TableHead>
               <TableHead>ShareCare</TableHead>
+              <TableHead>BCTV RS</TableHead>
+
               <TableHead style={{  borderRight: '2px solid black' }}>Other Group</TableHead>
 
 
@@ -452,7 +453,6 @@ Tarana: cumulativeValues.Tarana,
 
               <TableHead>PF Unitas RS</TableHead>
 
-              <TableHead>BCTV RS</TableHead>
 
               <TableHead>Tarana</TableHead>
 
@@ -575,12 +575,13 @@ Tarana: cumulativeValues.Tarana,
                      disabled={isPastQuarter(item.name, currentYear)}
                   />
                 </TableCell>
+             
                 <TableCell>
                   <input
                     className={styles.dataInput}
                     type="number"
-                    value={item.BCTVTS}
-                    onChange={(e) => handleDataChange(item.name, 'BCTVTS', e.target.value)}
+                    value={item.ShareCare}
+                    onChange={(e) => handleDataChange(item.name, 'ShareCare', e.target.value)}
                      disabled={isPastQuarter(item.name, currentYear)}
                   />
                 </TableCell>
@@ -588,8 +589,8 @@ Tarana: cumulativeValues.Tarana,
                   <input
                     className={styles.dataInput}
                     type="number"
-                    value={item.ShareCare}
-                    onChange={(e) => handleDataChange(item.name, 'ShareCare', e.target.value)}
+                    value={item.BCTVRS}
+                    onChange={(e) => handleDataChange(item.name, 'BCTVRS', e.target.value)}
                      disabled={isPastQuarter(item.name, currentYear)}
                   />
                 </TableCell>
@@ -620,15 +621,7 @@ Tarana: cumulativeValues.Tarana,
                      disabled={isPastQuarter(item.name, currentYear)}
                   />
                 </TableCell>
-                <TableCell>
-                  <input
-                    className={styles.dataInput}
-                    type="number"
-                    value={item.BCTVRS}
-                    onChange={(e) => handleDataChange(item.name, 'BCTVRS', e.target.value)}
-                     disabled={isPastQuarter(item.name, currentYear)}
-                  />
-                </TableCell>
+          
                 <TableCell>
                   <input
                     className={styles.dataInput}
@@ -670,13 +663,11 @@ Tarana: cumulativeValues.Tarana,
       
       </div>
       <div style={{ position: 'relative',height: '550px' }}>
-
-      <input className="checkbox" type="checkbox" checked={showLine1} onChange={() => setShowLine1(!showLine1)} /> Show FundGrossIRR
-<input className="checkbox" type="checkbox" checked={showLine2} onChange={() => setShowLine2(!showLine2)} /> Show FundNetIRR
-<input className="checkbox" type="checkbox" checked={showLine3} onChange={() => setShowLine3(!showLine3)} /> Show PortGrossIRR
-<input className="checkbox" type="checkbox" checked={showLine4} onChange={() => setShowLine4(!showLine4)} /> Show PortNetIRR
-<input className="checkbox" type="checkbox" checked={showLine5} onChange={() => setShowLine5(!showLine5)} /> Show NAV
-
+  <input className="checkbox" type="checkbox" checked={showLine1} onChange={() => setShowLine1(!showLine1)} /><span style={{ marginRight: '20px' }}>Show FundGrossIRR</span>
+  <input className="checkbox" type="checkbox" checked={showLine2} onChange={() => setShowLine2(!showLine2)} /><span style={{ marginRight: '20px' }}>Show FundNetIRR</span>
+  <input className="checkbox" type="checkbox" checked={showLine3} onChange={() => setShowLine3(!showLine3)} /><span style={{ marginRight: '20px' }}>Show PortGrossIRR</span>
+  <input className="checkbox" type="checkbox" checked={showLine4} onChange={() => setShowLine4(!showLine4)} /><span style={{ marginRight: '20px' }}>Show PortNetIRR</span>
+  <input className="checkbox" type="checkbox" checked={showLine5} onChange={() => setShowLine5(!showLine5)} /><span style={{ marginRight: '20px' }}>Show NAV</span>
       <ResponsiveContainer width="100%" height="100%" className="chartContainer">
     <ComposedChart  data={cumulativeChartData}>
       <XAxis dataKey="name" />
@@ -821,15 +812,14 @@ Tarana: cumulativeValues.Tarana,
       <TableHead>PS</TableHead>
       <TableHead style={{  borderRight: '2px solid black' }}>Qwilt/PS Group</TableHead>
 
-      <TableHead>BCTV TS</TableHead>
       <TableHead>ShareCare</TableHead>
+      <TableHead>BCTV RS</TableHead>
 
       <TableHead style={{  borderRight: '2px solid black' }}>Other Group</TableHead>
 
 
       <TableHead>RPMA</TableHead>
       <TableHead>PF Unitas RS</TableHead>
-      <TableHead>BCTV RS</TableHead>
       <TableHead>Tarana</TableHead>
 
       <TableHead>FeeReserve</TableHead>
@@ -857,14 +847,14 @@ Tarana: cumulativeValues.Tarana,
               <TableCell>{item.PS}</TableCell>
                 <TableCell style={{  borderRight: '2px solid black'}}>{item.QwiltPSGroup}</TableCell>
 
-                <TableCell>{item.BCTVTS}</TableCell>
                 <TableCell>{item.ShareCare}</TableCell>
+                <TableCell>{item.BCTVRS}</TableCell>
+
                 <TableCell style={{  borderRight: '2px solid black'}}>{item.OtherGroup}</TableCell>
 
 
                 <TableCell>{item.RPMA}</TableCell>
                 <TableCell>{item.PFUnitasRS}</TableCell>
-                <TableCell>{item.BCTVRS}</TableCell>
                 <TableCell>{item.Tarana}</TableCell>
 
                 <TableCell>{item.FeeReserve}</TableCell>
