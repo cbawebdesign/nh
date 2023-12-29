@@ -674,7 +674,7 @@ Tarana: cumulativeValues.Tarana,
       <YAxis yAxisId="left" label={{ value: 'Millions Deployed', angle: -90, position: 'insideLeft' }} />
 <YAxis yAxisId="right" orientation="right" label={{ value: 'Gross and Net IRR %', angle: 90, position: 'insideRight' }} />
       <Legend />
-      
+      <Tooltip />
           <Bar yAxisId="left" dataKey="WeLinkGroup" stackId="a" fill="#21675e">
           <LabelList content={(props) => <CustomizedLabel {...props} dataKey="WeLinkGroup" chartData={cumulativeChartData} />} />
           </Bar>
