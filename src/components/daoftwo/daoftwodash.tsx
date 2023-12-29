@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Line, ResponsiveContainer, LineChart, XAxis, LabelList } from 'recharts';
+import { Line, ResponsiveContainer, LineChart, XAxis, LabelList, Label } from 'recharts';
 import Tile from '~/core/ui/Tile';
 import Heading from '~/core/ui/Heading';
 
@@ -28,6 +28,8 @@ export default function daoftwo() {
         <Tile>
         <Tile.Heading>
   <span style={{ color: '#0000FF' }}>DAOF II Capital Deployment</span>
+  <h6>All capital deployment figures in $ in millions unless otherwise noted</h6>
+
 </Tile.Heading>           <Tile.Body>
             <StackedBarChart />
           </Tile.Body>
@@ -203,11 +205,10 @@ const StackedBarChart = () => {
   // Inside your component
   const currentYear = new Date().getFullYear();
   return (
-<div className={`flex flex-col space-y-6 pb-36 ${styles.tablesContainer}`}>
+<div className={`flex flex-col space-y-4 pb-36 justify-start ${styles.tablesContainer}`}>    {/* ... */}
   {/* ... */}
 
   <div className={`flex ${styles.tableWrapper}`}>
-    <div>
   <h1>Input: Incremental Deployment by Quarter</h1>
     <div className={styles.table}>
       <Table>
@@ -291,8 +292,50 @@ const StackedBarChart = () => {
         </TableBody>
       </Table>
     </div>
-    </div>
-    <div>
+      </div>
+      
+       
+      
+      
+      <div className={`chartContainer ${styles.chartContainer}`}>      
+
+      <ResponsiveContainer width="100%" height={650}>
+      <BarChart data={cumulativeChartData}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="name" />
+        <YAxis>
+        <Label value="Millions Deployed" angle={-90} position='insideLeft' />
+      </YAxis>
+        <Tooltip />
+        <Legend />
+        <Bar dataKey="Starlite" stackId="a" fill="#8884d8">
+          <LabelList content={(props) => renderCustomizedLabel(props, 'Starlite')} />
+        </Bar>
+        <Bar dataKey="UnitasGlobal" stackId="a" fill="#82ca9d">
+          <LabelList content={(props) => renderCustomizedLabel(props, 'UnitasGlobal')} />
+        </Bar>
+        <Bar dataKey="WeLink" stackId="a" fill="#89CFF0">
+          <LabelList content={(props) => renderCustomizedLabel(props, 'WeLink')} />
+        </Bar>
+        <Bar dataKey="FeesActual" stackId="a" fill="#191970">
+          <LabelList content={(props) => renderCustomizedLabel(props, 'FeesActual')} />
+        </Bar>
+        <Bar dataKey="FeeReserve" stackId="a" fill="#a52a2a">
+          <LabelList content={(props) => renderCustomizedLabel(props, 'FeeReserve')} />
+        </Bar>
+      
+        <Bar dataKey="DryPowder" stackId="a" fill="#D2B48C">
+          <LabelList content={(props) => renderCustomizedLabel(props, 'DryPowder')} />
+        </Bar>
+      
+      </BarChart>
+      
+    </ResponsiveContainer>
+
+    
+</div>
+     
+<div>
     <h1>Outputs: Cumulative Deployment by Quarter</h1>
     <div className={styles.tableWrapper}>
 
@@ -328,42 +371,9 @@ const StackedBarChart = () => {
         </TableBody>
       </Table>
     </div>
+    </div>
   </div>
-</div>
-      
-    </div>
-      <ResponsiveContainer width="100%" height={650}>
-      <BarChart data={cumulativeChartData}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
-        <YAxis />
-        <Tooltip />
-        <Legend />
-        <Bar dataKey="Starlite" stackId="a" fill="#8884d8">
-          <LabelList content={(props) => renderCustomizedLabel(props, 'Starlite')} />
-        </Bar>
-        <Bar dataKey="UnitasGlobal" stackId="a" fill="#82ca9d">
-          <LabelList content={(props) => renderCustomizedLabel(props, 'UnitasGlobal')} />
-        </Bar>
-        <Bar dataKey="WeLink" stackId="a" fill="#0000FF">
-          <LabelList content={(props) => renderCustomizedLabel(props, 'WeLink')} />
-        </Bar>
-        <Bar dataKey="FeesActual" stackId="a" fill="#a52a2a">
-          <LabelList content={(props) => renderCustomizedLabel(props, 'FeesActual')} />
-        </Bar>
-        <Bar dataKey="FeeReserve" stackId="a" fill="#a52a2a">
-          <LabelList content={(props) => renderCustomizedLabel(props, 'FeeReserve')} />
-        </Bar>
-      
-        <Bar dataKey="DryPowder" stackId="a" fill="#A020F0">
-          <LabelList content={(props) => renderCustomizedLabel(props, 'DryPowder')} />
-        </Bar>
-      
-      </BarChart>
-      
-    </ResponsiveContainer>
-
-    
-    </div>
-  );
-}; 
+        
+      </div>
+    );
+  }; 

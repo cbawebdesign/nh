@@ -31,6 +31,8 @@ import React, { useMemo, useState } from 'react';
           <Tile>
           <Tile.Heading>
     <span style={{ color: '#0000FF' }}>DAOF I Capital Deployment</span>
+    <h4>All capital deployment figures in $ in millions unless otherwise noted</h4>
+
   </Tile.Heading>           <Tile.Body>
               <StackedBarChart />
             </Tile.Body>
@@ -578,9 +580,7 @@ import React, { useMemo, useState } from 'react';
       
       </div>
       <div style={{ position: 'relative',height: '550px' }}>
-        <input type="checkbox" checked={showLine1} onChange={() => setShowLine1(!showLine1)} /> Show IRR
-      <input type="checkbox" checked={showLine2} onChange={() => setShowLine2(!showLine2)} /> Show MOIC
-
+   
       <ResponsiveContainer width="100%" height="100%" className="chartContainer">
     <ComposedChart  data={cumulativeChartData}>
       <XAxis dataKey="name" />
@@ -605,8 +605,8 @@ import React, { useMemo, useState } from 'react';
     <Bar yAxisId="left" dataKey="DryPowder" stackId="a" fill="#D2B48C">
       <LabelList content={(props) => <CustomizedLabel {...props} dataKey="DryPowder" chartData={cumulativeChartData} />} />
     </Bar>      
-    <Line yAxisId="right" type="monotone" dataKey="IRR" stroke={showLine1 ? "#ff0000" : "none"} strokeWidth={2} activeDot={{ r: 8 }} />    <Tooltip />
-    <Line yAxisId="right" type="monotone" dataKey="MOIC" stroke={showLine2 ? "#00FFFF" : "none"} strokeWidth={2} activeDot={{ r: 8 }} />    <Tooltip />
+        <Tooltip />
+     <Tooltip />
 
 
     </ComposedChart>

@@ -38,7 +38,9 @@
   margin-bottom: 10px;
   /* Other styling as needed */
 }
-
+.checkbox {
+  margin-right: 40px; /* Adjust as needed */
+}
 /* New styles for side-by-side layout */
 .tablesContainer {
   display: flex;

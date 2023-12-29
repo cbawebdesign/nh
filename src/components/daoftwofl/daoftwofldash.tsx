@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Line, ResponsiveContainer, LineChart, XAxis, LabelList, BarChart, Bar, CartesianGrid, YAxis, Tooltip, Legend } from 'recharts';
+import { Line, ResponsiveContainer, LineChart, XAxis, LabelList, BarChart, Bar, CartesianGrid, YAxis, Tooltip, Legend, Label } from 'recharts';
 import Tile from '~/core/ui/Tile';
 import Heading from '~/core/ui/Heading';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/core/ui/Table';
@@ -17,6 +17,8 @@ export default function Daoftwofldash() {
         <Tile>
         <Tile.Heading>
   <span style={{ color: '#0000FF' }}>DAOF II Fund Level Overview</span>
+  <h4>All capital deployment figures in $ in millions unless otherwise noted</h4>
+
 </Tile.Heading>           <Tile.Body>
             <StackedBarChart />
           </Tile.Body>
@@ -145,19 +147,20 @@ const StackedBarChart = () => {
       <BarChart data={chartData}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="name" />
-        <YAxis />
-        <Tooltip />
+        <YAxis>
+        <Label value="Millions Deployed" angle={-90} position='insideLeft' />
+      </YAxis>        <Tooltip />
         <Legend />
-        <Bar dataKey="Investments" stackId="a" fill="#8884d8">
+        <Bar dataKey="Investments" stackId="a" fill="#191970">
           <LabelList content={(props) => renderCustomizedLabel(props, 'Investments')} />
         </Bar>
-        <Bar dataKey="Fees" stackId="a" fill="#82ca9d">
+        <Bar dataKey="Fees" stackId="a" fill="#a52a2a">
           <LabelList content={(props) => renderCustomizedLabel(props, 'Fees')} />
         </Bar>
-        <Bar dataKey="FeeReserve" stackId="a" fill="#0000FF">
+        <Bar dataKey="FeeReserve" stackId="a" fill="#a52a2a">
           <LabelList content={(props) => renderCustomizedLabel(props, 'FeeReserve')} />
         </Bar>
-        <Bar dataKey="DryPowder" stackId="a" fill="#A020F0">
+        <Bar dataKey="DryPowder" stackId="a" fill="#D2B48C">
           <LabelList content={(props) => renderCustomizedLabel(props, 'DryPowder')} />
         </Bar>
       </BarChart>

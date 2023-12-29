@@ -15,9 +15,9 @@ import {
 import { useUserSession } from '~/core/hooks/use-user-session';
 import { BarChart, Bar, CartesianGrid, YAxis, Tooltip, Legend } from 'recharts';
 
-import styles from './daftwofl.module.css'; // Import your CSS file
+import styles from './daftwolf.module.css'; // Import your CSS file
 
-export default function Daftwofldash() {
+export default function Daftwolfdash() {
   const mrr = useMemo(() => generateDemoData(), []);
 
   return (

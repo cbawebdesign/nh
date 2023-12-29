@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Line, ResponsiveContainer, LineChart, XAxis, LabelList, BarChart, Bar, CartesianGrid, YAxis, Tooltip, Legend } from 'recharts';
+import { Line, ResponsiveContainer, LineChart, XAxis, LabelList, BarChart, Bar, CartesianGrid, YAxis, Tooltip, Legend, Label } from 'recharts';
 import Tile from '~/core/ui/Tile';
 import Heading from '~/core/ui/Heading';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/core/ui/Table';
@@ -17,6 +17,8 @@ export default function Daofonefldash() {
         <Tile>
         <Tile.Heading>
   <span style={{ color: '#0000FF' }}>DAOF I Fund Level Overview</span>
+  <h4>All capital deployment figures in $ in millions unless otherwise noted</h4>
+
 </Tile.Heading>           <Tile.Body>
             <StackedBarChart />
           </Tile.Body>
@@ -151,7 +153,9 @@ const StackedBarChart = () => {
       <BarChart data={chartData}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="name" />
-        <YAxis />
+        <YAxis>
+        <Label value="Millions Deployed" angle={-90} position='insideLeft' />
+      </YAxis>
         <Tooltip />
         <Legend />
         <Bar dataKey="Investments" stackId="a" fill="#191970">

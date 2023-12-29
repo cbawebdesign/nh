@@ -2,7 +2,7 @@
 
 
 import React, { useMemo, useState } from 'react';
-  import { Line, ResponsiveContainer, LineChart, XAxis, LabelList } from 'recharts';
+  import { Line, ResponsiveContainer, LineChart, XAxis, LabelList, ComposedChart } from 'recharts';
   import Tile from '~/core/ui/Tile';
   import Heading from '~/core/ui/Heading';
   
@@ -19,6 +19,7 @@ import React, { useMemo, useState } from 'react';
   import { BarChart, Bar, CartesianGrid, YAxis, Tooltip, Legend } from 'recharts';
   
   import styles from './daftwo.module.css'; // Import your CSS file
+import { LargeNumberLike } from 'crypto';
   
   export default function Daftwo() {
   
@@ -30,7 +31,8 @@ import React, { useMemo, useState } from 'react';
         <div>
           <Tile>
           <Tile.Heading>
-    <span style={{ color: '#0000FF' }}>DAOF I Capital Deployment</span>
+    <span style={{ color: '#0000FF' }}>DAF II Capital Deployment</span>
+    <h4>All capital deployment figures in $ in millions unless otherwise noted</h4>
   </Tile.Heading>           <Tile.Body>
               <StackedBarChart />
             </Tile.Body>
@@ -107,6 +109,13 @@ import React, { useMemo, useState } from 'react';
  
   const StackedBarChart = () => {
     // Assuming the type for a single data item
+    const [showLine1, setShowLine1] = useState(true);
+    const [showLine2, setShowLine2] = useState(true);
+    const [showLine3, setShowLine3] = useState(true);
+    const [showLine4, setShowLine4] = useState(true);
+    const [showLine5, setShowLine5] = useState(true);
+    const [showLine6, setShowLine6] = useState(true);
+
     interface ChartDataItem {
 
 
@@ -144,24 +153,43 @@ import React, { useMemo, useState } from 'react';
       FeesActual: number;
       FeeReserve: number;
       DryPowder: number;
+      MOIC: number;
+      IRR: number;
+      FundGrossIRR: number | null,
+      FundNetIRR: number | null;
+      PortGrossIRR: number | null;
+      PortNetIRR: number | null;
+      NAV: number | null;
+
+
     }
   
     const initialChartData: ChartDataItem[] = [
       
-      { name: 'Q4-2022', Tarana: 0, WeLinkGroup: 0, WeLinkRS: 22.7,WeLinkOpCo: 45.1, DTIQGroup:0, DTIQOpCo: 123.4, DTIQRS: 0, E8Group: 0, E8OpCo:0,E8RS: 0, QwiltPSGroup: 0, Qwilt: 10, PS: 64.3, OtherGroup: 0, BCTVTS: 0,ShareCare: 15, RPMA: 12, PFUnitasRS: 198.9, BCTVRS:0.4,FeesActual: .38, FeeReserve: 105.6, DryPowder: 458.4 },
-      { name: 'Q1-2023', Tarana: 0, WeLinkGroup: 0, WeLinkRS: 0,WeLinkOpCo: 16.5, DTIQGroup:0, DTIQOpCo: 0, DTIQRS: 0, E8Group: 0, E8OpCo:0,E8RS: 0, QwiltPSGroup: 0, Qwilt: 0, PS: 0.5, OtherGroup: 0, BCTVTS: 0,ShareCare: 0, RPMA: 0, PFUnitasRS: 0, BCTVRS:2.4,FeesActual: .38, FeeReserve: 105.6, DryPowder: 439 },
-      { name: 'Q2-2023', Tarana: 40,WeLinkGroup: 0, WeLinkRS: 0,WeLinkOpCo: 13.5, DTIQGroup:0, DTIQOpCo: 5, DTIQRS: 1.5, E8Group: 0, E8OpCo:20,E8RS: 0, QwiltPSGroup: 0, Qwilt: 0, PS: 1.4, OtherGroup: 0, BCTVTS: 0,ShareCare: 0, RPMA: 0, PFUnitasRS: 0, BCTVRS:13.3,FeesActual: .38, FeeReserve: 105.6, DryPowder: 344.3 },
-      { name: 'Q3-2023', Tarana: 0, WeLinkGroup: 0, WeLinkRS: 3.1,WeLinkOpCo: 2.0, DTIQGroup:0, DTIQOpCo: 0, DTIQRS: 2, E8Group: 0, E8OpCo:4.1,E8RS: 55.8, QwiltPSGroup: 0, Qwilt: 0, PS: 0.2, OtherGroup: 0, BCTVTS: 0,ShareCare: 0, RPMA: 0, PFUnitasRS: 10, BCTVRS:3.0,FeesActual: .38, FeeReserve: 105.6, DryPowder: 264.2 },
-      { name: 'Q4-2023', Tarana: 0, WeLinkGroup: 0, WeLinkRS: 0,WeLinkOpCo: 1.2, DTIQGroup:0, DTIQOpCo: 0, DTIQRS: 0, E8Group: 0, E8OpCo:22.5,E8RS: 7.5, QwiltPSGroup: 0, Qwilt: 0, PS: 0.1, OtherGroup: 0, BCTVTS: 0,ShareCare: 0, RPMA: 0, PFUnitasRS: 0, BCTVRS:2.8,FeesActual: .38, FeeReserve: 105.6, DryPowder: 230.1},
-      { name: 'Q1-2024P', Tarana: 0, WeLinkGroup: 0, WeLinkRS: 0,WeLinkOpCo: 0, DTIQGroup:0, DTIQOpCo: 0, DTIQRS: 0, E8Group: 0, E8OpCo:0,E8RS: 0, QwiltPSGroup: 0, Qwilt: 0, PS: 0, OtherGroup: 0, BCTVTS: 0,ShareCare: 0, RPMA: 0, PFUnitasRS: 0, BCTVRS:0,FeesActual: .38, FeeReserve: 105.6, DryPowder: 230.1 },
-      { name: 'Q2-2024P', Tarana: 0, WeLinkGroup: 0, WeLinkRS: 0,WeLinkOpCo: 0, DTIQGroup:0, DTIQOpCo: 0, DTIQRS: 0, E8Group: 0, E8OpCo:0,E8RS: 0, QwiltPSGroup: 0, Qwilt: 0, PS: 0, OtherGroup: 0, BCTVTS: 0,ShareCare: 0, RPMA: 0, PFUnitasRS: 0, BCTVRS:0,FeesActual: .38, FeeReserve: 105.6, DryPowder: 230.1 },
-      { name: 'Q3-2024P', Tarana: 0, WeLinkGroup: 0, WeLinkRS: 0,WeLinkOpCo: 0, DTIQGroup:0, DTIQOpCo: 0, DTIQRS: 0, E8Group: 0, E8OpCo:0,E8RS: 0, QwiltPSGroup: 0, Qwilt: 0, PS: 0, OtherGroup: 0, BCTVTS: 0,ShareCare: 0, RPMA: 0, PFUnitasRS: 0, BCTVRS:0,FeesActual: .38, FeeReserve: 105.6, DryPowder: 230.1 },
-      { name: 'Q4-2024P', Tarana: 0, WeLinkGroup: 0, WeLinkRS: 0,WeLinkOpCo: 0, DTIQGroup:0, DTIQOpCo: 0, DTIQRS: 0, E8Group: 0, E8OpCo:0,E8RS: 0, QwiltPSGroup: 0, Qwilt: 0, PS: 0, OtherGroup: 0, BCTVTS: 0,ShareCare: 0, RPMA: 0, PFUnitasRS: 0, BCTVRS:0,FeesActual: .38, FeeReserve: 105.6, DryPowder: 230.1 },
+      { name: 'Q4-2022', FundGrossIRR: 29, FundNetIRR: 24, PortGrossIRR: 49, PortNetIRR: 42, NAV: 708.7, IRR: 5,MOIC: 5, Tarana: 0, WeLinkGroup: 0, WeLinkRS: 22.7,WeLinkOpCo: 45.1, DTIQGroup:0, DTIQOpCo: 123.4, DTIQRS: 0, E8Group: 0, E8OpCo:0,E8RS: 0, QwiltPSGroup: 0, Qwilt: 10, PS: 64.3, OtherGroup: 0, BCTVTS: 0,ShareCare: 15, RPMA: 12, PFUnitasRS: 198.9, BCTVRS:0.4,FeesActual: .38, FeeReserve: 105.6, DryPowder: 458.4 },
+      { name: 'Q1-2023', FundGrossIRR: 29, FundNetIRR: 24, PortGrossIRR: 49, PortNetIRR: 42, NAV: 708.7,IRR: 5, MOIC: 8,Tarana: 0, WeLinkGroup: 0, WeLinkRS: 0,WeLinkOpCo: 16.5, DTIQGroup:0, DTIQOpCo: 0, DTIQRS: 0, E8Group: 0, E8OpCo:0,E8RS: 0, QwiltPSGroup: 0, Qwilt: 0, PS: 0.5, OtherGroup: 0, BCTVTS: 0,ShareCare: 0, RPMA: 0, PFUnitasRS: 0, BCTVRS:2.4,FeesActual: .38, FeeReserve: 105.6, DryPowder: 439 },
+      { name: 'Q2-2023', FundGrossIRR: 18, FundNetIRR: 14.8, PortGrossIRR: 30.5, PortNetIRR: 26.9, NAV: 928.9,IRR: 5, MOIC: 9, Tarana: 40,WeLinkGroup: 0, WeLinkRS: 0,WeLinkOpCo: 13.5, DTIQGroup:0, DTIQOpCo: 5, DTIQRS: 1.5, E8Group: 0, E8OpCo:20,E8RS: 0, QwiltPSGroup: 0, Qwilt: 0, PS: 1.4, OtherGroup: 0, BCTVTS: 0,ShareCare: 0, RPMA: 0, PFUnitasRS: 0, BCTVRS:13.3,FeesActual: .38, FeeReserve: 105.6, DryPowder: 344.3 },
+      { name: 'Q3-2023', FundGrossIRR: 18, FundNetIRR: 14.8, PortGrossIRR: 26.2, PortNetIRR: 22.80, NAV: 928.9,IRR: 0, MOIC: 9, Tarana: 0, WeLinkGroup: 0, WeLinkRS: 3.1,WeLinkOpCo: 2.0, DTIQGroup:0, DTIQOpCo: 0, DTIQRS: 2, E8Group: 0, E8OpCo:4.1,E8RS: 55.8, QwiltPSGroup: 0, Qwilt: 0, PS: 0.2, OtherGroup: 0, BCTVTS: 0,ShareCare: 0, RPMA: 0, PFUnitasRS: 10, BCTVRS:3.0,FeesActual: .38, FeeReserve: 105.6, DryPowder: 264.2 },
+      { name: 'Q4-2023', FundGrossIRR: 18, FundNetIRR: 14.8, PortGrossIRR: 26.2, PortNetIRR: 22.80, NAV: 928.9,IRR: 0, MOIC:9, Tarana: 0, WeLinkGroup: 0, WeLinkRS: 0,WeLinkOpCo: 1.2, DTIQGroup:0, DTIQOpCo: 0, DTIQRS: 0, E8Group: 0, E8OpCo:22.5,E8RS: 7.5, QwiltPSGroup: 0, Qwilt: 0, PS: 0.1, OtherGroup: 0, BCTVTS: 0,ShareCare: 0, RPMA: 0, PFUnitasRS: 0, BCTVRS:2.8,FeesActual: .38, FeeReserve: 105.6, DryPowder: 230.1},
+      { name: 'Q1-2024P', FundGrossIRR: null, FundNetIRR: null, PortGrossIRR: null, PortNetIRR: null, NAV: null,IRR: 5, MOIC: 11,Tarana: 0, WeLinkGroup: 0, WeLinkRS: 0,WeLinkOpCo: 0, DTIQGroup:0, DTIQOpCo: 0, DTIQRS: 0, E8Group: 0, E8OpCo:0,E8RS: 0, QwiltPSGroup: 0, Qwilt: 0, PS: 0, OtherGroup: 0, BCTVTS: 0,ShareCare: 0, RPMA: 0, PFUnitasRS: 0, BCTVRS:0,FeesActual: .38, FeeReserve: 105.6, DryPowder: 230.1 },
+      { name: 'Q2-2024P', FundGrossIRR: null,FundNetIRR: null, PortGrossIRR: null, PortNetIRR: null, NAV: null,IRR: 5, MOIC: 12,Tarana: 0, WeLinkGroup: 0, WeLinkRS: 0,WeLinkOpCo: 0, DTIQGroup:0, DTIQOpCo: 0, DTIQRS: 0, E8Group: 0, E8OpCo:0,E8RS: 0, QwiltPSGroup: 0, Qwilt: 0, PS: 0, OtherGroup: 0, BCTVTS: 0,ShareCare: 0, RPMA: 0, PFUnitasRS: 0, BCTVRS:0,FeesActual: .38, FeeReserve: 105.6, DryPowder: 230.1 },
+      { name: 'Q3-2024P', FundGrossIRR: null, FundNetIRR: null, PortGrossIRR: null, PortNetIRR: null, NAV: null,IRR: 8, MOIC:13,Tarana: 0, WeLinkGroup: 0, WeLinkRS: 0,WeLinkOpCo: 0, DTIQGroup:0, DTIQOpCo: 0, DTIQRS: 0, E8Group: 0, E8OpCo:0,E8RS: 0, QwiltPSGroup: 0, Qwilt: 0, PS: 0, OtherGroup: 0, BCTVTS: 0,ShareCare: 0, RPMA: 0, PFUnitasRS: 0, BCTVRS:0,FeesActual: .38, FeeReserve: 105.6, DryPowder: 230.1 },
+      { name: 'Q4-2024P', FundGrossIRR: null, FundNetIRR: null, PortGrossIRR: null, PortNetIRR: null, NAV: null,IRR: 9, MOIC: 14, Tarana: 0, WeLinkGroup: 0, WeLinkRS: 0,WeLinkOpCo: 0, DTIQGroup:0, DTIQOpCo: 0, DTIQRS: 0, E8Group: 0, E8OpCo:0,E8RS: 0, QwiltPSGroup: 0, Qwilt: 0, PS: 0, OtherGroup: 0, BCTVTS: 0,ShareCare: 0, RPMA: 0, PFUnitasRS: 0, BCTVRS:0,FeesActual: .38, FeeReserve: 105.6, DryPowder: 230.1 },
 
 
     ];
   
-    
+    const initialLineData: { name: string, NAV: number | null, FundGrossIRR: number | null, FundNetIRR: number | null, PortGrossIRR: number | null, PortNetIRR: number | null, IRR: number,MOIC: number }[] = initialChartData.map(item => ({
+      name: item.name,
+      MOIC: item.MOIC,
+      IRR: item.IRR,
+      FundGrossIRR: item.FundGrossIRR,
+      FundNetIRR: item.FundNetIRR,
+      PortGrossIRR: item.PortGrossIRR,
+      PortNetIRR: item.PortNetIRR,
+      NAV: item.NAV,
+
+    }));
     const handleDataChange = (page: string, key: keyof ChartDataItem, value: string) => {
       const numericValue = parseFloat(value);
     
@@ -233,7 +261,14 @@ import React, { useMemo, useState } from 'react';
         BCTVRS: 0,
         BCTVTS: 0,
         ShareCare: 0,
-        Tarana:0
+        Tarana:0,
+        MOIC: 0,
+        IRR: 0,
+        FundGrossIRR: 0,
+        FundNetIRR: 0,
+        PortGrossIRR: 0,
+        PortNetIRR: 0,
+        NAV: 0,
       };
     
       // Calculate cumulative values, including group sums
@@ -283,6 +318,8 @@ Tarana: cumulativeValues.Tarana,
           FeesActual: cumulativeValues.FeesActual,
           FeeReserve: cumulativeValues.FeeReserve,
           DryPowder: parseFloat((item.DryPowder).toFixed(1)),
+          MOIC: item.MOIC,
+          IRR: item.IRR
 
         };
       });
@@ -316,7 +353,7 @@ Tarana: cumulativeValues.Tarana,
         
           <div className={`flex ${styles.tableWrapper}`}>
       <div>
-      <h1>Input: Incremental Deployment by Quarter</h1>
+      <h1 style={{ textDecoration: 'underline' }}>Input: Incremental Deployment by Quarter</h1>
       <div className={styles.table}>
         <Table>
           <TableHeader>
@@ -632,57 +669,69 @@ Tarana: cumulativeValues.Tarana,
        
       
       </div>
-      <ResponsiveContainer width="100%" height={650}>
-        <BarChart data={cumulativeChartData}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
+      <div style={{ position: 'relative',height: '550px' }}>
+
+      <input className="checkbox" type="checkbox" checked={showLine1} onChange={() => setShowLine1(!showLine1)} /> Show FundGrossIRR
+<input className="checkbox" type="checkbox" checked={showLine2} onChange={() => setShowLine2(!showLine2)} /> Show FundNetIRR
+<input className="checkbox" type="checkbox" checked={showLine3} onChange={() => setShowLine3(!showLine3)} /> Show PortGrossIRR
+<input className="checkbox" type="checkbox" checked={showLine4} onChange={() => setShowLine4(!showLine4)} /> Show PortNetIRR
+<input className="checkbox" type="checkbox" checked={showLine5} onChange={() => setShowLine5(!showLine5)} /> Show NAV
+
+      <ResponsiveContainer width="100%" height="100%" className="chartContainer">
+    <ComposedChart  data={cumulativeChartData}>
+      <XAxis dataKey="name" />
+      <YAxis yAxisId="left" label={{ value: 'Millions Deployed', angle: -90, position: 'insideLeft' }} />
+<YAxis yAxisId="right" orientation="right" label={{ value: 'Gross and Net IRR %', angle: 90, position: 'insideRight' }} />
+      <Legend />
       
-          <Bar dataKey="WeLinkGroup" stackId="a" fill="#8884d8">
+          <Bar yAxisId="left" dataKey="WeLinkGroup" stackId="a" fill="#8884d8">
           <LabelList content={(props) => <CustomizedLabel {...props} dataKey="WeLinkGroup" chartData={cumulativeChartData} />} />
           </Bar>
-          <Bar dataKey="DTIQGroup" stackId="a" fill="#8884d8">
+          <Bar yAxisId="left" dataKey="DTIQGroup" stackId="a" fill="#8884d8">
           <LabelList content={(props) => <CustomizedLabel {...props} dataKey="DTIQGroup" chartData={cumulativeChartData} />} />
           </Bar>
-          <Bar dataKey="E8Group" stackId="a" fill="#8884d8">
+          <Bar yAxisId="left" dataKey="E8Group" stackId="a" fill="#8884d8">
           <LabelList content={(props) => <CustomizedLabel {...props} dataKey="E8Group" chartData={cumulativeChartData} />} />
           </Bar>
-          <Bar dataKey="QwiltPSGroup" stackId="a" fill="#a52a2a">
+          <Bar yAxisId="left" dataKey="QwiltPSGroup" stackId="a" fill="#a52a2a">
           <LabelList content={(props) => <CustomizedLabel {...props} dataKey="QwiltPSGroup" chartData={cumulativeChartData} />} />
           </Bar>
-          <Bar dataKey="OtherGroup" stackId="a" fill="#a52a2a">
+          <Bar yAxisId="left" dataKey="OtherGroup" stackId="a" fill="#a52a2a">
           <LabelList content={(props) => <CustomizedLabel {...props} dataKey="OtherGroup" chartData={cumulativeChartData} />} />
           </Bar>       
-          <Bar dataKey="RPMA" stackId="a" fill="#89CFF0">
+          <Bar yAxisId="left" dataKey="RPMA" stackId="a" fill="#89CFF0">
           <LabelList content={(props) => <CustomizedLabel {...props} dataKey="RPMA" chartData={cumulativeChartData} />} />
           </Bar>
-          <Bar dataKey="PFUnitasRS" stackId="a" fill="#7393B3">
+          <Bar yAxisId="left" dataKey="PFUnitasRS" stackId="a" fill="#7393B3">
           <LabelList content={(props) => <CustomizedLabel {...props} dataKey="PFUnitasRS" chartData={cumulativeChartData} />} />
           </Bar>
-          <Bar dataKey="BCTVRS" stackId="a" fill="#191970">
+          <Bar yAxisId="left" dataKey="BCTVRS" stackId="a" fill="#191970">
           <LabelList content={(props) => <CustomizedLabel {...props} dataKey="BCTVRS" chartData={cumulativeChartData} />} />
           </Bar>
-          <Bar dataKey="Tarana" stackId="a" fill="#a52a2a">
+          <Bar yAxisId="left" dataKey="Tarana" stackId="a" fill="#a52a2a">
           <LabelList content={(props) => <CustomizedLabel {...props} dataKey="Tarana" chartData={cumulativeChartData} />} />
           </Bar>
         
-          <Bar dataKey="FeeReserve" stackId="a" fill="#a52a2a">
+          <Bar yAxisId="left" dataKey="FeeReserve" stackId="a" fill="#a52a2a">
           <LabelList content={(props) => <CustomizedLabel {...props} dataKey="FeeReserve" chartData={cumulativeChartData} />} />
           </Bar>
         
-          <Bar dataKey="DryPowder" stackId="a" fill="#D2B48C">
+          <Bar  yAxisId="left"dataKey="DryPowder" stackId="a" fill="#D2B48C">
           <LabelList content={(props) => <CustomizedLabel {...props} dataKey="DryPowder" chartData={cumulativeChartData} />} />
           </Bar>
-        
-        </BarChart>
+          <Line yAxisId="right" type="monotone" dataKey="FundGrossIRR" stroke={showLine1 ? "#702963" : "none"} strokeWidth={3} activeDot={{ r: 8 }} />
+<Line yAxisId="right" type="monotone" dataKey="FundNetIRR" stroke={showLine2 ? "#DE3163" : "none"} strokeWidth={3} activeDot={{ r: 8 }} />
+<Line yAxisId="right" type="monotone" dataKey="PortGrossIRR" stroke={showLine3 ? "#FFC300 " : "none"} strokeWidth={3} activeDot={{ r: 8 }} />
+<Line yAxisId="right" type="monotone" dataKey="PortNetIRR" stroke={showLine4 ? "#468499" : "none"} strokeWidth={3} activeDot={{ r: 8 }} />
+<Line yAxisId="left" type="monotone" dataKey="NAV" stroke={showLine5 ? "#00ff7f" : "none"} strokeWidth={3} activeDot={{ r: 8 }} />
+          
+        </ComposedChart>
         
       </ResponsiveContainer>
-  
+      </div>
       <div>
-      <h1>Outputs: Cumulative Deployment by Quarter</h1>
-      <div className={styles.tableWrapper}>
+      <h1 style={{ textDecoration: 'underline' }}>Outputs: Cumulative Deployment by Quarter</h1>
+            <div className={styles.tableWrapper}>
   
       <div className={styles.table}>
         {/* Second table code */}

@@ -1,25 +1,66 @@
+/* Existing styles */
+.groupTitle {
+  text-align: center !important;
+  font-weight: bold !important;
+  background-color: rgb(130, 35, 35) !important;
+}
+.borderRight {
+  border-right: 2px solid #000; /* Adjust color and width as needed */
+}
+
+
 .columnHeader, .dataCell {
-    width: 80px;
-    text-align: left;
-  
+  width: 80px; /* Adjust as needed */
+}
+
+.dataInputRow label {
+  width: 40px; /* Adjust if needed */
+  margin-right: 10px;
+  text-align: left; /* Align label text */
+}
+
+.dataInput {
+  width: 55px;
+  margin-right: 0px;
+  padding: 5px;
+  color: blue;
+}
+
+.dataInputRow {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.sectionTitle {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  /* Other styling as needed */
+}
+.checkbox {
+  margin-right: 40px; /* Adjust as needed */
+}
+/* New styles for side-by-side layout */
+.tablesContainer {
+  display: flex;
+  justify-content: space-between; /* Adjust the spacing between tables */
+  flex-wrap: wrap; /* Allows tables to stack on smaller screens */
+}
+
+.tableWrapper, .chartContainer {
+  max-width: 100%;
+  max-height: 100%;
+  flex-wrap: wrap;
+
+  overflow: auto;
+
+}
+.tableWrapper table td, .tableWrapper table th {
+  font-size: 0.80em; /* Adjust as needed */
+}
+@media (max-width: 600px) {
+  .tableWrapper {
+    flex-direction: column;
   }
-  
-  .dataInputRow label {
-    width: 80px; /* Adjust if needed */
-    margin-right: 10px;
-    text-align: left; /* Align label text */
-  }
-  
-  .dataInput {
-    width: 80px;
-    margin-right: 10px;
-    padding: 5px;
-    color: blue;
-  }
-  
-  .dataInputRow {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  
+}
