@@ -684,10 +684,10 @@ Tarana: cumulativeValues.Tarana,
 <YAxis yAxisId="right" orientation="right" label={{ value: 'Gross and Net IRR %', angle: 90, position: 'insideRight' }} />
       <Legend />
       
-          <Bar yAxisId="left" dataKey="WeLinkGroup" stackId="a" fill="#8884d8">
+          <Bar yAxisId="left" dataKey="WeLinkGroup" stackId="a" fill="#21675e">
           <LabelList content={(props) => <CustomizedLabel {...props} dataKey="WeLinkGroup" chartData={cumulativeChartData} />} />
           </Bar>
-          <Bar yAxisId="left" dataKey="DTIQGroup" stackId="a" fill="#8884d8">
+          <Bar yAxisId="left" dataKey="DTIQGroup" stackId="a" fill="#468499">
           <LabelList content={(props) => <CustomizedLabel {...props} dataKey="DTIQGroup" chartData={cumulativeChartData} />} />
           </Bar>
           <Bar yAxisId="left" dataKey="E8Group" stackId="a" fill="#8884d8">
@@ -696,7 +696,7 @@ Tarana: cumulativeValues.Tarana,
           <Bar yAxisId="left" dataKey="QwiltPSGroup" stackId="a" fill="#a52a2a">
           <LabelList content={(props) => <CustomizedLabel {...props} dataKey="QwiltPSGroup" chartData={cumulativeChartData} />} />
           </Bar>
-          <Bar yAxisId="left" dataKey="OtherGroup" stackId="a" fill="#a52a2a">
+          <Bar yAxisId="left" dataKey="OtherGroup" stackId="a" fill="#f27d52">
           <LabelList content={(props) => <CustomizedLabel {...props} dataKey="OtherGroup" chartData={cumulativeChartData} />} />
           </Bar>       
           <Bar yAxisId="left" dataKey="RPMA" stackId="a" fill="#89CFF0">
