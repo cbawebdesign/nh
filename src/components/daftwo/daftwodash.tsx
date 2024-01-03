@@ -663,12 +663,8 @@ Tarana: cumulativeValues.Tarana,
       
       </div>
       <div style={{ position: 'relative',height: '550px' }}>
-  <input className="checkbox" type="checkbox" checked={showLine1} onChange={() => setShowLine1(!showLine1)} /><span style={{ marginRight: '20px' }}>Show FundGrossIRR</span>
-  <input className="checkbox" type="checkbox" checked={showLine2} onChange={() => setShowLine2(!showLine2)} /><span style={{ marginRight: '20px' }}>Show FundNetIRR</span>
-  <input className="checkbox" type="checkbox" checked={showLine3} onChange={() => setShowLine3(!showLine3)} /><span style={{ marginRight: '20px' }}>Show PortGrossIRR</span>
-  <input className="checkbox" type="checkbox" checked={showLine4} onChange={() => setShowLine4(!showLine4)} /><span style={{ marginRight: '20px' }}>Show PortNetIRR</span>
-  <input className="checkbox" type="checkbox" checked={showLine5} onChange={() => setShowLine5(!showLine5)} /><span style={{ marginRight: '20px' }}>Show NAV</span>
-      <ResponsiveContainer width="100%" height="100%" className="chartContainer">
+  
+  <ResponsiveContainer width="100%" height="100%" className="chartContainer">
     <ComposedChart  data={cumulativeChartData}>
       <XAxis dataKey="name" />
       <YAxis yAxisId="left" label={{ value: 'Millions Deployed', angle: -90, position: 'insideLeft' }} />
@@ -684,7 +680,7 @@ Tarana: cumulativeValues.Tarana,
           <Bar yAxisId="left" dataKey="E8Group" stackId="a" fill="#8884d8">
           <LabelList content={(props) => <CustomizedLabel {...props} dataKey="E8Group" chartData={cumulativeChartData} />} />
           </Bar>
-          <Bar yAxisId="left" dataKey="QwiltPSGroup" stackId="a" fill="#a52a2a">
+          <Bar yAxisId="left" dataKey="QwiltPSGroup" stackId="a" fill="#808080">
           <LabelList content={(props) => <CustomizedLabel {...props} dataKey="QwiltPSGroup" chartData={cumulativeChartData} />} />
           </Bar>
           <Bar yAxisId="left" dataKey="OtherGroup" stackId="a" fill="#f27d52">
@@ -699,7 +695,7 @@ Tarana: cumulativeValues.Tarana,
           <Bar yAxisId="left" dataKey="BCTVRS" stackId="a" fill="#191970">
           <LabelList content={(props) => <CustomizedLabel {...props} dataKey="BCTVRS" chartData={cumulativeChartData} />} />
           </Bar>
-          <Bar yAxisId="left" dataKey="Tarana" stackId="a" fill="#a52a2a">
+          <Bar yAxisId="left" dataKey="Tarana" stackId="a" fill="#FFC300">
           <LabelList content={(props) => <CustomizedLabel {...props} dataKey="Tarana" chartData={cumulativeChartData} />} />
           </Bar>
         
@@ -710,11 +706,7 @@ Tarana: cumulativeValues.Tarana,
           <Bar  yAxisId="left"dataKey="DryPowder" stackId="a" fill="#D2B48C">
           <LabelList content={(props) => <CustomizedLabel {...props} dataKey="DryPowder" chartData={cumulativeChartData} />} />
           </Bar>
-          <Line yAxisId="right" type="monotone" dataKey="FundGrossIRR" stroke={showLine1 ? "#702963" : "none"} strokeWidth={3} activeDot={{ r: 8 }} />
-<Line yAxisId="right" type="monotone" dataKey="FundNetIRR" stroke={showLine2 ? "#DE3163" : "none"} strokeWidth={3} activeDot={{ r: 8 }} />
-<Line yAxisId="right" type="monotone" dataKey="PortGrossIRR" stroke={showLine3 ? "#FFC300 " : "none"} strokeWidth={3} activeDot={{ r: 8 }} />
-<Line yAxisId="right" type="monotone" dataKey="PortNetIRR" stroke={showLine4 ? "#468499" : "none"} strokeWidth={3} activeDot={{ r: 8 }} />
-<Line yAxisId="left" type="monotone" dataKey="NAV" stroke={showLine5 ? "#00ff7f" : "none"} strokeWidth={3} activeDot={{ r: 8 }} />
+      
           
         </ComposedChart>
         
