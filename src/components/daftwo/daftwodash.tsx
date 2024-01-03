@@ -1,7 +1,7 @@
 
 
 
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
   import { Line, ResponsiveContainer, LineChart, XAxis, LabelList, ComposedChart } from 'recharts';
   import Tile from '~/core/ui/Tile';
   import Heading from '~/core/ui/Heading';
@@ -22,7 +22,7 @@ import React, { useMemo, useState } from 'react';
 import { LargeNumberLike } from 'crypto';
   
   export default function Daftwo() {
-  
+
     return (
       <div className={'flex flex-col space-y-6 pb-36'}>
         <UserGreetings />
@@ -115,6 +115,8 @@ import { LargeNumberLike } from 'crypto';
     const [showLine4, setShowLine4] = useState(true);
     const [showLine5, setShowLine5] = useState(true);
     const [showLine6, setShowLine6] = useState(true);
+    const [isFocused, setIsFocused] = useState(false);
+    const [isEmpty, setIsEmpty] = useState(false);
 
     interface ChartDataItem {
 
@@ -190,9 +192,22 @@ import { LargeNumberLike } from 'crypto';
       NAV: item.NAV,
 
     }));
+// Create a state to track which inputs are empty
+const [emptyInputs, setEmptyInputs] = useState<Record<string, Record<string, boolean>>>({});
     const handleDataChange = (page: string, key: keyof ChartDataItem, value: string) => {
-      const numericValue = parseFloat(value);
+      const numericValue = value === '' ? 0 : Number(value);
+
+      // If the value is empty, treat it as zero
+     
+      setEmptyInputs(prevState => ({
+        ...prevState,
+        [page]: {
+          ...(prevState[page] || {}),
+          [key]: value === '',
+        },
+      }));
     
+
       // Find the index of the quarter being updated
       const pageIndex = inputChartData.findIndex(item => item.name === page);
       const updatedInputChartData = [...inputChartData];
@@ -203,7 +218,8 @@ import { LargeNumberLike } from 'crypto';
           ...updatedInputChartData[pageIndex],
           [key]: numericValue
         };
-    
+       
+      
         // Recalculate group sums for the updated quarter
         updatedInputChartData[pageIndex] = calculateGroupSums([updatedInputChartData[pageIndex]])[0];
     
@@ -463,222 +479,393 @@ Tarana: cumulativeValues.Tarana,
             </TableRow>
           </TableHeader>
           <TableBody>
+
                 {inputChartData.map((item, index) => (
               <TableRow key={index}>
                 <TableCell>{item.name}</TableCell>
            
                 <TableCell>
-                  <input
-                    className={styles.dataInput}
-                    type="number"
-                    value={item.WeLinkRS}
-                    onChange={(e) => handleDataChange(item.name, 'WeLinkRS', e.target.value)}
-                     disabled={isPastQuarter(item.name, currentYear)}
-                     onFocus={(e) => e.target.select()}
-
-                  />
+                <input
+  className={styles.dataInput}
+  type="number"
+  value={emptyInputs[item.name]?.['WeLinkRS'] ? '' : item.WeLinkRS}
+  onChange={(e) => handleDataChange(item.name, 'WeLinkRS', e.target.value)}
+  onBlur={() => {
+    setIsFocused(false);
+    if (item.WeLinkRS === 0) {
+      handleDataChange(item.name, 'WeLinkRS', '0');
+    }
+  }}
+  onFocus={(e) => {
+    setIsFocused(true);
+    e.target.select();
+  }}
+  disabled={isPastQuarter(item.name, currentYear)}
+/>
                 </TableCell>
                 <TableCell>
-                  <input
-                    className={styles.dataInput}
-                    type="number"
-                    value={item.WeLinkOpCo}
-                    onChange={(e) => handleDataChange(item.name, 'WeLinkOpCo', e.target.value)}
-                     disabled={isPastQuarter(item.name, currentYear)}
-                     onFocus={(e) => e.target.select()}
-
-                  />
+                <input
+  className={styles.dataInput}
+  type="number"
+  value={emptyInputs[item.name]?.['WeLinkOpCo'] ? '' : item.WeLinkOpCo}
+  onChange={(e) => handleDataChange(item.name, 'WeLinkOpCo', e.target.value)}
+  onBlur={() => {
+    setIsFocused(false);
+    if (item.WeLinkOpCo === 0) {
+      handleDataChange(item.name, 'WeLinkOpCo', '0');
+    }
+  }}
+  onFocus={(e) => {
+    setIsFocused(true);
+    e.target.select();
+  }}
+  disabled={isPastQuarter(item.name, currentYear)}
+/>
                 </TableCell>
                 <TableCell style={{  borderRight: '2px solid black'}}>
-                  <input
-                    className={styles.dataInput}
-                    type="number"
-                    value={item.WeLinkGroup}
-                    onChange={(e) => handleDataChange(item.name, 'WeLinkGroup', e.target.value)}
-                    disabled={true}
-                    onFocus={(e) => e.target.select()}
-                  />
+                <input
+  className={styles.dataInput}
+  type="number"
+  value={emptyInputs[item.name]?.['WeLinkGroup'] ? '' : item.WeLinkGroup}
+  onChange={(e) => handleDataChange(item.name, 'WeLinkGroup', e.target.value)}
+  onBlur={() => {
+    setIsFocused(false);
+    if (item.WeLinkGroup === 0) {
+      handleDataChange(item.name, 'WeLinkGroup', '0');
+    }
+  }}
+  onFocus={(e) => {
+    setIsFocused(true);
+    e.target.select();
+  }}
+  disabled={true}
+/>
                 </TableCell>
                 <TableCell>
-                  <input
-                    className={styles.dataInput}
-                    type="number"
-                    value={item.DTIQOpCo}
-                    onChange={(e) => handleDataChange(item.name, 'DTIQOpCo', e.target.value)}
-                     disabled={isPastQuarter(item.name, currentYear)}
-                      onFocus={(e) => e.target.select()}
-
-
-                  />
+                <input
+  className={styles.dataInput}
+  type="number"
+  value={emptyInputs[item.name]?.['DTIQOpCo'] ? '' : item.DTIQOpCo}
+  onChange={(e) => handleDataChange(item.name, 'DTIQOpCo', e.target.value)}
+  onBlur={() => {
+    setIsFocused(false);
+    if (item.DTIQOpCo === 0) {
+      handleDataChange(item.name, 'DTIQOpCo', '0');
+    }
+  }}
+  onFocus={(e) => {
+    setIsFocused(true);
+    e.target.select();
+  }}
+  disabled={isPastQuarter(item.name, currentYear)}
+/>
                 </TableCell>
                 <TableCell>
-                  <input
-                    className={styles.dataInput}
-                    type="number"
-                    value={item.DTIQRS}
-                    onChange={(e) => handleDataChange(item.name, 'DTIQRS', e.target.value)}
-                     disabled={isPastQuarter(item.name, currentYear)}
-                      onFocus={(e) => e.target.select()}
-                  />
+ <input
+  className={styles.dataInput}
+  type="number"
+  value={emptyInputs[item.name]?.['DTIQRS'] ? '' : item.DTIQRS}
+  onChange={(e) => handleDataChange(item.name, 'DTIQRS', e.target.value)}
+  onBlur={() => {
+    setIsFocused(false);
+    if (item.DTIQRS === 0) {
+      handleDataChange(item.name, 'DTIQRS', '0');
+    }
+  }}
+  onFocus={(e) => {
+    setIsFocused(true);
+    e.target.select();
+  }}
+  disabled={isPastQuarter(item.name, currentYear)}
+/>
                 </TableCell>
                 <TableCell style={{  borderRight: '2px solid black'}}>
-                  <input
-                    className={styles.dataInput}
-                    type="number"
-                    value={item.DTIQGroup}
-                    onChange={(e) => handleDataChange(item.name, 'DTIQGroup', e.target.value)}
-                    disabled={true}
-                    onFocus={(e) => e.target.select()}
-                  />
+                <input
+  className={styles.dataInput}
+  type="number"
+  value={emptyInputs[item.name]?.['DTIQGroup'] ? '' : item.DTIQGroup}
+  onChange={(e) => handleDataChange(item.name, 'DTIQGroup', e.target.value)}
+  onBlur={() => {
+    setIsFocused(false);
+    if (item.DTIQGroup === 0) {
+      handleDataChange(item.name, 'DTIQGroup', '0');
+    }
+  }}
+  onFocus={(e) => {
+    setIsFocused(true);
+    e.target.select();
+  }}
+  disabled={true}
+/>
                 </TableCell>
                 <TableCell>
-                  <input
-                    className={styles.dataInput}
-                    type="number"
-                    value={item.E8OpCo}
-                    onChange={(e) => handleDataChange(item.name, 'E8OpCo', e.target.value)}
-                     disabled={isPastQuarter(item.name, currentYear)}
-                     onFocus={(e) => e.target.select()}
-
-                  />
+                <input
+  className={styles.dataInput}
+  type="number"
+  value={emptyInputs[item.name]?.['E8OpCo'] ? '' : item.E8OpCo}
+  onChange={(e) => handleDataChange(item.name, 'E8OpCo', e.target.value)}
+  onBlur={() => {
+    setIsFocused(false);
+    if (item.E8OpCo === 0) {
+      handleDataChange(item.name, 'E8OpCo', '0');
+    }
+  }}
+  onFocus={(e) => {
+    setIsFocused(true);
+    e.target.select();
+  }}
+  disabled={isPastQuarter(item.name, currentYear)}
+/>
                 </TableCell>
                 <TableCell>
-                  <input
-                    className={styles.dataInput}
-                    type="number"
-                    value={item.E8RS}
-                    onChange={(e) => handleDataChange(item.name, 'E8RS', e.target.value)}
-                     disabled={isPastQuarter(item.name, currentYear)}
-                     onFocus={(e) => e.target.select()}
-
-                  />
+                <input
+  className={styles.dataInput}
+  type="number"
+  value={emptyInputs[item.name]?.['E8RS'] ? '' : item.E8RS}
+  onChange={(e) => handleDataChange(item.name, 'E8RS', e.target.value)}
+  onBlur={() => {
+    setIsFocused(false);
+    if (item.E8RS === 0) {
+      handleDataChange(item.name, 'E8RS', '0');
+    }
+  }}
+  onFocus={(e) => {
+    setIsFocused(true);
+    e.target.select();
+  }}
+  disabled={isPastQuarter(item.name, currentYear)}
+/>
                 </TableCell>
                 <TableCell style={{  borderRight: '2px solid black'}}>
-                  <input
-                    className={styles.dataInput}
-                    type="number"
-                    value={item.E8Group}
-                    onChange={(e) => handleDataChange(item.name, 'E8Group', e.target.value)}
-                    disabled={true}
-                    onFocus={(e) => e.target.select()}
-                  />
+                <input
+  className={styles.dataInput}
+  type="number"
+  value={emptyInputs[item.name]?.['E8Group'] ? '' : item.E8Group}
+  onChange={(e) => handleDataChange(item.name, 'E8Group', e.target.value)}
+  onBlur={() => {
+    setIsFocused(false);
+    if (item.E8Group === 0) {
+      handleDataChange(item.name, 'E8Group', '0');
+    }
+  }}
+  onFocus={(e) => {
+    setIsFocused(true);
+    e.target.select();
+  }}
+  disabled={true}
+/>
                 </TableCell>
                 <TableCell>
-                  <input
-                    className={styles.dataInput}
-                    type="number"
-                    value={item.Qwilt}
-                    onChange={(e) => handleDataChange(item.name, 'Qwilt', e.target.value)}
-                     disabled={isPastQuarter(item.name, currentYear)}
-                      onFocus={(e) => e.target.select()}
-                  />
+                <input
+  className={styles.dataInput}
+  type="number"
+  value={emptyInputs[item.name]?.['Qwilt'] ? '' : item.Qwilt}
+  onChange={(e) => handleDataChange(item.name, 'Qwilt', e.target.value)}
+  onBlur={() => {
+    setIsFocused(false);
+    if (item.Qwilt === 0) {
+      handleDataChange(item.name, 'Qwilt', '0');
+    }
+  }}
+  onFocus={(e) => {
+    setIsFocused(true);
+    e.target.select();
+  }}
+  disabled={isPastQuarter(item.name, currentYear)}
+/>
                 </TableCell>
                 <TableCell>
-                  <input
-                    className={styles.dataInput}
-                    type="number"
-                    value={item.PS}
-                    onChange={(e) => handleDataChange(item.name, 'PS', e.target.value)}
-                     disabled={isPastQuarter(item.name, currentYear)}
-                      onFocus={(e) => e.target.select()}
-                  />
+                <input
+  className={styles.dataInput}
+  type="number"
+  value={emptyInputs[item.name]?.['PS'] ? '' : item.PS}
+  onChange={(e) => handleDataChange(item.name, 'PS', e.target.value)}
+  onBlur={() => {
+    setIsFocused(false);
+    if (item.PS === 0) {
+      handleDataChange(item.name, 'PS', '0');
+    }
+  }}
+  onFocus={(e) => {
+    setIsFocused(true);
+    e.target.select();
+  }}
+  disabled={isPastQuarter(item.name, currentYear)}
+/>
                 </TableCell>
                 <TableCell style={{  borderRight: '2px solid black'}}>
-                  <input
-                    className={styles.dataInput}
-                    type="number"
-                    value={item.QwiltPSGroup}
-                    onChange={(e) => handleDataChange(item.name, 'QwiltPSGroup', e.target.value)}
-                    disabled={true}
-                    onFocus={(e) => e.target.select()}
-                  />
+                <input
+  className={styles.dataInput}
+  type="number"
+  value={emptyInputs[item.name]?.['QwiltPSGroup'] ? '' : item.QwiltPSGroup}
+  onChange={(e) => handleDataChange(item.name, 'QwiltPSGroup', e.target.value)}
+  onBlur={() => {
+    setIsFocused(false);
+    if (item.QwiltPSGroup === 0) {
+      handleDataChange(item.name, 'QwiltPSGroup', '0');
+    }
+  }}
+  onFocus={(e) => {
+    setIsFocused(true);
+    e.target.select();
+  }}
+  disabled={true}
+/>
                 </TableCell>
              
                 <TableCell>
-                  <input
-                    className={styles.dataInput}
-                    type="number"
-                    value={item.ShareCare}
-                    onChange={(e) => handleDataChange(item.name, 'ShareCare', e.target.value)}
-                     disabled={isPastQuarter(item.name, currentYear)}
-                      onFocus={(e) => e.target.select()}
-                  />
+                <input
+  className={styles.dataInput}
+  type="number"
+  value={emptyInputs[item.name]?.['ShareCare'] ? '' : item.ShareCare}
+  onChange={(e) => handleDataChange(item.name, 'ShareCare', e.target.value)}
+  onBlur={() => {
+    setIsFocused(false);
+    if (item.ShareCare === 0) {
+      handleDataChange(item.name, 'ShareCare', '0');
+    }
+  }}
+  onFocus={(e) => {
+    setIsFocused(true);
+    e.target.select();
+  }}
+  disabled={isPastQuarter(item.name, currentYear)}
+/>
                 </TableCell>
                 <TableCell>
-                  <input
-                    className={styles.dataInput}
-                    type="number"
-                    value={item.BCTVRS}
-                    onChange={(e) => handleDataChange(item.name, 'BCTVRS', e.target.value)}
-                     disabled={isPastQuarter(item.name, currentYear)}
-                     onFocus={(e) => e.target.select()}
-
-                  />
+               <input
+  className={styles.dataInput}
+  type="number"
+  value={emptyInputs[item.name]?.['BCTVRS'] ? '' : item.BCTVRS}
+  onChange={(e) => handleDataChange(item.name, 'BCTVRS', e.target.value)}
+  onBlur={() => {
+    setIsFocused(false);
+    if (item.BCTVRS === 0) {
+      handleDataChange(item.name, 'BCTVRS', '0');
+    }
+  }}
+  onFocus={(e) => {
+    setIsFocused(true);
+    e.target.select();
+  }}
+  disabled={isPastQuarter(item.name, currentYear)}
+/>
                 </TableCell>
                 <TableCell style={{  borderRight: '2px solid black'}}>
-                  <input
-                    className={styles.dataInput}
-                    type="number"
-                    value={item.OtherGroup}
-                    onChange={(e) => handleDataChange(item.name, 'OtherGroup', e.target.value)}
-                    disabled={true}
-                    onFocus={(e) => e.target.select()}
-                  />
+                <input
+  className={styles.dataInput}
+  type="number"
+  value={emptyInputs[item.name]?.['OtherGroup'] ? '' : item.OtherGroup}
+  onChange={(e) => handleDataChange(item.name, 'OtherGroup', e.target.value)}
+  onBlur={() => {
+    setIsFocused(false);
+    if (item.OtherGroup === 0) {
+      handleDataChange(item.name, 'OtherGroup', '0');
+    }
+  }}
+  onFocus={(e) => {
+    setIsFocused(true);
+    e.target.select();
+  }}
+  disabled={true}
+/>
                 </TableCell>
                 <TableCell>
-                  <input
-                    className={styles.dataInput}
-                    type="number"
-                    value={item.RPMA}
-                    onChange={(e) => handleDataChange(item.name, 'RPMA', e.target.value)}
-                     disabled={isPastQuarter(item.name, currentYear)}
-                      onFocus={(e) => e.target.select()}
-                  />
+                <input
+  className={styles.dataInput}
+  type="number"
+  value={emptyInputs[item.name]?.['RPMA'] ? '' : item.RPMA}
+  onChange={(e) => handleDataChange(item.name, 'RPMA', e.target.value)}
+  onBlur={() => {
+    setIsFocused(false);
+    if (item.RPMA === 0) {
+      handleDataChange(item.name, 'RPMA', '0');
+    }
+  }}
+  onFocus={(e) => {
+    setIsFocused(true);
+    e.target.select();
+  }}
+  disabled={isPastQuarter(item.name, currentYear)}
+/>
                 </TableCell>
                 <TableCell>
-                  <input
-                    className={styles.dataInput}
-                    type="number"
-                    value={item.PFUnitasRS}
-                    onChange={(e) => handleDataChange(item.name, 'PFUnitasRS', e.target.value)}
-                     disabled={isPastQuarter(item.name, currentYear)}
-                      onFocus={(e) => e.target.select()}
-                  />
+                <input
+  className={styles.dataInput}
+  type="number"
+  value={emptyInputs[item.name]?.['PFUnitasRS'] ? '' : item.PFUnitasRS}
+  onChange={(e) => handleDataChange(item.name, 'PFUnitasRS', e.target.value)}
+  onBlur={() => {
+    setIsFocused(false);
+    if (item.PFUnitasRS === 0) {
+      handleDataChange(item.name, 'PFUnitasRS', '0');
+    }
+  }}
+  onFocus={(e) => {
+    setIsFocused(true);
+    e.target.select();
+  }}
+  disabled={isPastQuarter(item.name, currentYear)}
+/>
                 </TableCell>
           
                 <TableCell>
-                  <input
-                    className={styles.dataInput}
-                    type="number"
-                    value={item.Tarana}
-                    onChange={(e) => handleDataChange(item.name, 'Tarana', e.target.value)}
-                     disabled={isPastQuarter(item.name, currentYear)}
-                      onFocus={(e) => e.target.select()}
-                  />
+                <input
+  className={styles.dataInput}
+  type="number"
+  value={emptyInputs[item.name]?.['Tarana'] ? '' : item.Tarana}
+  onChange={(e) => handleDataChange(item.name, 'Tarana', e.target.value)}
+  onBlur={() => {
+    setIsFocused(false);
+    if (item.Tarana === 0) {
+      handleDataChange(item.name, 'Tarana', '0');
+    }
+  }}
+  onFocus={(e) => {
+    setIsFocused(true);
+    e.target.select();
+  }}
+  disabled={isPastQuarter(item.name, currentYear)}
+/>
                 </TableCell>
              
                 <TableCell>
-                  <input
-                    className={styles.dataInput}
-                    type="number"
-                    value={item.FeeReserve}
-                    onChange={(e) => handleDataChange(item.name, 'FeeReserve', e.target.value)}
-                     disabled={true}
-                     onFocus={(e) => e.target.select()}
-
-  
-                  />
+                <input
+  className={styles.dataInput}
+  type="number"
+  value={emptyInputs[item.name]?.['FeeReserve'] ? '' : item.FeeReserve}
+  onChange={(e) => handleDataChange(item.name, 'FeeReserve', e.target.value)}
+  onBlur={() => {
+    setIsFocused(false);
+    if (item.FeeReserve === 0) {
+      handleDataChange(item.name, 'FeeReserve', '0');
+    }
+  }}
+  onFocus={(e) => {
+    setIsFocused(true);
+    e.target.select();
+  }}
+  disabled={true}
+/>
                 </TableCell>
                 <TableCell>
-                  <input
-                    className={styles.dataInput}
-                    type="number"
-                    value={item.DryPowder}
-                    onChange={(e) => handleDataChange(item.name, 'DryPowder', e.target.value)}
-                     disabled={true}
-                      onFocus={(e) => e.target.select()}
-  
-                  />
+                <input
+  className={styles.dataInput}
+  type="number"
+  value={emptyInputs[item.name]?.['DryPowder'] ? '' : item.DryPowder}
+  onChange={(e) => handleDataChange(item.name, 'DryPowder', e.target.value)}
+  onBlur={() => {
+    setIsFocused(false);
+    if (item.DryPowder === 0) {
+      handleDataChange(item.name, 'DryPowder', '0');
+    }
+  }}
+  onFocus={(e) => {
+    setIsFocused(true);
+    e.target.select();
+  }}
+  disabled={true}
+/>
                 </TableCell>
               </TableRow>
             ))}
