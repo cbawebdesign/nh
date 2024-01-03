@@ -474,6 +474,8 @@ Tarana: cumulativeValues.Tarana,
                     value={item.WeLinkRS}
                     onChange={(e) => handleDataChange(item.name, 'WeLinkRS', e.target.value)}
                      disabled={isPastQuarter(item.name, currentYear)}
+                     onFocus={(e) => e.target.select()}
+
                   />
                 </TableCell>
                 <TableCell>
@@ -483,6 +485,8 @@ Tarana: cumulativeValues.Tarana,
                     value={item.WeLinkOpCo}
                     onChange={(e) => handleDataChange(item.name, 'WeLinkOpCo', e.target.value)}
                      disabled={isPastQuarter(item.name, currentYear)}
+                     onFocus={(e) => e.target.select()}
+
                   />
                 </TableCell>
                 <TableCell style={{  borderRight: '2px solid black'}}>
@@ -491,7 +495,8 @@ Tarana: cumulativeValues.Tarana,
                     type="number"
                     value={item.WeLinkGroup}
                     onChange={(e) => handleDataChange(item.name, 'WeLinkGroup', e.target.value)}
-                     disabled={isPastQuarter(item.name, currentYear)}
+                    disabled={true}
+                    onFocus={(e) => e.target.select()}
                   />
                 </TableCell>
                 <TableCell>
@@ -501,6 +506,9 @@ Tarana: cumulativeValues.Tarana,
                     value={item.DTIQOpCo}
                     onChange={(e) => handleDataChange(item.name, 'DTIQOpCo', e.target.value)}
                      disabled={isPastQuarter(item.name, currentYear)}
+                      onFocus={(e) => e.target.select()}
+
+
                   />
                 </TableCell>
                 <TableCell>
@@ -510,6 +518,7 @@ Tarana: cumulativeValues.Tarana,
                     value={item.DTIQRS}
                     onChange={(e) => handleDataChange(item.name, 'DTIQRS', e.target.value)}
                      disabled={isPastQuarter(item.name, currentYear)}
+                      onFocus={(e) => e.target.select()}
                   />
                 </TableCell>
                 <TableCell style={{  borderRight: '2px solid black'}}>
@@ -518,7 +527,8 @@ Tarana: cumulativeValues.Tarana,
                     type="number"
                     value={item.DTIQGroup}
                     onChange={(e) => handleDataChange(item.name, 'DTIQGroup', e.target.value)}
-                     disabled={isPastQuarter(item.name, currentYear)}
+                    disabled={true}
+                    onFocus={(e) => e.target.select()}
                   />
                 </TableCell>
                 <TableCell>
@@ -528,6 +538,8 @@ Tarana: cumulativeValues.Tarana,
                     value={item.E8OpCo}
                     onChange={(e) => handleDataChange(item.name, 'E8OpCo', e.target.value)}
                      disabled={isPastQuarter(item.name, currentYear)}
+                     onFocus={(e) => e.target.select()}
+
                   />
                 </TableCell>
                 <TableCell>
@@ -537,6 +549,8 @@ Tarana: cumulativeValues.Tarana,
                     value={item.E8RS}
                     onChange={(e) => handleDataChange(item.name, 'E8RS', e.target.value)}
                      disabled={isPastQuarter(item.name, currentYear)}
+                     onFocus={(e) => e.target.select()}
+
                   />
                 </TableCell>
                 <TableCell style={{  borderRight: '2px solid black'}}>
@@ -545,7 +559,8 @@ Tarana: cumulativeValues.Tarana,
                     type="number"
                     value={item.E8Group}
                     onChange={(e) => handleDataChange(item.name, 'E8Group', e.target.value)}
-                     disabled={isPastQuarter(item.name, currentYear)}
+                    disabled={true}
+                    onFocus={(e) => e.target.select()}
                   />
                 </TableCell>
                 <TableCell>
@@ -555,6 +570,7 @@ Tarana: cumulativeValues.Tarana,
                     value={item.Qwilt}
                     onChange={(e) => handleDataChange(item.name, 'Qwilt', e.target.value)}
                      disabled={isPastQuarter(item.name, currentYear)}
+                      onFocus={(e) => e.target.select()}
                   />
                 </TableCell>
                 <TableCell>
@@ -564,6 +580,7 @@ Tarana: cumulativeValues.Tarana,
                     value={item.PS}
                     onChange={(e) => handleDataChange(item.name, 'PS', e.target.value)}
                      disabled={isPastQuarter(item.name, currentYear)}
+                      onFocus={(e) => e.target.select()}
                   />
                 </TableCell>
                 <TableCell style={{  borderRight: '2px solid black'}}>
@@ -572,7 +589,8 @@ Tarana: cumulativeValues.Tarana,
                     type="number"
                     value={item.QwiltPSGroup}
                     onChange={(e) => handleDataChange(item.name, 'QwiltPSGroup', e.target.value)}
-                     disabled={isPastQuarter(item.name, currentYear)}
+                    disabled={true}
+                    onFocus={(e) => e.target.select()}
                   />
                 </TableCell>
              
@@ -583,6 +601,7 @@ Tarana: cumulativeValues.Tarana,
                     value={item.ShareCare}
                     onChange={(e) => handleDataChange(item.name, 'ShareCare', e.target.value)}
                      disabled={isPastQuarter(item.name, currentYear)}
+                      onFocus={(e) => e.target.select()}
                   />
                 </TableCell>
                 <TableCell>
@@ -592,6 +611,8 @@ Tarana: cumulativeValues.Tarana,
                     value={item.BCTVRS}
                     onChange={(e) => handleDataChange(item.name, 'BCTVRS', e.target.value)}
                      disabled={isPastQuarter(item.name, currentYear)}
+                     onFocus={(e) => e.target.select()}
+
                   />
                 </TableCell>
                 <TableCell style={{  borderRight: '2px solid black'}}>
@@ -600,7 +621,8 @@ Tarana: cumulativeValues.Tarana,
                     type="number"
                     value={item.OtherGroup}
                     onChange={(e) => handleDataChange(item.name, 'OtherGroup', e.target.value)}
-                     disabled={isPastQuarter(item.name, currentYear)}
+                    disabled={true}
+                    onFocus={(e) => e.target.select()}
                   />
                 </TableCell>
                 <TableCell>
@@ -610,6 +632,7 @@ Tarana: cumulativeValues.Tarana,
                     value={item.RPMA}
                     onChange={(e) => handleDataChange(item.name, 'RPMA', e.target.value)}
                      disabled={isPastQuarter(item.name, currentYear)}
+                      onFocus={(e) => e.target.select()}
                   />
                 </TableCell>
                 <TableCell>
@@ -619,6 +642,7 @@ Tarana: cumulativeValues.Tarana,
                     value={item.PFUnitasRS}
                     onChange={(e) => handleDataChange(item.name, 'PFUnitasRS', e.target.value)}
                      disabled={isPastQuarter(item.name, currentYear)}
+                      onFocus={(e) => e.target.select()}
                   />
                 </TableCell>
           
@@ -629,6 +653,7 @@ Tarana: cumulativeValues.Tarana,
                     value={item.Tarana}
                     onChange={(e) => handleDataChange(item.name, 'Tarana', e.target.value)}
                      disabled={isPastQuarter(item.name, currentYear)}
+                      onFocus={(e) => e.target.select()}
                   />
                 </TableCell>
              
@@ -639,6 +664,8 @@ Tarana: cumulativeValues.Tarana,
                     value={item.FeeReserve}
                     onChange={(e) => handleDataChange(item.name, 'FeeReserve', e.target.value)}
                      disabled={true}
+                     onFocus={(e) => e.target.select()}
+
   
                   />
                 </TableCell>
@@ -649,6 +676,7 @@ Tarana: cumulativeValues.Tarana,
                     value={item.DryPowder}
                     onChange={(e) => handleDataChange(item.name, 'DryPowder', e.target.value)}
                      disabled={true}
+                      onFocus={(e) => e.target.select()}
   
                   />
                 </TableCell>
