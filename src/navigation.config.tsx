@@ -4,7 +4,13 @@ import { Cog8ToothIcon, MagnifyingGlassPlusIcon, Squares2X2Icon } from '@heroico
 const NAVIGATION_CONFIG = {
   items: [
 
-
+    {
+      label: 'common:dafonelabel',
+      path: '/dafone',
+      Icon: ({ className }: { className: string }) => {
+        return <MagnifyingGlassPlusIcon className={className} />;
+      },
+    },
     {
       label: 'common:daofonefllabel',
       path: '/daofonefl',
@@ -12,6 +18,9 @@ const NAVIGATION_CONFIG = {
         return <MagnifyingGlassPlusIcon className={className} />;
       },
     },
+
+  
+
     {
       label: 'common:daofonelabel',
       path: '/daofone',
