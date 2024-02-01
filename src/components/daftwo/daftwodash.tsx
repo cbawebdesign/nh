@@ -117,6 +117,8 @@ import { LargeNumberLike } from 'crypto';
     const [showLine6, setShowLine6] = useState(true);
     const [isFocused, setIsFocused] = useState(false);
     const [isEmpty, setIsEmpty] = useState(false);
+    const [showDryPowder, setShowDryPowder] = useState(false);
+    const [showFeeReserve, setShowFeeReserve] = useState(false);
 
     interface ChartDataItem {
 
@@ -294,7 +296,7 @@ const [emptyInputs, setEmptyInputs] = useState<Record<string, Record<string, boo
         cumulativeValues.DTIQGroup += item.DTIQOpCo + item.DTIQRS;
         cumulativeValues.E8Group += item.E8OpCo + item.E8RS;
         cumulativeValues.QwiltPSGroup += item.Qwilt + item.PS;
-        cumulativeValues.OtherGroup += item.BCTVTS + item.ShareCare;
+        cumulativeValues.OtherGroup += item.BCTVTS + item.ShareCare +item.RPMA;
 cumulativeValues.WeLinkRS += item.WeLinkRS;
 cumulativeValues.PFUnitasRS += item.PFUnitasRS;
 cumulativeValues.WeLinkOpCo += item.WeLinkOpCo;
@@ -365,8 +367,72 @@ Tarana: cumulativeValues.Tarana,
     // Inside your component
     const currentYear = new Date().getFullYear();
     return (
+
+      
       <div className={`flex flex-col space-y-4 pb-36 justify-start ${styles.tablesContainer}`}>    {/* ... */}
+<div style={{ position: 'relative', height: '550px', marginBottom: '50px' }}>
+<button 
+  onClick={() => setShowDryPowder(!showDryPowder)}
+  style={{ margin: '10px', padding: '5.625px', fontSize: '0.9rem', backgroundColor: '#0000FF', color: 'white', border: 'none', borderRadius: '5px' }}
+>
+  Toggle Dry Powder
+</button>
+
+<button 
+  onClick={() => setShowFeeReserve(!showFeeReserve)}
+  style={{ margin: '10px', padding: '5.625px', fontSize: '0.9rem', backgroundColor: '#0000FF', color: 'white', border: 'none', borderRadius: '5px' }}
+>
+  Toggle Fee Reserve
+</button>
+  <ResponsiveContainer width="100%" height="100%" className="chartContainer">
+    <ComposedChart  data={cumulativeChartData}>
+      <XAxis dataKey="name" />
+      <YAxis yAxisId="left" label={{ value: 'Millions Deployed', angle: -90, position: 'insideLeft' }} />
+<YAxis yAxisId="right" orientation="right" label={{ value: 'Gross and Net IRR %', angle: 90, position: 'insideRight' }} />
+      <Legend />
+      <Tooltip />
+          <Bar yAxisId="left" dataKey="WeLinkGroup" stackId="a" fill="#21675e">
+          <LabelList content={(props) => <CustomizedLabel {...props} dataKey="WeLinkGroup" chartData={cumulativeChartData} />} />
+          </Bar>
+          <Bar yAxisId="left" dataKey="DTIQGroup" stackId="a" fill="#468499">
+          <LabelList content={(props) => <CustomizedLabel {...props} dataKey="DTIQGroup" chartData={cumulativeChartData} />} />
+          </Bar>
+          <Bar yAxisId="left" dataKey="E8Group" stackId="a" fill="#8884d8">
+          <LabelList content={(props) => <CustomizedLabel {...props} dataKey="E8Group" chartData={cumulativeChartData} />} />
+          </Bar>
+          <Bar yAxisId="left" dataKey="QwiltPSGroup" stackId="a" fill="#808080">
+          <LabelList content={(props) => <CustomizedLabel {...props} dataKey="QwiltPSGroup" chartData={cumulativeChartData} />} />
+          </Bar>
+          <Bar yAxisId="left" dataKey="OtherGroup" stackId="a" fill="#C0C0C0">
+          <LabelList content={(props) => <CustomizedLabel {...props} dataKey="OtherGroup" chartData={cumulativeChartData} />} />
+          </Bar>       
+          <Bar yAxisId="left" dataKey="RPMA" stackId="a" fill="#89CFF0">
+          <LabelList content={(props) => <CustomizedLabel {...props} dataKey="RPMA" chartData={cumulativeChartData} />} />
+          </Bar>
+          <Bar yAxisId="left" dataKey="PFUnitasRS" stackId="a" fill="#7393B3">
+          <LabelList content={(props) => <CustomizedLabel {...props} dataKey="PFUnitasRS" chartData={cumulativeChartData} />} />
+          </Bar>
+          <Bar yAxisId="left" dataKey="BCTVRS" stackId="a" fill="#191970">
+          <LabelList content={(props) => <CustomizedLabel {...props} dataKey="BCTVRS" chartData={cumulativeChartData} />} />
+          </Bar>
+          <Bar yAxisId="left" dataKey="Tarana" stackId="a" fill="#8884d8">
+          <LabelList content={(props) => <CustomizedLabel {...props} dataKey="Tarana" chartData={cumulativeChartData} />} />
+          </Bar>
         
+\          {showDryPowder && (
+            <Bar yAxisId="left" dataKey="DryPowder" stackId="a" fill="#D2B48C">
+              <LabelList content={(props) => <CustomizedLabel {...props} dataKey="DryPowder" chartData={cumulativeChartData} />} />
+            </Bar>
+          )}
+  {showFeeReserve && (
+            <Bar yAxisId="left" dataKey="FeeReserve" stackId="a" fill="#a52a2a">
+              <LabelList content={(props) => <CustomizedLabel {...props} dataKey="FeeReserve" chartData={cumulativeChartData} />} />
+            </Bar>
+          )}
+        </ComposedChart>
+        
+      </ResponsiveContainer>
+      </div>
           <div className={`flex ${styles.tableWrapper}`}>
       <div>
       <h1 style={{ textDecoration: 'underline' }}>Input: Incremental Deployment by Quarter</h1>
@@ -461,11 +527,11 @@ Tarana: cumulativeValues.Tarana,
 
               <TableHead>ShareCare</TableHead>
               <TableHead>BCTV RS</TableHead>
+              <TableHead>RPMA</TableHead>
 
               <TableHead style={{  borderRight: '2px solid black' }}>Other Group</TableHead>
 
 
-              <TableHead>RPMA</TableHead>
 
               <TableHead>PF Unitas RS</TableHead>
 
@@ -751,25 +817,6 @@ Tarana: cumulativeValues.Tarana,
   disabled={isPastQuarter(item.name, currentYear)}
 />
                 </TableCell>
-                <TableCell style={{  borderRight: '2px solid black'}}>
-                <input
-  className={styles.dataInput}
-  type="number"
-  value={emptyInputs[item.name]?.['OtherGroup'] ? '' : item.OtherGroup}
-  onChange={(e) => handleDataChange(item.name, 'OtherGroup', e.target.value)}
-  onBlur={() => {
-    setIsFocused(false);
-    if (item.OtherGroup === 0) {
-      handleDataChange(item.name, 'OtherGroup', '0');
-    }
-  }}
-  onFocus={(e) => {
-    setIsFocused(true);
-    e.target.select();
-  }}
-  disabled={true}
-/>
-                </TableCell>
                 <TableCell>
                 <input
   className={styles.dataInput}
@@ -789,6 +836,26 @@ Tarana: cumulativeValues.Tarana,
   disabled={isPastQuarter(item.name, currentYear)}
 />
                 </TableCell>
+                <TableCell style={{  borderRight: '2px solid black'}}>
+                <input
+  className={styles.dataInput}
+  type="number"
+  value={emptyInputs[item.name]?.['OtherGroup'] ? '' : item.OtherGroup}
+  onChange={(e) => handleDataChange(item.name, 'OtherGroup', e.target.value)}
+  onBlur={() => {
+    setIsFocused(false);
+    if (item.OtherGroup === 0) {
+      handleDataChange(item.name, 'OtherGroup', '0');
+    }
+  }}
+  onFocus={(e) => {
+    setIsFocused(true);
+    e.target.select();
+  }}
+  disabled={true}
+/>
+                </TableCell>
+ 
                 <TableCell>
                 <input
   className={styles.dataInput}
@@ -877,56 +944,7 @@ Tarana: cumulativeValues.Tarana,
        
       
       </div>
-      <div style={{ position: 'relative',height: '550px' }}>
-  
-  <ResponsiveContainer width="100%" height="100%" className="chartContainer">
-    <ComposedChart  data={cumulativeChartData}>
-      <XAxis dataKey="name" />
-      <YAxis yAxisId="left" label={{ value: 'Millions Deployed', angle: -90, position: 'insideLeft' }} />
-<YAxis yAxisId="right" orientation="right" label={{ value: 'Gross and Net IRR %', angle: 90, position: 'insideRight' }} />
-      <Legend />
-      <Tooltip />
-          <Bar yAxisId="left" dataKey="WeLinkGroup" stackId="a" fill="#21675e">
-          <LabelList content={(props) => <CustomizedLabel {...props} dataKey="WeLinkGroup" chartData={cumulativeChartData} />} />
-          </Bar>
-          <Bar yAxisId="left" dataKey="DTIQGroup" stackId="a" fill="#468499">
-          <LabelList content={(props) => <CustomizedLabel {...props} dataKey="DTIQGroup" chartData={cumulativeChartData} />} />
-          </Bar>
-          <Bar yAxisId="left" dataKey="E8Group" stackId="a" fill="#8884d8">
-          <LabelList content={(props) => <CustomizedLabel {...props} dataKey="E8Group" chartData={cumulativeChartData} />} />
-          </Bar>
-          <Bar yAxisId="left" dataKey="QwiltPSGroup" stackId="a" fill="#808080">
-          <LabelList content={(props) => <CustomizedLabel {...props} dataKey="QwiltPSGroup" chartData={cumulativeChartData} />} />
-          </Bar>
-          <Bar yAxisId="left" dataKey="OtherGroup" stackId="a" fill="#f27d52">
-          <LabelList content={(props) => <CustomizedLabel {...props} dataKey="OtherGroup" chartData={cumulativeChartData} />} />
-          </Bar>       
-          <Bar yAxisId="left" dataKey="RPMA" stackId="a" fill="#89CFF0">
-          <LabelList content={(props) => <CustomizedLabel {...props} dataKey="RPMA" chartData={cumulativeChartData} />} />
-          </Bar>
-          <Bar yAxisId="left" dataKey="PFUnitasRS" stackId="a" fill="#7393B3">
-          <LabelList content={(props) => <CustomizedLabel {...props} dataKey="PFUnitasRS" chartData={cumulativeChartData} />} />
-          </Bar>
-          <Bar yAxisId="left" dataKey="BCTVRS" stackId="a" fill="#191970">
-          <LabelList content={(props) => <CustomizedLabel {...props} dataKey="BCTVRS" chartData={cumulativeChartData} />} />
-          </Bar>
-          <Bar yAxisId="left" dataKey="Tarana" stackId="a" fill="#FFC300">
-          <LabelList content={(props) => <CustomizedLabel {...props} dataKey="Tarana" chartData={cumulativeChartData} />} />
-          </Bar>
-        
-          <Bar yAxisId="left" dataKey="FeeReserve" stackId="a" fill="#a52a2a">
-          <LabelList content={(props) => <CustomizedLabel {...props} dataKey="FeeReserve" chartData={cumulativeChartData} />} />
-          </Bar>
-        
-          <Bar  yAxisId="left"dataKey="DryPowder" stackId="a" fill="#D2B48C">
-          <LabelList content={(props) => <CustomizedLabel {...props} dataKey="DryPowder" chartData={cumulativeChartData} />} />
-          </Bar>
-      
-          
-        </ComposedChart>
-        
-      </ResponsiveContainer>
-      </div>
+
       <div>
       <h1 style={{ textDecoration: 'underline' }}>Outputs: Cumulative Deployment by Quarter</h1>
             <div className={styles.tableWrapper}>
@@ -1021,11 +1039,11 @@ Tarana: cumulativeValues.Tarana,
 
       <TableHead>ShareCare</TableHead>
       <TableHead>BCTV RS</TableHead>
+      <TableHead>RPMA</TableHead>
 
       <TableHead style={{  borderRight: '2px solid black' }}>Other Group</TableHead>
 
 
-      <TableHead>RPMA</TableHead>
       <TableHead>PF Unitas RS</TableHead>
       <TableHead>Tarana</TableHead>
 
@@ -1056,11 +1074,11 @@ Tarana: cumulativeValues.Tarana,
 
                 <TableCell>{item.ShareCare}</TableCell>
                 <TableCell>{item.BCTVRS}</TableCell>
+                <TableCell>{item.RPMA}</TableCell>
 
                 <TableCell style={{  borderRight: '2px solid black'}}>{item.OtherGroup}</TableCell>
 
 
-                <TableCell>{item.RPMA}</TableCell>
                 <TableCell>{item.PFUnitasRS}</TableCell>
                 <TableCell>{item.Tarana}</TableCell>
 
