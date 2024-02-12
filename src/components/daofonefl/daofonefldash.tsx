@@ -150,27 +150,18 @@ const StackedBarChart = () => {
 
   return (
     <ResponsiveContainer width="100%" height={400}>
-      <BarChart data={chartData}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
-        <YAxis>
-        <Label value="Millions Deployed" angle={-90} position='insideLeft' />
-      </YAxis>
-        <Tooltip />
-        <Legend />
-        <Bar dataKey="Investments" stackId="a" fill="#191970">
-          <LabelList content={(props) => renderCustomizedLabel(props, 'Investments')} />
-        </Bar>
-        <Bar dataKey="Fees" stackId="a" fill="#a52a2a">
-          <LabelList content={(props) => renderCustomizedLabel(props, 'Fees')} />
-        </Bar>
-        <Bar dataKey="FeeReserve" stackId="a" fill="#a52a2a">
-          <LabelList content={(props) => renderCustomizedLabel(props, 'FeeReserve')} />
-        </Bar>
-        <Bar dataKey="DryPowder" stackId="a" fill="#D2B48C">
-          <LabelList content={(props) => renderCustomizedLabel(props, 'DryPowder')} />
-        </Bar>
-      </BarChart>
+     <div>
+     <iframe 
+  title="DAOF 1 Visuals v2" 
+  width="1140" 
+  height="541.25" 
+  src="https://app.fabric.microsoft.com/reportEmbed?reportId=994ee472-3526-4259-8f4e-82290090e83f&autoAuth=true&ctid=f63e5255-d676-4605-926f-8136f95168b5" 
+  frameBorder="0" 
+  allowFullScreen={true}
+></iframe>      </div>
     </ResponsiveContainer>
+
+
   );
+
 };
