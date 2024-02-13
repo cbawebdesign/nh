@@ -16,7 +16,7 @@ export default function Daofonefldash() {
       <div>
         <Tile>
         <Tile.Heading>
-  <span style={{ color: '#0000FF' }}>DAOF I Fund Level Overview</span>
+  <h4 >DAOF I Fund Level Overview</h4>
   <h4>All capital deployment figures in $ in millions unless otherwise noted</h4>
 
 </Tile.Heading>           <Tile.Body>
