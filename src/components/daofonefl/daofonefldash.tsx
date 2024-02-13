@@ -153,8 +153,8 @@ const StackedBarChart = () => {
      <div>
      <iframe 
   title="DAOF 1 Visuals v2" 
-  width="1140" 
-  height="541.25" 
+  width="1580" 
+  height="581.25" 
   src="https://app.fabric.microsoft.com/reportEmbed?reportId=994ee472-3526-4259-8f4e-82290090e83f&autoAuth=true&ctid=f63e5255-d676-4605-926f-8136f95168b5" 
   frameBorder="0" 
   allowFullScreen={true}
