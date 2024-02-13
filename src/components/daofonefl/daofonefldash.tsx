@@ -149,17 +149,16 @@ const StackedBarChart = () => {
   };
 
   return (
-    <ResponsiveContainer width="100%" height={400}>
-    <div style={{ position: 'relative', width: '100%', paddingTop: '36.25%' }}>
-      <iframe 
-        title="DAOF 1 Visuals v2" 
-        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
-        src="https://app.fabric.microsoft.com/reportEmbed?reportId=994ee472-3526-4259-8f4e-82290090e83f&autoAuth=true&ctid=f63e5255-d676-4605-926f-8136f95168b5" 
-        frameBorder="0" 
-        allowFullScreen={true}
-      ></iframe>
-    </div>
-  </ResponsiveContainer>
+<ResponsiveContainer width="100%" height={400}>
+  <div className={styles['iframe-container']}>
+    <iframe 
+      title="DAOF 1 Visuals v2" 
+      src="https://app.fabric.microsoft.com/reportEmbed?reportId=994ee472-3526-4259-8f4e-82290090e83f&autoAuth=true&ctid=f63e5255-d676-4605-926f-8136f95168b5" 
+      frameBorder="0" 
+      allowFullScreen={true}
+    ></iframe>
+  </div>
+</ResponsiveContainer>
 
   );
 
