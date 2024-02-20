@@ -319,8 +319,42 @@ import React, { useMemo, useState } from 'react';
     // Inside your component
     const currentYear = new Date().getFullYear();
     return (
+
+      
 <div className={`flex flex-col space-y-4 pb-36 justify-start ${styles.tablesContainer}`}>    {/* ... */}
-  
+<div style={{ position: 'relative',height: '550px' }}>
+   
+   <ResponsiveContainer width="100%" height="100%" className="chartContainer">
+ <ComposedChart  data={cumulativeChartData}>
+   <XAxis dataKey="name" />
+   <YAxis yAxisId="left" label={{ value: 'Millions Deployed', angle: -90, position: 'insideLeft' }} />
+<YAxis yAxisId="right" orientation="right" label={{ value: 'Gross and Net IRR', angle: 90, position: 'insideRight' }} />
+   <Legend />
+   <Bar yAxisId="left" dataKey="QuantelaGroup" stackId="a" fill="#89CFF0">
+   <LabelList content={(props) => <CustomizedLabel {...props} dataKey="QuantelaGroup" chartData={cumulativeChartData} />} />
+ </Bar>
+ <Bar yAxisId="left" dataKey="PacketFabricGroup" stackId="a" fill="#7393B3">
+   <LabelList content={(props) => <CustomizedLabel {...props} dataKey="PacketFabricGroup" chartData={cumulativeChartData} />} />
+ </Bar>
+ <Bar yAxisId="left" dataKey="OtherGroup" stackId="a" fill="#191970">
+   <LabelList content={(props) => <CustomizedLabel {...props} dataKey="OtherGroup" chartData={cumulativeChartData} />} />
+ </Bar>
+ <Bar yAxisId="left" dataKey="FeesActual" stackId="a" fill="#a52a2a">
+   <LabelList content={(props) => <CustomizedLabel {...props} dataKey="FeesActual" chartData={cumulativeChartData} />} />
+ </Bar>
+ <Bar yAxisId="left" dataKey="FeeReserve" stackId="a" fill="#a52a2a">
+   <LabelList content={(props) => <CustomizedLabel {...props} dataKey="FeeReserve" chartData={cumulativeChartData} />} />
+ </Bar>
+ <Bar yAxisId="left" dataKey="DryPowder" stackId="a" fill="#D2B48C">
+   <LabelList content={(props) => <CustomizedLabel {...props} dataKey="DryPowder" chartData={cumulativeChartData} />} />
+ </Bar>      
+     <Tooltip />
+  <Tooltip />
+
+
+ </ComposedChart>
+</ResponsiveContainer>
+</div>
     <div className={`flex ${styles.tableWrapper}`}>
       <div>
       <h1>Input: Incremental Deployment by Quarter</h1>
@@ -579,39 +613,7 @@ import React, { useMemo, useState } from 'react';
        
       
       </div>
-      <div style={{ position: 'relative',height: '550px' }}>
-   
-      <ResponsiveContainer width="100%" height="100%" className="chartContainer">
-    <ComposedChart  data={cumulativeChartData}>
-      <XAxis dataKey="name" />
-      <YAxis yAxisId="left" label={{ value: 'Millions Deployed', angle: -90, position: 'insideLeft' }} />
-<YAxis yAxisId="right" orientation="right" label={{ value: 'Gross and Net IRR', angle: 90, position: 'insideRight' }} />
-      <Legend />
-      <Bar yAxisId="left" dataKey="QuantelaGroup" stackId="a" fill="#89CFF0">
-      <LabelList content={(props) => <CustomizedLabel {...props} dataKey="QuantelaGroup" chartData={cumulativeChartData} />} />
-    </Bar>
-    <Bar yAxisId="left" dataKey="PacketFabricGroup" stackId="a" fill="#7393B3">
-      <LabelList content={(props) => <CustomizedLabel {...props} dataKey="PacketFabricGroup" chartData={cumulativeChartData} />} />
-    </Bar>
-    <Bar yAxisId="left" dataKey="OtherGroup" stackId="a" fill="#191970">
-      <LabelList content={(props) => <CustomizedLabel {...props} dataKey="OtherGroup" chartData={cumulativeChartData} />} />
-    </Bar>
-    <Bar yAxisId="left" dataKey="FeesActual" stackId="a" fill="#a52a2a">
-      <LabelList content={(props) => <CustomizedLabel {...props} dataKey="FeesActual" chartData={cumulativeChartData} />} />
-    </Bar>
-    <Bar yAxisId="left" dataKey="FeeReserve" stackId="a" fill="#a52a2a">
-      <LabelList content={(props) => <CustomizedLabel {...props} dataKey="FeeReserve" chartData={cumulativeChartData} />} />
-    </Bar>
-    <Bar yAxisId="left" dataKey="DryPowder" stackId="a" fill="#D2B48C">
-      <LabelList content={(props) => <CustomizedLabel {...props} dataKey="DryPowder" chartData={cumulativeChartData} />} />
-    </Bar>      
-        <Tooltip />
-     <Tooltip />
-
-
-    </ComposedChart>
-  </ResponsiveContainer>
-</div>
+     
      
       <div>
       <h1>Outputs: Cumulative Deployment by Quarter</h1>

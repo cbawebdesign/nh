@@ -207,7 +207,43 @@ const StackedBarChart = () => {
   return (
 <div className={`flex flex-col space-y-4 pb-36 justify-start ${styles.tablesContainer}`}>    {/* ... */}
   {/* ... */}
+  <div className={`chartContainer ${styles.chartContainer}`}>      
 
+<ResponsiveContainer width="100%" height={650}>
+<BarChart data={cumulativeChartData}>
+  <CartesianGrid strokeDasharray="3 3" />
+  <XAxis dataKey="name" />
+  <YAxis>
+  <Label value="Millions Deployed" angle={-90} position='insideLeft' />
+</YAxis>
+  <Tooltip />
+  <Legend />
+  <Bar dataKey="Starlite" stackId="a" fill="#8884d8">
+    <LabelList content={(props) => renderCustomizedLabel(props, 'Starlite')} />
+  </Bar>
+  <Bar dataKey="UnitasGlobal" stackId="a" fill="#82ca9d">
+    <LabelList content={(props) => renderCustomizedLabel(props, 'UnitasGlobal')} />
+  </Bar>
+  <Bar dataKey="WeLink" stackId="a" fill="#89CFF0">
+    <LabelList content={(props) => renderCustomizedLabel(props, 'WeLink')} />
+  </Bar>
+  <Bar dataKey="FeesActual" stackId="a" fill="#191970">
+    <LabelList content={(props) => renderCustomizedLabel(props, 'FeesActual')} />
+  </Bar>
+  <Bar dataKey="FeeReserve" stackId="a" fill="#a52a2a">
+    <LabelList content={(props) => renderCustomizedLabel(props, 'FeeReserve')} />
+  </Bar>
+
+  <Bar dataKey="DryPowder" stackId="a" fill="#D2B48C">
+    <LabelList content={(props) => renderCustomizedLabel(props, 'DryPowder')} />
+  </Bar>
+
+</BarChart>
+
+</ResponsiveContainer>
+
+
+</div>
   <div className={`flex ${styles.tableWrapper}`}>
   <h1>Input: Incremental Deployment by Quarter</h1>
     <div className={styles.table}>
@@ -297,43 +333,7 @@ const StackedBarChart = () => {
        
       
       
-      <div className={`chartContainer ${styles.chartContainer}`}>      
-
-      <ResponsiveContainer width="100%" height={650}>
-      <BarChart data={cumulativeChartData}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
-        <YAxis>
-        <Label value="Millions Deployed" angle={-90} position='insideLeft' />
-      </YAxis>
-        <Tooltip />
-        <Legend />
-        <Bar dataKey="Starlite" stackId="a" fill="#8884d8">
-          <LabelList content={(props) => renderCustomizedLabel(props, 'Starlite')} />
-        </Bar>
-        <Bar dataKey="UnitasGlobal" stackId="a" fill="#82ca9d">
-          <LabelList content={(props) => renderCustomizedLabel(props, 'UnitasGlobal')} />
-        </Bar>
-        <Bar dataKey="WeLink" stackId="a" fill="#89CFF0">
-          <LabelList content={(props) => renderCustomizedLabel(props, 'WeLink')} />
-        </Bar>
-        <Bar dataKey="FeesActual" stackId="a" fill="#191970">
-          <LabelList content={(props) => renderCustomizedLabel(props, 'FeesActual')} />
-        </Bar>
-        <Bar dataKey="FeeReserve" stackId="a" fill="#a52a2a">
-          <LabelList content={(props) => renderCustomizedLabel(props, 'FeeReserve')} />
-        </Bar>
-      
-        <Bar dataKey="DryPowder" stackId="a" fill="#D2B48C">
-          <LabelList content={(props) => renderCustomizedLabel(props, 'DryPowder')} />
-        </Bar>
-      
-      </BarChart>
-      
-    </ResponsiveContainer>
-
-    
-</div>
+     
      
 <div>
     <h1>Outputs: Cumulative Deployment by Quarter</h1>
