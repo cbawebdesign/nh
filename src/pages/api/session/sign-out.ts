@@ -17,7 +17,9 @@ const SUPPORTED_HTTP_METHODS: HttpMethod[] = ['POST'];
 async function signOut(req: NextApiRequest, res: NextApiResponse) {
   await signOutServerSession(req, res);
 
-  res.send({ success: true });
+  return res.json({
+    success: true,
+  });
 }
 
 export default function sessionSignOutHandler(

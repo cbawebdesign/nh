@@ -10,6 +10,7 @@ import logger from '~/core/logger';
 const SESSION_COOKIE_NAME = 'session';
 const SESSION_EXPIRES_AT_COOKIE_NAME = 'sessionExpiresAt';
 const SESSION_CSRF_SECRET_COOKIE = `csrfSecret`;
+const ORGANIZATION_ID_COOKIE = 'organizationId';
 const COOKIE_PATH = '/';
 
 type Req = NextApiRequest | GetServerSidePropsContext['req'];
@@ -25,21 +26,18 @@ export async function signOutServerSession(req: Req, res: Res) {
   // we cannot delete nor sign the user out
   // so, we end the request
   if (!sessionCookie) {
-    logger.warn(`No session cookie was provided`);
-
     return;
   }
 
   try {
     await revokeCookie(sessionCookie);
-
-    destroySessionCookies(res);
   } catch (e) {
     const error = e instanceof Error ? e.message : e;
-    logger.warn(
-      `Could not destroy user's session: ${error}. Removing cookies.`,
-    );
 
+    logger.debug(
+      `Could not destroy user's session: ${error}. Removing cookies...`,
+    );
+  } finally {
     destroySessionCookies(res);
   }
 }
@@ -54,7 +52,6 @@ async function revokeCookie(sessionCookie: string) {
 
 /**
  * @description destroy session cookies to sign user out
- * @param res
  */
 function destroySessionCookies(res: Res) {
   const options = { path: COOKIE_PATH };
@@ -62,4 +59,5 @@ function destroySessionCookies(res: Res) {
   destroyCookie({ res }, SESSION_COOKIE_NAME, options);
   destroyCookie({ res }, SESSION_EXPIRES_AT_COOKIE_NAME, options);
   destroyCookie({ res }, SESSION_CSRF_SECRET_COOKIE, options);
+  destroyCookie({ res }, ORGANIZATION_ID_COOKIE, options);
 }

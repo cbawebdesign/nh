@@ -45,9 +45,18 @@ function Index() {
                   ' from-blue-400 to-blue-700 leading-[1.2]'
                 }
               >
-                Admin Analytics
+                Limited Partner Dashboard
               </span>
+              <span
+    className={
+      'text-center text-2xl text-gray-600 dark:text-white md:text-3xl' +
+      ' flex flex-col font-heading font-medium xl:text-5xl 2xl:text-[4.2rem]'
+    }
+  >
+    Fund I
+  </span>
             </HeroTitle>
+            
 
             <SubHeading className={'text-center'}>
              

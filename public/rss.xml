@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
     <channel>
-        <title>Digital Alpha</title>
+        <title>T4 Trading Group LLC</title>
         <link>http://localhost:3000</link>
-        <description>Analytics</description>
-        <lastBuildDate>Tue, 20 Feb 2024 02:27:02 GMT</lastBuildDate>
+        <description>LP Dashboard</description>
+        <lastBuildDate>Fri, 21 Jun 2024 20:05:37 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>

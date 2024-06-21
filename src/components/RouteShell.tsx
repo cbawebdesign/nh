@@ -1,20 +1,11 @@
 import Head from 'next/head';
 import dynamic from 'next/dynamic';
 
+import { useSigninCheck } from 'reactfire';
+
 import configuration from '~/configuration';
 import { LayoutStyle } from '~/core/layout-style';
 import Layout from '~/core/ui/Layout';
-
-const Sonner = dynamic(
-  async () => {
-    const { Toaster } = await import('sonner');
-
-    return Toaster;
-  },
-  {
-    ssr: false,
-  },
-);
 
 const FirebaseFirestoreProvider = dynamic(
   () => import('~/core/firebase/components/FirebaseFirestoreProvider'),
@@ -34,27 +25,36 @@ const RouteShellWithTopNavigation = dynamic(
   () => import('./layouts/header/RouteShellWithTopNavigation'),
 );
 
-const redirectPathWhenSignedOut = '/';
+const Toaster = dynamic(() => import('~/core/ui/Toaster'), {
+  ssr: false,
+});
 
-const RouteShell: React.FCC<{
-  title: string;
+type RouteShellProps = (
+  | {
+      title: string | React.ReactNode;
+      description?: string | React.ReactNode;
+    }
+  | {
+      header?: React.ReactNode;
+    }
+) & {
   style?: LayoutStyle;
-}> = ({ title, style, children }) => {
-  const layout = style ?? configuration.navigation.style;
+};
+
+const RouteShell: React.FCC<RouteShellProps> = (props) => {
+  const redirectPath = useRedirectPathWhenSignedOut();
 
   return (
     <FirebaseFirestoreProvider>
-      <Head>
-        <title key="title">{title}</title>
-      </Head>
+      <PageTitle title={'title' in props && props.title} />
 
-      <GuardedPage whenSignedOut={redirectPathWhenSignedOut}>
+      <GuardedPage whenSignedOut={redirectPath}>
         <SentryProvider>
           <Layout>
-            <Sonner richColors position={'top-center'} />
+            <Toaster position={'top-center'} />
 
-            <LayoutRenderer style={layout} title={title}>
-              {children}
+            <LayoutRenderer {...props}>
+              <OnAuthReady>{props.children}</OnAuthReady>
             </LayoutRenderer>
           </Layout>
         </SentryProvider>
@@ -63,16 +63,13 @@ const RouteShell: React.FCC<{
   );
 };
 
-function LayoutRenderer(
-  props: React.PropsWithChildren<{
-    title: string;
-    style: LayoutStyle;
-  }>,
-) {
-  switch (props.style) {
+function LayoutRenderer(props: React.PropsWithChildren<RouteShellProps>) {
+  const layout = props.style ?? configuration.navigation.style;
+
+  switch (layout) {
     case LayoutStyle.Sidebar: {
       return (
-        <RouteShellWithSidebar title={props.title}>
+        <RouteShellWithSidebar {...props}>
           {props.children}
         </RouteShellWithSidebar>
       );
@@ -80,7 +77,7 @@ function LayoutRenderer(
 
     case LayoutStyle.TopHeader: {
       return (
-        <RouteShellWithTopNavigation title={props.title}>
+        <RouteShellWithTopNavigation {...props}>
           {props.children}
         </RouteShellWithTopNavigation>
       );
@@ -92,3 +89,43 @@ function LayoutRenderer(
 }
 
 export default RouteShell;
+
+function OnAuthReady(props: React.PropsWithChildren) {
+  const signIn = useSigninCheck();
+
+  if (signIn.status === 'loading') {
+    return null;
+  }
+
+  if (signIn.status === 'error') {
+    return null;
+  }
+
+  if (signIn.data.signedIn) {
+    return props.children;
+  }
+
+  return null;
+}
+
+function useRedirectPathWhenSignedOut() {
+  const paths = configuration.paths;
+
+  const queryParam = new URLSearchParams({
+    signOut: 'true',
+  });
+
+  return `${paths.signIn}?${queryParam.toString()}`;
+}
+
+function PageTitle(props: { title?: string | React.ReactNode }) {
+  if (!props.title || typeof props.title !== 'string') {
+    return null;
+  }
+
+  return (
+    <Head>
+      <title key="title">{props.title}</title>
+    </Head>
+  );
+}

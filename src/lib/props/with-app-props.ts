@@ -12,6 +12,7 @@ import { getUserData } from '~/lib/server/queries';
 
 import createCsrfCookie from '~/core/generic/create-csrf-token';
 import { signOutServerSession } from '~/core/session/sign-out-server-session';
+import logger from '~/core/logger';
 
 const ORGANIZATION_ID_COOKIE_NAME = 'organizationId';
 
@@ -21,6 +22,8 @@ const DEFAULT_OPTIONS = {
   localeNamespaces: <string[]>[],
   requirePlans: <string[]>[],
 };
+
+const requireEmailVerification = configuration.auth.requireEmailVerification;
 
 /**
  * @description A server props pipe to fetch the selected user and the organization
@@ -34,39 +37,60 @@ export async function withAppProps(
   const mergedOptions = getAppPropsOptions(ctx.locale, options);
   const { redirectPath, requirePlans } = mergedOptions;
 
+  const forceSignOut = async () => {
+    // clear session cookies to avoid stale data
+    await signOutServerSession(ctx.req, ctx.res);
+
+    return redirectToLogin({
+      returnUrl: ctx.resolvedUrl,
+      redirectPath,
+      signOut: true,
+    });
+  };
+
+  await initializeFirebaseAdminApp();
+
+  let metadata: Awaited<ReturnType<typeof getUserAuthMetadata>>;
+
   try {
-    await initializeFirebaseAdminApp();
+    metadata = await getUserAuthMetadata(ctx);
+  } catch (error) {
+    logger.debug(
+      {
+        error,
+      },
+      'Encountered an error while retrieving user metadata. Forcing sign out...',
+    );
 
-    const metadata = await getUserAuthMetadata(ctx);
+    return forceSignOut();
+  }
 
-    // if for any reason we're not able to fetch the user's data, we redirect
-    // back to the login page
-    if (!metadata) {
-      // clear session cookies to avoid stale data
-      await signOutServerSession(ctx.req, ctx.res);
+  // if for any reason we're not able to fetch the user's data, we redirect
+  // back to the login page
+  if (!metadata) {
+    return forceSignOut();
+  }
 
-      return redirectToLogin({
-        returnUrl: ctx.resolvedUrl,
-        redirectPath,
-        signOut: true,
-      });
-    }
-
+  try {
     const userId = metadata.uid;
     const isEmailVerified = metadata.emailVerified;
 
-    const requireEmailVerification =
-      configuration.auth.requireEmailVerification;
+    // check if the user has an email/password provider linked to their account
+    // if they don't, we don't need to verify their email
+    const userHasProviderWithEmailVerification =
+      metadata.signInProvider === 'password';
 
-    // when the user is not yet verified and we require email verification
-    // redirect them back to the login page
-    if (!isEmailVerified && requireEmailVerification) {
-      return redirectToLogin({
-        returnUrl: ctx.resolvedUrl,
-        redirectPath,
-        needsEmailVerification: true,
-        signOut: true,
-      });
+    // we check if the user needs to verify their email
+    if (requireEmailVerification) {
+      // if the user is not yet verified, we redirect them back to the login
+      if (!isEmailVerified && userHasProviderWithEmailVerification) {
+        return redirectToLogin({
+          returnUrl: ctx.resolvedUrl,
+          redirectPath,
+          needsEmailVerification: true,
+          signOut: true,
+        });
+      }
     }
 
     const isOnboarded = Boolean(metadata?.customClaims?.onboarded);
@@ -141,16 +165,15 @@ export async function withAppProps(
         ...translationProps,
       },
     };
-  } catch (e) {
-    await signOutServerSession(ctx.req, ctx.res);
+  } catch (error) {
+    logger.warn(
+      {
+        error,
+      },
+      'Encountered an error while retrieving app data. Forcing sign out...',
+    );
 
-    // if the user is signed out, we save the requested URL
-    // so, we can redirect them to where they originally navigated to
-    return redirectToLogin({
-      returnUrl: ctx.resolvedUrl,
-      redirectPath,
-      signOut: true,
-    });
+    return forceSignOut();
   }
 }
 
@@ -200,8 +223,18 @@ function redirectToLogin({
 
 async function getUserAuthMetadata(ctx: GetServerSidePropsContext) {
   const user = await getLoggedInUser(ctx);
+  const data = await getUserInfoById(user.uid);
 
-  return getUserInfoById(user.uid);
+  if (!data) {
+    return;
+  }
+
+  const signInProvider = user.firebase.sign_in_provider;
+
+  return {
+    ...data,
+    signInProvider,
+  };
 }
 
 function saveOrganizationInCookies(
@@ -243,7 +276,7 @@ function getAppPropsOptions(
 function getUiProps(ctx: GetServerSidePropsContext) {
   const cookies = parseCookies(ctx);
   const sidebarState = cookies['sidebarState'] ?? 'expanded';
-  const theme = cookies['theme'] ?? 'light';
+  const theme = cookies['theme'] ?? configuration.theme;
 
   return {
     sidebarState,

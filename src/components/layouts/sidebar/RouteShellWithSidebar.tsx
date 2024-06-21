@@ -1,41 +1,57 @@
 import { useEffect } from 'react';
 
 import { isBrowser } from '~/core/generic/is-browser';
-import AppHeaderNoMenu from './AppHeaderNoMenu';
-import Heading from '~/core/ui/Heading';
 import AppSidebar from './AppSidebar';
+import { Page, PageBody, PageHeader } from '~/core/ui/Page';
+import MobileAppNavigation from '~/components/MobileNavigation';
 
-const RouteShellWithSidebar: React.FCC<{
-  title: string;
-}> = ({ title, children }) => {
+type HeaderProps =
+  | {
+      title: string | React.ReactNode;
+      description?: string | React.ReactNode;
+    }
+  | {
+      header: React.ReactNode;
+    };
+
+export type RouteShellWithSidebarProps = HeaderProps | {};
+
+const RouteShellWithSidebar: React.FCC<RouteShellWithSidebarProps> = ({
+  children,
+  ...props
+}) => {
   useDisableBodyScrolling();
 
   return (
-    <div className={'flex h-full flex-1 overflow-hidden'}>
-      <div className={'hidden lg:block'}>
-        <AppSidebar />
-      </div>
+    <Page sidebar={<AppSidebar />}>
+      <RouteShellHeader {...props} />
 
-      <div
-        className={
-          'relative mx-auto h-screen w-full overflow-y-auto flex flex-col'
-        }
-      >
-        <AppHeaderNoMenu>
-          <div className={'w-full'}>
-            <Heading type={5}>
-              <span className={'font-medium dark:text-white'}>{title}</span>
-            </Heading>
-          </div>
-        </AppHeaderNoMenu>
-
-        <div className={'p-3 flex flex-col flex-1'}>{children}</div>
-      </div>
-    </div>
+      <PageBody>{children}</PageBody>
+    </Page>
   );
 };
 
 export default RouteShellWithSidebar;
+
+function RouteShellHeader(props: RouteShellWithSidebarProps) {
+  const isVoid = !props || !('title' in props || 'header' in props);
+
+  if (isVoid) {
+    return null;
+  }
+
+  if ('header' in props) {
+    return props.header;
+  }
+
+  return (
+    <PageHeader
+      mobileNavigation={<MobileAppNavigation />}
+      title={props.title}
+      description={props.description}
+    />
+  );
+}
 
 function useDisableBodyScrolling() {
   useEffect(() => {

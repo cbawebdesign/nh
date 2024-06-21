@@ -20,83 +20,85 @@ import EmailPasswordSignInContainer from '~/components/auth/EmailPasswordSignInC
 import PhoneNumberSignInContainer from '~/components/auth/PhoneNumberSignInContainer';
 import EmailLinkAuth from '~/components/auth/EmailLinkAuth';
 import AuthPageLayout from '~/components/auth/AuthPageLayout';
+import ClientOnly from '~/core/ui/ClientOnly';
 
 const signUpPath = configuration.paths.signUp;
 const appHome = configuration.paths.appHome;
+const providers = configuration.auth.providers;
 
 const FORCE_SIGN_OUT_QUERY_PARAM = 'signOut';
 const NEEDS_EMAIL_VERIFICATION_QUERY_PARAM = 'needsEmailVerification';
 
 export const SignIn = () => {
   const router = useRouter();
-  const auth = useAuth();
   const { t } = useTranslation();
 
-  const shouldForceSignOut = useShouldSignOut();
   const shouldVerifyEmail = useShouldVerifyEmail();
 
-  const onSignIn = useCallback(async () => {
+  const onSignIn = useCallback(() => {
     const path = getRedirectPathWithoutSearchParam(appHome);
 
     return router.replace(path);
   }, [router]);
 
-  // force user signOut if the query parameter has been passed
-  useEffect(() => {
-    if (shouldForceSignOut) {
-      void auth.signOut();
-    }
-  }, [auth, shouldForceSignOut]);
-
   return (
-    <AuthPageLayout heading={<Trans i18nKey={'auth:signInHeading'} />}>
-      <Head>
-        <title key={'title'}>{t(`auth:signIn`)}</title>
-      </Head>
+    <>
+      <ClientOnly>
+        <SignOutRedirectHandler />
+      </ClientOnly>
 
-      <OAuthProviders onSignIn={onSignIn} />
+      <AuthPageLayout heading={<Trans i18nKey={'auth:signInHeading'} />}>
+        <Head>
+          <title key={'title'}>{t(`auth:signIn`)}</title>
+        </Head>
 
-      <If condition={configuration.auth.providers.emailPassword}>
-        <span className={'text-xs text-gray-400'}>
-          <Trans i18nKey={'auth:orContinueWithEmail'} />
-        </span>
 
-        <EmailPasswordSignInContainer
-          shouldVerifyEmail={shouldVerifyEmail}
-          onSignIn={onSignIn}
-        />
-      </If>
+        <If condition={providers.emailPassword}>
+        
+          <EmailPasswordSignInContainer
+            shouldVerifyEmail={shouldVerifyEmail}
+            onSignIn={onSignIn}
+          />
+        </If>
 
-      <If condition={configuration.auth.providers.phoneNumber}>
-        <PhoneNumberSignInContainer onSignIn={onSignIn} />
-      </If>
+        <If condition={providers.phoneNumber}>
+          <PhoneNumberSignInContainer onSignIn={onSignIn} />
+        </If>
 
-      <If condition={configuration.auth.providers.emailLink}>
-        <EmailLinkAuth />
-      </If>
+        <If condition={providers.emailLink}>
+          <EmailLinkAuth />
+        </If>
 
-      <div className={'flex justify-center text-xs'}>
-        <p className={'flex space-x-1'}>
-          <span>
-            <Trans i18nKey={'auth:doNotHaveAccountYet'} />
-          </span>
-
-          <Link
-            className={'text-primary-800 hover:underline dark:text-primary'}
-            href={signUpPath}
-          >
-            <Trans i18nKey={'auth:signUp'} />
-          </Link>
-        </p>
-      </div>
-    </AuthPageLayout>
+        <div className={'flex justify-center text-xs'}>
+         
+        </div>
+      </AuthPageLayout>
+    </>
   );
 };
 
 export default SignIn;
 
-export async function getServerSideProps(ctx: GetServerSidePropsContext) {
-  return await withAuthProps(ctx);
+export function getServerSideProps(ctx: GetServerSidePropsContext) {
+  return withAuthProps(ctx);
+}
+
+function SignOutRedirectHandler() {
+  const auth = useAuth();
+  const shouldSignOut = useShouldSignOut();
+
+  // force user signOut if the query parameter has been passed
+  useEffect(() => {
+    if (!isBrowser()) {
+      return;
+    }
+
+    if (shouldSignOut) {
+      void auth.signOut();
+    }
+  }, [auth, shouldSignOut]);
+
+  return null;
 }
 
 function useShouldSignOut() {

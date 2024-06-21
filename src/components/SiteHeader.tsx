@@ -37,7 +37,9 @@ const SiteHeader: React.FCC<{
             <Logo />
           </div>
 
-        
+          <div className={'w-4/12 hidden lg:flex justify-center'}>
+            <SiteNavigation />
+          </div>
 
           <div className={'flex items-center space-x-4 w-4/12 justify-end'}>
             <If condition={configuration.features.enableThemeSwitcher}>
@@ -49,6 +51,7 @@ const SiteHeader: React.FCC<{
             <If condition={userSession?.auth} fallback={<AuthButtons />}>
               {(user) => (
                 <ProfileDropdown
+                  displayName={false}
                   user={user}
                   signOutRequested={signOutRequested}
                 />
@@ -72,12 +75,7 @@ function AuthButtons() {
         <span>Sign In</span>
       </Button>
 
-      <Button round href={configuration.paths.signUp}>
-        <span className={'flex items-center space-x-2'}>
-          <span>Sign Up</span>
-          <ChevronRightIcon className={'h-4'} />
-        </span>
-      </Button>
+      
     </div>
   );
 }

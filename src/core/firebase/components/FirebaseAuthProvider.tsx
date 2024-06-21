@@ -1,11 +1,11 @@
 import React, { Dispatch, useCallback, useEffect, useRef } from 'react';
 import { AuthProvider, useAuth, useFirebaseApp } from 'reactfire';
+import { i18n } from 'next-i18next';
 
 import {
   initializeAuth,
   indexedDBLocalPersistence,
   connectAuthEmulator,
-  inMemoryPersistence,
   User,
 } from 'firebase/auth';
 
@@ -36,12 +36,10 @@ export default function FirebaseAuthProvider({
   setUserSession,
   children,
   useEmulator,
-  language,
 }: React.PropsWithChildren<{
   useEmulator: boolean;
   userSession: Maybe<UserSession>;
   setUserSession: Dispatch<Maybe<UserSession>>;
-  language: string;
 }>) {
   const app = useFirebaseApp();
   const { trigger: signOut } = useDestroySession();
@@ -49,14 +47,15 @@ export default function FirebaseAuthProvider({
 
   // make sure we're not using IndexedDB when SSR
   // as it is only supported on browser environments
-  const persistence = isBrowser()
-    ? indexedDBLocalPersistence
-    : inMemoryPersistence;
+  const persistence = isBrowser() ? indexedDBLocalPersistence : undefined;
 
   const sdk = initializeAuth(app, { persistence });
   const shouldConnectEmulator = useEmulator && !('emulator' in sdk.config);
 
-  sdk.languageCode = language;
+  // set the language code for the SDK
+  if (i18n?.language) {
+    sdk.languageCode = i18n?.language;
+  }
 
   if (shouldConnectEmulator) {
     const host = getAuthEmulatorHost();

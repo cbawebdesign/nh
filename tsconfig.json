@@ -47,9 +47,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts",
-    "types/**/*" // Add this line
-
+    ".next/types/**/*.ts"
   ],
   "ts-node": {
     "files": true

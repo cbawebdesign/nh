@@ -1,4 +1,4 @@
-import { Trans } from 'react-i18next';
+import { Trans } from 'next-i18next';
 import useSWRMutation from 'swr/mutation';
 
 import Modal from '~/core/ui/Modal';
@@ -18,36 +18,27 @@ function DeleteProfileContainer() {
     <div>
       <div className={'flex flex-col space-y-4'}>
         <div className={'flex flex-col space-y-1'}>
-          <Heading type={5}>
+          <Heading type={6}>
             <Trans i18nKey={'profile:deleteAccount'} />
           </Heading>
 
-          <p className={'text-gray-500'}>
+          <p className={'text-gray-500 text-sm'}>
             <Trans i18nKey={'profile:deleteAccountDescription'} />
           </p>
         </div>
 
-        <Modal
-          heading={<Trans i18nKey={'profile:deleteAccount'} />}
-          Trigger={
-            <div className={'flex flex-col space-y-2'}>
-              <div>
-                <Button
-                  data-cy={'delete-account-button'}
-                  variant={'destructive'}
-                >
-                  <Trans i18nKey={'profile:deleteAccount'} />
-                </Button>
-              </div>
-
-              <p className={'text-sm text-gray-500 dark:text-gray-400'}>
-                <Trans i18nKey={'profile:deleteAccountConfirmationHint'} />
-              </p>
-            </div>
-          }
-        >
-          <DeleteProfileForm />
-        </Modal>
+        <div>
+          <Modal
+            heading={<Trans i18nKey={'profile:deleteAccount'} />}
+            Trigger={
+              <Button data-cy={'delete-account-button'} variant={'destructive'}>
+                <Trans i18nKey={'profile:deleteAccount'} />
+              </Button>
+            }
+          >
+            <DeleteProfileForm />
+          </Modal>
+        </div>
       </div>
     </div>
   );
@@ -62,6 +53,7 @@ function DeleteProfileForm() {
         <Alert.Heading>
           <Trans i18nKey={'profile:deleteAccountErrorHeading'} />
         </Alert.Heading>
+
         <Trans i18nKey={'common:genericError'} />
       </Alert>
     );
@@ -79,8 +71,16 @@ function DeleteProfileForm() {
       onSubmit={onAccountDeleteRequested}
     >
       <div className={'flex flex-col space-y-6'}>
-        <div>
-          <Trans i18nKey={'profile:deleteAccountDescription'} />
+        <div className={'border-2 border-red-500 p-4 text-sm text-red-500'}>
+          <div className={'flex flex-col space-y-2'}>
+            <div>
+              <Trans i18nKey={'profile:deleteAccountDescription'} />
+            </div>
+
+            <div>
+              <Trans i18nKey={'common:modalConfirmationQuestion'} />
+            </div>
+          </div>
         </div>
 
         <TextFieldLabel>
@@ -95,10 +95,6 @@ function DeleteProfileForm() {
             pattern={`DELETE`}
           />
         </TextFieldLabel>
-
-        <div>
-          <Trans i18nKey={'common:modalConfirmationQuestion'} />
-        </div>
       </div>
 
       <div className={'flex justify-end space-x-2.5'}>

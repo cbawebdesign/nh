@@ -42,11 +42,11 @@ function DeleteOrganizationContainer() {
   return (
     <div className={'flex flex-col space-y-4'}>
       <div className={'flex flex-col space-y-1'}>
-        <Heading type={5}>
+        <Heading type={6}>
           <Trans i18nKey={'organization:deleteOrganization'} />
         </Heading>
 
-        <p className={'text-gray-500'}>
+        <p className={'text-gray-500 text-sm'}>
           <Trans
             i18nKey={'organization:deleteOrganizationDescription'}
             values={{
@@ -56,10 +56,10 @@ function DeleteOrganizationContainer() {
         </p>
       </div>
 
-      <Modal
-        heading={<Trans i18nKey={'organization:deletingOrganization'} />}
-        Trigger={
-          <div>
+      <div>
+        <Modal
+          heading={<Trans i18nKey={'organization:deletingOrganization'} />}
+          Trigger={
             <Button
               data-cy={'delete-organization-button'}
               type={'button'}
@@ -67,15 +67,15 @@ function DeleteOrganizationContainer() {
             >
               <Trans i18nKey={'organization:deleteOrganization'} />
             </Button>
-          </div>
-        }
-      >
-        <If condition={organization}>
-          {({ name, id }) => (
-            <DeleteOrganizationForm organization={{ name, id }} />
-          )}
-        </If>
-      </Modal>
+          }
+        >
+          <If condition={organization}>
+            {({ name, id }) => (
+              <DeleteOrganizationForm organization={{ name, id }} />
+            )}
+          </If>
+        </Modal>
+      </div>
     </div>
   );
 }
@@ -96,17 +96,24 @@ function DeleteOrganizationForm({
       }}
     >
       <div className={'flex flex-col space-y-4'}>
-        <div>
-          <Trans
-            i18nKey={'organization:deleteOrganizationDisclaimer'}
-            values={{
-              organizationName: organization?.name,
-            }}
-          />
-        </div>
+        <div
+          className={
+            'border-2 border-red-500 p-4 text-sm text-red-500' +
+            ' flex flex-col space-y-2'
+          }
+        >
+          <div>
+            <Trans
+              i18nKey={'organization:deleteOrganizationDisclaimer'}
+              values={{
+                organizationName: organization?.name,
+              }}
+            />
+          </div>
 
-        <div>
-          <Trans i18nKey={'common:modalConfirmationQuestion'} />
+          <div className={'text-sm'}>
+            <Trans i18nKey={'common:modalConfirmationQuestion'} />
+          </div>
         </div>
 
         <TextFieldLabel>
@@ -172,7 +179,7 @@ function LeaveOrganizationContainer() {
           }
         >
           <div className={'flex flex-col space-y-6'}>
-            <div>
+            <div className={'text-sm'}>
               <Trans
                 i18nKey={'organization:leaveOrganizationDisclaimer'}
                 values={{
@@ -181,7 +188,7 @@ function LeaveOrganizationContainer() {
               />
             </div>
 
-            <div>
+            <div className={'text-sm'}>
               <Trans i18nKey={'common:modalConfirmationQuestion'} />
             </div>
 

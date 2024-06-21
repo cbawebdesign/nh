@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
-import { Trans } from 'next-i18next';
+import { Trans, useTranslation } from 'next-i18next';
 
 import Plans from '~/components/subscriptions/Plans';
 import SettingsPageContainer from '~/components/settings/SettingsPageContainer';
@@ -11,7 +11,7 @@ import { withAppProps } from '~/lib/props/with-app-props';
 
 import If from '~/core/ui/If';
 import Alert from '~/core/ui/Alert';
-import SettingsTile from '~/components/settings/SettingsTile';
+import { Section, SectionBody, SectionHeader } from '~/core/ui/Section';
 
 enum SubscriptionStatusQueryParams {
   Success = 'success',
@@ -21,21 +21,25 @@ enum SubscriptionStatusQueryParams {
 
 const Subscription = () => {
   const status = useSubscriptionStatus();
+  const { t } = useTranslation();
 
   return (
-    <SettingsPageContainer title={'Settings'}>
+    <SettingsPageContainer title={t(`common:settingsTabLabel`)}>
       <Head>
-        <title key="title">Subscription</title>
+        <title key="title">{t('common:subscriptionSettingsTabLabel')}</title>
       </Head>
 
       <div className={'w-full'}>
-        <SettingsTile
-          heading={<Trans i18nKey={'common:subscriptionSettingsTabLabel'} />}
-          subHeading={
-            <Trans i18nKey={'subscription:subscriptionTabSubheading'} />
-          }
-        >
-          <div className={'flex flex-col space-y-4'}>
+        <Section className={'border-transparent'}>
+          <SectionHeader
+            className={'!p-0'}
+            title={<Trans i18nKey={'common:subscriptionSettingsTabLabel'} />}
+            description={
+              <Trans i18nKey={'subscription:subscriptionTabSubheading'} />
+            }
+          />
+
+          <SectionBody>
             <If condition={status !== undefined}>
               <PlansStatusAlert
                 status={status as SubscriptionStatusQueryParams}
@@ -43,8 +47,8 @@ const Subscription = () => {
             </If>
 
             <Plans />
-          </div>
-        </SettingsTile>
+          </SectionBody>
+        </Section>
       </div>
     </SettingsPageContainer>
   );

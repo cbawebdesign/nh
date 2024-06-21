@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Trans } from 'react-i18next';
+import { Trans } from 'next-i18next';
 
 import {
   ComputerDesktopIcon,
@@ -55,6 +55,7 @@ const DarkModeToggle = () => {
           size={'icon'}
           variant={'custom'}
           data-cy={'dark-mode-toggle'}
+          aria-label={'Toggle dark mode'}
           className={
             'flex items-center !rounded-full border-transparent transition-shadow' +
             ' !bg-transparent hover:shadow-xl dark:border-transparent' +

@@ -9,12 +9,12 @@ enum Themes {
 
 const configuration = {
   site: {
-    name: 'Digital Alpha',
-    description: 'Analytics',
+    name: 'T4 Trading Group LLC',
+    description: 'LP Dashboard',
     themeColor: '#ffffff',
     themeColorDark: '#0a0a0a',
     siteUrl: process.env.NEXT_PUBLIC_SITE_URL as string,
-    siteName: 'Digital Alpha',
+    siteName: 'T4 Trading Group LLC',
     twitterHandle: '',
     githubHandle: '',
     convertKitFormId: '',
@@ -45,16 +45,15 @@ const configuration = {
       emailLink: false,
       oAuth: [GoogleAuthProvider],
     },
-    // use redirect or popup. By default, we use the popup strategy
-    // the redirect strategy needs additional setup:
-    // https://firebase.google.com/docs/auth/web/redirect-best-practices
+    // Use Redirect or Popup strategy for oAuth.
+    // By default, we use the redirect strategy.
     useRedirectStrategy: true,
   },
   environment: process.env.NODE_ENV ?? 'development',
   emulatorHost: process.env.NEXT_PUBLIC_EMULATOR_HOST,
   emulator: process.env.NEXT_PUBLIC_EMULATOR === 'true',
   production: process.env.NODE_ENV === 'production',
-  theme: Themes.Dark,
+  theme: Themes.Light,
   features: {
     enableThemeSwitcher: true,
     enableAccountDeletion: getBoolean(
@@ -71,10 +70,11 @@ const configuration = {
     signUp: '/auth/sign-up',
     emailLinkSignIn: '/auth/link',
     onboarding: `/onboarding`,
-    appHome: '/fundoneover',
-    fundone: '/fundone',
+    appHome: '/settings/profile/authentication',
     settings: {
       profile: '/settings/profile',
+      organization: '/settings/organization',
+      subscription: '/settings/subscription',
       authentication: '/settings/profile/authentication',
       email: '/settings/profile/email',
       password: '/settings/profile/password',

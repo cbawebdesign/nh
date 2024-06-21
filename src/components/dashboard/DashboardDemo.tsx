@@ -1,297 +1,216 @@
-import { Line, ResponsiveContainer, LineChart, XAxis } from 'recharts';
-import { useMemo } from 'react';
-
-import Tile from '~/core/ui/Tile';
-import Heading from '~/core/ui/Heading';
-
+import React, { useState } from 'react';
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '~/core/ui/Table';
+  ResponsiveContainer,
+  AreaChart,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  CartesianGrid,
+  Area,
+  Line,
+} from 'recharts';
 
-import { useUserSession } from '~/core/hooks/use-user-session';
-import { Title } from '@radix-ui/react-dialog';
+interface DataEntry {
+  month: string;
+  profit: number;
+  startingBalance: number;
+  endingBalance: number;
+  trades: { ticker: string; profit: number }[];
+  platformFee: number;
+  commissions: number;
+  cumulativeProfit: number;
+}
 
 export default function DashboardDemo() {
-  const mrr = useMemo(() => generateDemoData(), []);
-  const visitors = useMemo(() => generateDemoData(), []);
-  const returningVisitors = useMemo(() => generateDemoData(), []);
-  const churn = useMemo(() => generateDemoData(), []);
-  const netRevenue = useMemo(() => generateDemoData(), []);
-  const fees = useMemo(() => generateDemoData(), []);
-  const newCustomers = useMemo(() => generateDemoData(), []);
-  const tickets = useMemo(() => generateDemoData(), []);
-  const activeUsers = useMemo(() => generateDemoData(), []);
+  const [includeFees, setIncludeFees] = useState(true);
+  const [expandedMonth, setExpandedMonth] = useState<string | null>(null);
 
-  return (
-    <div className={'flex flex-col space-y-6 pb-36'}>
-      <UserGreetings />
-      <p>IN DEVELOPMENT-DRAFT</p>
+  const initialBalance = 7930.02;
+  const platformFee = 250;
 
-      <div
-        className={
-          'grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3' +
-          ' xl:grid-cols-4'
-        }
-      >
-        <Tile>
-          <Tile.Heading>New Customers</Tile.Heading>
+  const data: Omit<DataEntry, 'startingBalance' | 'endingBalance' | 'cumulativeProfit'>[] = [
+    {
+      month: 'January',
+      profit: 1228.31,
+      trades: [
+        { ticker: 'NVDA', profit: 507.16 },
+        { ticker: 'SPY', profit: 400.00 },
+        { ticker: 'QQQ', profit: -120.90 },
+        { ticker: 'SMCI', profit: 328.31 }
+      ],
+      platformFee,
+      commissions: 49.80
+    },
+    {
+      month: 'February',
+      profit: -50.39,
+      trades: [
+        { ticker: 'GME', profit: -100.00 },
+        { ticker: 'TSLA', profit: 20.61 },
+        { ticker: 'AAPL', profit: 29.00 }
+      ],
+      platformFee,
+      commissions: 80.11
+    },
+    {
+      month: 'March',
+      profit: 852.97,
+      trades: [
+        { ticker: 'LRCX', profit: 500.00 },
+        { ticker: 'AVGO', profit: 300.00 },
+        { ticker: 'SMCI', profit: 52.97 }
+      ],
+      platformFee,
+      commissions: 76.83
+    },
+    {
+      month: 'April',
+      profit: 915.48,
+      trades: [
+        { ticker: 'TSLA', profit: 500.00 },
+        { ticker: 'QQQ', profit: 415.48 },
+        { ticker: 'AAPL', profit: -100.00 }
+      ],
+      platformFee,
+      commissions: 61.08
+    },
+    {
+      month: 'May',
+      profit: -210.85,
+      trades: [
+        { ticker: 'AVGO', profit: -150.00 },
+        { ticker: 'GME', profit: -60.85 }
+      ],
+      platformFee,
+      commissions: 48.92
+    },
+    {
+      month: 'June',
+      profit: 692.08,
+      trades: [
+        { ticker: 'SPY', profit: 300.00 },
+        { ticker: 'VIX', profit: 192.08 },
+        { ticker: 'AAPL', profit: 200.00 }
+      ],
+      platformFee,
+      commissions: 24.15
+    }
+  ];
 
-          <Tile.Body>
-            <div className={'flex justify-between'}>
-              <Tile.Figure>{`$${mrr[1]}`}</Tile.Figure>
-              <Tile.Trend trend={'up'}>0%</Tile.Trend>
-            </div>
-
-            <Chart data={mrr[0]} />
-          </Tile.Body>
-        </Tile>
-
-        <Tile>
-          <Tile.Heading>Existing Customers</Tile.Heading>
-
-          <Tile.Body>
-            <div className={'flex justify-between'}>
-              <Tile.Figure>{`$${netRevenue[1]}`}</Tile.Figure>
-              <Tile.Trend trend={'up'}>12%</Tile.Trend>
-            </div>
-
-            <Chart data={netRevenue[0]} />
-          </Tile.Body>
-        </Tile>
-
-        <Tile>
-          <Tile.Heading>Outgoing Files</Tile.Heading>
-
-          <Tile.Body>
-            <div className={'flex justify-between'}>
-              <Tile.Figure>{`$${fees[1]}`}</Tile.Figure>
-              <Tile.Trend trend={'up'}>9%</Tile.Trend>
-            </div>
-
-            <Chart data={fees[0]} />
-          </Tile.Body>
-        </Tile>
-
-        <Tile>
-          <Tile.Heading>Incoming Files</Tile.Heading>
-
-          <Tile.Body>
-            <div className={'flex justify-between'}>
-              <Tile.Figure>{`${newCustomers[1]}`}</Tile.Figure>
-              <Tile.Trend trend={'down'}>-25%</Tile.Trend>
-            </div>
-
-            <Chart data={newCustomers[0]} />
-          </Tile.Body>
-        </Tile>
-
-        <Tile>
-          <Tile.Heading>Placeholder</Tile.Heading>
-
-          <Tile.Body>
-            <div className={'flex justify-between'}>
-              <Tile.Figure>{visitors[1]}</Tile.Figure>
-              <Tile.Trend trend={'down'}>-4.3%</Tile.Trend>
-            </div>
-
-            <Chart data={visitors[0]} />
-          </Tile.Body>
-        </Tile>
-
-        <Tile>
-          <Tile.Heading>Placeholder</Tile.Heading>
-
-          <Tile.Body>
-            <div className={'flex justify-between'}>
-              <Tile.Figure>{returningVisitors[1]}</Tile.Figure>
-              <Tile.Trend trend={'stale'}>10%</Tile.Trend>
-            </div>
-
-            <Chart data={returningVisitors[0]} />
-          </Tile.Body>
-        </Tile>
-
-        <Tile>
-          <Tile.Heading>Placeholder</Tile.Heading>
-
-          <Tile.Body>
-            <div className={'flex justify-between'}>
-              <Tile.Figure>{churn[1]}%</Tile.Figure>
-              <Tile.Trend trend={'up'}>-10%</Tile.Trend>
-            </div>
-
-            <Chart data={churn[0]} />
-          </Tile.Body>
-        </Tile>
-
-        <Tile>
-          <Tile.Heading>Placeholder</Tile.Heading>
-
-          <Tile.Body>
-            <div className={'flex justify-between'}>
-              <Tile.Figure>{tickets[1]}</Tile.Figure>
-              <Tile.Trend trend={'up'}>-30%</Tile.Trend>
-            </div>
-
-            <Chart data={tickets[0]} />
-          </Tile.Body>
-        </Tile>
-      </div>
-
-      <div>
-        <Tile>
-          <Tile.Heading>Placeholder</Tile.Heading>
-
-          <Tile.Body>
-            <div className={'flex justify-between'}>
-              <Tile.Figure>{activeUsers[1]}</Tile.Figure>
-              <Tile.Trend trend={'up'}>10%</Tile.Trend>
-            </div>
-
-            <Chart data={activeUsers[0]} />
-          </Tile.Body>
-        </Tile>
-      </div>
-
-      <div>
-        <Tile>
-          <Tile.Heading>Placeholder</Tile.Heading>
-
-          <Tile.Body>
-            <CustomersTable></CustomersTable>
-          </Tile.Body>
-        </Tile>
-      </div>
-    </div>
-  );
-}
-
-function UserGreetings() {
-  const user = useUserSession();
-  const userDisplayName = user?.auth?.displayName ?? user?.auth?.email ?? '';
-
-  return (
-    <div>
-      <Heading type={4}>Welcome Back, {userDisplayName}</Heading>
-
-      <p className={'text-gray-500 dark:text-gray-400'}>
-        <span>Here&apos;s what is happening across your business</span>
-      </p>
-    </div>
-  );
-}
-
-function generateDemoData() {
-  const today = new Date();
-
-  const formatter = new Intl.DateTimeFormat('en-us', {
-    month: 'long',
-    year: '2-digit',
+  let balance = initialBalance;
+  let cumulativeProfit = 0;
+  const processedData: DataEntry[] = data.map((entry) => {
+    const profit = includeFees ? entry.profit - entry.platformFee - entry.commissions : entry.profit;
+    cumulativeProfit += profit;
+    const startingBalance = balance;
+    const endingBalance = startingBalance + profit;
+    balance = endingBalance;
+    return { ...entry, profit, startingBalance, endingBalance, cumulativeProfit: parseFloat(cumulativeProfit.toFixed(2)) };
   });
 
-  const data: { value: string; name: string }[] = [];
+  const toggleMonth = (month: string) => {
+    setExpandedMonth(expandedMonth === month ? null : month);
+  };
 
-  for (let n = 8; n > 0; n -= 1) {
-    const date = new Date(today.getFullYear(), today.getMonth() - n, 1);
-
-    data.push({
-      name: formatter.format(date) as string,
-      value: (Math.random() * 10).toFixed(1),
-    });
-  }
-
-  return [data, data[data.length - 1].value] as [typeof data, string];
-}
-
-function Chart(
-  props: React.PropsWithChildren<{ data: { value: string; name: string }[] }>,
-) {
   return (
-    <div className={'h-36'}>
-      <ResponsiveContainer width={'100%'} height={'100%'}>
-        <LineChart data={props.data}>
-          <Line
-            className={'text-primary'}
-            type="monotone"
-            dataKey="value"
-            stroke="currentColor"
-            strokeWidth={2.5}
-            dot={false}
-          />
+    <div className="flex flex-col min-h-screen p-6 space-y-6 text-sm">
+      <h1 className="text-xl font-bold mb-4">Monthly Trading Totals</h1>
 
-          <XAxis
-            style={{ fontSize: 9 }}
-            axisLine={false}
-            tickSize={0}
-            dataKey="name"
-            height={15}
-            dy={10}
-          />
-        </LineChart>
-      </ResponsiveContainer>
+      <div className="flex justify-end mb-4">
+        <select defaultValue="2024">
+          <option value="2024">2024</option>
+        </select>
+      </div>
+
+      <div className="w-full">
+        <ResponsiveContainer width="100%" height={400}>
+          <AreaChart data={processedData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="month" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Area type="monotone" dataKey="cumulativeProfit" stroke="#8884d8" fill="#8884d8" fillOpacity={0.8} />
+            <Line type="monotone" dataKey="platformFee" stroke="#FF0000" strokeWidth={2} />
+            <Line type="monotone" dataKey="commissions" stroke="#00FF00" strokeWidth={2} />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
+
+      <button
+        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded self-start"
+        onClick={() => setIncludeFees(!includeFees)}
+      >
+        {includeFees ? 'Exclude All Fees' : 'Include All Fees'}
+      </button>
+
+      <div className="w-full mt-6">
+        <table className="min-w-full divide-y divide-gray-200 text-left">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider">Month</th>
+              <th className="px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider">Profit/Loss</th>
+              <th className="px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider">Platform Fee</th>
+              <th className="px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider">Commissions</th>
+              <th className="px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider">Starting Balance</th>
+              <th className="px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider">Ending Balance</th>
+              <th className="px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {processedData.map((entry, index) => (
+              <React.Fragment key={index}>
+                <tr onClick={() => toggleMonth(entry.month)} className="cursor-pointer">
+                  <td className="px-4 py-2 whitespace-nowrap">{entry.month}</td>
+                  <td
+                    className={`px-4 py-2 whitespace-nowrap ${
+                      entry.profit < 0 ? 'text-red-500' : 'text-green-500'
+                    }`}
+                  >
+                    {entry.profit.toFixed(2)}
+                  </td>
+                  <td className="px-4 py-2 whitespace-nowrap text-red-500">{entry.platformFee.toFixed(2)}</td>
+                  <td className="px-4 py-2 whitespace-nowrap text-red-500">{entry.commissions.toFixed(2)}</td>
+                  <td className="px-4 py-2 whitespace-nowrap">{entry.startingBalance.toFixed(2)}</td>
+                  <td className="px-4 py-2 whitespace-nowrap">{entry.endingBalance.toFixed(2)}</td>
+                  <td className="px-4 py-2 whitespace-nowrap">
+                    {expandedMonth === entry.month ? '▲' : '▼'}
+                  </td>
+                </tr>
+                {expandedMonth === entry.month && (
+                  <tr>
+                    <td colSpan={7} className="px-4 py-2 whitespace-nowrap bg-gray-50">
+                      <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-100">
+                          <tr>
+                            <th className="px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider">Ticker</th>
+                            <th className="px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider">Profit/Loss</th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                          {entry.trades.map((trade, tradeIndex) => (
+                            <tr key={tradeIndex}>
+                              <td className="px-4 py-2 whitespace-nowrap">{trade.ticker}</td>
+                              <td
+                                className={`px-4 py-2 whitespace-nowrap ${
+                                  trade.profit < 0 ? 'text-red-500' : 'text-green-500'
+                                }`}
+                              >
+                                {trade.profit.toFixed(2)}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                )}
+              </React.Fragment>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
-  );
-}
-
-function CustomersTable() {
-  return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Placeholder</TableHead>
-          <TableHead>Placeholder</TableHead>
-          <TableHead>Placeholder</TableHead>
-          <TableHead>Placeholder</TableHead>
-          <TableHead>Placeholder</TableHead>
-        </TableRow>
-      </TableHeader>
-
-      <TableBody>
-        <TableRow>
-          <TableCell>Placeholder</TableCell>
-          <TableCell>Placeholder</TableCell>
-          <TableCell>Placeholder</TableCell>
-          <TableCell>Placeholder</TableCell>
-          <TableCell>
-            <Tile.Badge trend={'up'}>Placeholder</Tile.Badge>
-          </TableCell>
-        </TableRow>
-
-        <TableRow>
-          <TableCell>Placeholder</TableCell>
-          <TableCell>Placeholder</TableCell>
-          <TableCell>Placeholder</TableCell>
-          <TableCell>Placeholder</TableCell>
-          <TableCell>
-            <Tile.Badge trend={'stale'}>Placeholder</Tile.Badge>
-          </TableCell>
-        </TableRow>
-
-        <TableRow>
-          <TableCell>Placeholder</TableCell>
-          <TableCell>Placeholder</TableCell>
-          <TableCell>Placeholder</TableCell>
-          <TableCell></TableCell>
-          <TableCell>
-            <Tile.Badge trend={'up'}>Placeholder</Tile.Badge>
-          </TableCell>
-        </TableRow>
-
-        <TableRow>
-          <TableCell>Placeholder</TableCell>
-          <TableCell>Placeholder</TableCell>
-          <TableCell>Placeholder</TableCell>
-          <TableCell>Placeholder</TableCell>
-          <TableCell>
-            <Tile.Badge trend={'down'}>Placeholder</Tile.Badge>
-          </TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
   );
 }

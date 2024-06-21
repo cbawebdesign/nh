@@ -1,70 +1,94 @@
 import configuration from '~/configuration';
-import { Cog8ToothIcon, MagnifyingGlassPlusIcon, Squares2X2Icon } from '@heroicons/react/24/outline';
 
-const NAVIGATION_CONFIG = {
+import {
+  CreditCardIcon,
+  Squares2X2Icon,
+  UserGroupIcon,
+  UserIcon,
+  ArchiveBoxArrowDownIcon,
+  ClipboardDocumentIcon,
+  NewspaperIcon,
+  ChevronRightIcon,
+  ShieldCheckIcon,
+  ChatBubbleBottomCenterIcon,
+  MapIcon,
+  ChartBarIcon,
+  CogIcon
+  
+
+} from '@heroicons/react/24/outline';
+
+type Divider = {
+  divider: true;
+};
+
+type NavigationItemLink = {
+  label: string;
+  path: string;
+  Icon: (props: { className: string }) => JSX.Element;
+  end?: boolean;
+};
+
+type NavigationGroup = {
+  label: string;
+  collapsible?: boolean;
+  collapsed?: boolean;
+  children: NavigationItemLink[];
+};
+
+type NavigationItem = NavigationItemLink | NavigationGroup | Divider;
+
+type NavigationConfig = {
+  items: NavigationItem[];
+};
+
+const NAVIGATION_CONFIG: NavigationConfig = {
   items: [
-
     {
-      label: 'common:dafonelabel',
-      path: '/dafone',
+      label: 'common:dashboardTabLabel',
+      path: '/dashboard',
       Icon: ({ className }: { className: string }) => {
-        return <MagnifyingGlassPlusIcon className={className} />;
+        return <ChartBarIcon className={className} />;
       },
     },
     {
-      label: 'common:daofonefllabel',
-      path: '/daofonefl',
+      label: 'common:CommunicationsLabel',
+      path: '/communication',
       Icon: ({ className }: { className: string }) => {
-        return <MagnifyingGlassPlusIcon className={className} />;
+        return <CogIcon className={className} />;
+      },
+    },
+    {
+      label: 'common:DistributionsLabel',
+      path: '/distributions',
+      Icon: ({ className }: { className: string }) => {
+        return <ArchiveBoxArrowDownIcon className={className} />;
       },
     },
 
   
-
-    {
-      label: 'common:daofonelabel',
-      path: '/daofone',
-      Icon: ({ className }: { className: string }) => {
-        return <MagnifyingGlassPlusIcon className={className} />;
-      },
-    },
-    {
-      label: 'common:daoftwofllabel',
-      path: '/daoftwofl',
-      Icon: ({ className }: { className: string }) => {
-        return <MagnifyingGlassPlusIcon className={className} />;
-      },
-    },
-    {
-      label: 'common:daoftwolabel',
-      path: '/daoftwo',
-      Icon: ({ className }: { className: string }) => {
-        return <MagnifyingGlassPlusIcon className={className} />;
-      },
-    },
-    {
-      label: 'common:daftwofllabel',
-      path: '/fundoneover',
-      Icon: ({ className }: { className: string }) => {
-        return <MagnifyingGlassPlusIcon className={className} />;
-      },
-    },
-    {
-      label: 'common:daftwolabel',
-      path: '/daftwo',
-      Icon: ({ className }: { className: string }) => {
-        return <MagnifyingGlassPlusIcon className={className} />;
-      },
-    },
-
+  
     {
       label: 'common:settingsTabLabel',
-      path: '/settings',
-      Icon: ({ className }: { className: string }) => {
-        return <Cog8ToothIcon className={className} />;
-      },
+      collapsible: false,
+      children: [
+        {
+          label: 'common:profileSettingsTabLabel',
+          path: configuration.paths.settings.profile,
+          Icon: ({ className }: { className: string }) => {
+            return <UserIcon className={className} />;
+          },
+        },
+     
+        {
+          label: 'common:AuthTabLabel',
+          path: configuration.paths.settings.authentication,
+          Icon: ({ className }: { className: string }) => {
+            return <ShieldCheckIcon className={className} />;
+          },
+        },
+      ],
     },
- 
   ],
 };
 

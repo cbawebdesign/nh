@@ -1,9 +1,9 @@
 {
     "version": "https://jsonfeed.org/version/1",
-    "title": "Digital Alpha",
+    "title": "T4 Trading Group LLC",
     "home_page_url": "http://localhost:3000",
     "feed_url": "http://localhost:3000/rss.json",
-    "description": "Analytics",
+    "description": "LP Dashboard",
     "author": {},
     "items": [
         {
