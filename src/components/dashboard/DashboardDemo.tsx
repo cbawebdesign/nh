@@ -95,6 +95,17 @@ export default function DashboardDemo() {
       ],
       platformFee,
       commissions: 24.15
+    },
+    {
+      month: 'July',
+      profit: 926.43,
+      trades: [
+        { ticker: 'SPY', profit: 341.00 },
+        { ticker: 'TSLA', profit: 402.08 },
+        { ticker: 'QQQ', profit: -117.01 }
+      ],
+      platformFee,
+      commissions: 18.01
     }
   ];
 
