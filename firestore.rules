@@ -103,6 +103,11 @@ service cloud.firestore {
       }
     }
 
+    match /tasks/{taskId} {
+      allow create: if isSignedIn();
+      allow read, update, delete: if userIsMemberByOrganizationId(existingData().organizationId);
+    }
+
     match /users/{user} {
       allow read: if userId() == user;
     }

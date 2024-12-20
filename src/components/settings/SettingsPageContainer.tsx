@@ -9,7 +9,11 @@ const links = [
     path: '/settings/profile',
     i18n: 'common:profileSettingsTabLabel',
   },
-
+  {
+    path: '/settings/organization',
+    i18n: 'common:organizationSettingsTabLabel',
+  },
+ 
 ];
 
 const SettingsPageContainer: React.FCC<{

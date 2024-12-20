@@ -39,6 +39,17 @@ const PlanSelectionForm: React.FCC<{
         </If>
 
         <div className={'flex w-full flex-col space-y-8'}>
+          <div>
+            <Alert type={'info'}>
+              <Alert.Heading>
+                It&apos;s a test account, don&apos;t worry
+              </Alert.Heading>
+              Use the card 4242 4242 4242 4242 to successfully subscribe to a
+              plan. Don&apos;t worry, it&apos;s a testing account. All the plans
+              point to the same Stripe product.
+            </Alert>
+          </div>
+
           <PricingTable
             CheckoutButton={(props) => {
               return (

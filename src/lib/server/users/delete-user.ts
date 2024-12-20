@@ -110,7 +110,7 @@ async function sendAccountDeleteEmail(params: {
 }) {
   const productName = configuration.site.siteName;
 
-  const accountDeleteEmail = renderAccountDeleteEmail({
+  const accountDeleteEmail = await renderAccountDeleteEmail({
     productName,
     userDisplayName: params.userDisplayName,
   });

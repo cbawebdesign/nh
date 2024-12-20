@@ -11,6 +11,7 @@ import { withAuthedUser } from '~/core/middleware/with-authed-user';
 import { withPipe } from '~/core/middleware/with-pipe';
 import { withMethodsGuard } from '~/core/middleware/with-methods-guard';
 import { withExceptionFilter } from '~/core/middleware/with-exception-filter';
+import { withAppCheck } from '~/core/middleware/with-app-check';
 import withCsrf from '~/core/middleware/with-csrf';
 
 const SUPPORTED_METHODS: HttpMethod[] = ['POST', 'GET'];
@@ -70,6 +71,7 @@ export default function members(req: NextApiRequest, res: NextApiResponse) {
   const handler = withPipe(
     withMethodsGuard(SUPPORTED_METHODS),
     withAuthedUser,
+    withAppCheck,
     membersHandler
   );
 

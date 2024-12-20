@@ -11,13 +11,14 @@ import { CompleteOnboardingStep } from '~/components/onboarding/CompleteOnboardi
 
 import {
   OrganizationInfoStep,
-  OrganizationInfoStepData,
+  OrganizationInfoStepData
 } from '~/components/onboarding/OrganizationInfoStep';
 
 import { withTranslationProps } from '~/lib/props/with-translation-props';
 import { OnboardingLayout } from '~/components/onboarding/OnboardingLayout';
 import { MembershipRole } from '~/lib/organizations/types/membership-role';
 import OrganizationInvitesStep from '~/components/onboarding/OrganizationInvitesStep';
+import { getLoggedInUser } from '~/core/firebase/admin/auth/get-logged-in-user';
 
 type Invite = {
   email: string;
@@ -36,7 +37,7 @@ type Invite = {
 const STEPS: Array<string> = [
   'onboarding:info',
   'onboarding:invites',
-  'onboarding:complete',
+  'onboarding:complete'
 ];
 
 const Onboarding = () => {
@@ -44,10 +45,10 @@ const Onboarding = () => {
     defaultValues: {
       data: {
         organization: '',
-        invites: [] as Invite[],
+        invites: [] as Invite[]
       },
-      currentStep: 0,
-    },
+      currentStep: 0
+    }
   });
 
   const nextStep = useCallback(() => {
@@ -59,7 +60,7 @@ const Onboarding = () => {
       form.setValue('data.organization', organizationInfo.organization);
       nextStep();
     },
-    [form, nextStep],
+    [form, nextStep]
   );
 
   const onInvitesStepSubmitted = useCallback(
@@ -67,7 +68,7 @@ const Onboarding = () => {
       form.setValue('data.invites', invites);
       form.setValue('currentStep', form.getValues('currentStep') + 1);
     },
-    [form],
+    [form]
   );
 
   const currentStep = form.watch('currentStep');
@@ -75,7 +76,7 @@ const Onboarding = () => {
 
   const isStep = useCallback(
     (step: number) => currentStep === step,
-    [currentStep],
+    [currentStep]
   );
 
   return (
@@ -101,17 +102,24 @@ export default Onboarding;
 
 export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   const { props } = await withUserProps(ctx);
-  const user = props.session;
+  const user = await getLoggedInUser(ctx);
 
   if (!user) {
     return redirectToSignIn();
   }
 
-  const isEmailVerified = user.emailVerified;
+  const isEmailVerified = user.email_verified;
   const requireEmailVerification = configuration.auth.requireEmailVerification;
+  const signInProvider = user.firebase.sign_in_provider;
 
-  if (requireEmailVerification && !isEmailVerified) {
-    return redirectToSignIn();
+  const userHasProviderWithEmailVerification =
+    signInProvider === 'password';
+
+  // verify if the user has an email/password provider linked to their account
+  if (userHasProviderWithEmailVerification) {
+    if (requireEmailVerification && !isEmailVerified) {
+      return redirectToSignIn();
+    }
   }
 
   const userData = await getUserData(user.uid);
@@ -123,16 +131,16 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   if (!userData) {
     return {
       ...translationProps,
-      props,
+      props
     };
   }
 
   const { getCurrentOrganization } = await import(
     '~/lib/server/organizations/get-current-organization'
-  );
+    );
 
   const organization = await getCurrentOrganization(user.uid);
-  const { onboarded } = user.customClaims;
+  const onboarded = user.customClaims?.onboarded;
 
   if (onboarded && organization) {
     return redirectToAppHome(ctx.locale);
@@ -140,7 +148,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
 
   return {
     ...translationProps,
-    props,
+    props
   };
 }
 
@@ -149,14 +157,14 @@ function redirectToSignIn() {
 
   const destination = [
     paths.signIn,
-    `?returnUrl=${paths.onboarding}&signOut=true`,
+    `?returnUrl=${paths.onboarding}&signOut=true`
   ].join('/');
 
   return {
     redirect: {
       destination,
-      permanent: false,
-    },
+      permanent: false
+    }
   };
 }
 
@@ -167,8 +175,8 @@ function redirectToAppHome(locale: string | undefined) {
   return {
     redirect: {
       destination,
-      permanent: false,
-    },
+      permanent: false
+    }
   };
 }
 
@@ -186,7 +194,7 @@ async function getUserData(userId: string) {
   if (data) {
     return {
       ...data,
-      id: ref.id,
+      id: ref.id
     };
   }
 }

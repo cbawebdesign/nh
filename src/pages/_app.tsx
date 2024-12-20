@@ -12,7 +12,6 @@ import configuration from '~/configuration';
 
 import FirebaseAppShell from '~/core/firebase/components/FirebaseAppShell';
 import FirebaseAuthProvider from '~/core/firebase/components/FirebaseAuthProvider';
-import FirebaseAppCheckProvider from '~/core/firebase/components/FirebaseAppCheckProvider';
 import FirebaseAnalyticsProvider from '~/core/firebase/components/FirebaseAnalyticsProvider';
 import useCollapsible from '~/core/hooks/use-sidebar-state';
 
@@ -26,6 +25,10 @@ import { ThemeContext } from '~/core/contexts/theme';
 import { CsrfTokenContext } from '~/core/contexts/csrf-token';
 import { loadSelectedTheme } from '~/core/theming';
 import { isBrowser } from '~/core/generic/is-browser';
+
+import { LayoutStyleContext } from '~/lib/contexts/layout';
+import { LayoutStyle } from '~/core/layout-style';
+import { setCookie } from 'nookies';
 
 const AppRouteLoadingIndicator = dynamic(
   () => import('~/core/ui/AppRouteLoadingIndicator'),
@@ -49,6 +52,7 @@ const fontFamilyHeading = fontFamilySans;
 interface UIState {
   sidebarState: string;
   theme: 'light' | 'dark';
+  layout: LayoutStyle;
 }
 
 interface DefaultPageProps extends SSRConfig {
@@ -80,6 +84,10 @@ function App(
   const [userSession, setUserSession] =
     useState<Maybe<UserSession>>(userSessionContext);
 
+  const [layoutStyle, setLayoutStyle] = useState<LayoutStyle>(
+    pageProps.ui?.layout || LayoutStyle.Sidebar,
+  );
+
   const updateCurrentOrganization = useCallback(() => {
     setOrganization(pageProps.organization);
   }, [pageProps.organization]);
@@ -92,33 +100,38 @@ function App(
 
   useEffect(updateCurrentOrganization, [updateCurrentOrganization]);
   useEffect(updateCurrentUser, [updateCurrentUser]);
+  useEffect(() => {
+    setCookie(null, 'layout', layoutStyle);
+  }, [layoutStyle]);
 
   return (
     <FirebaseAppShell config={firebase}>
-      <FirebaseAppCheckProvider>
-        <FirebaseAuthProvider
-          userSession={userSession}
-          setUserSession={setUserSession}
-          useEmulator={emulator}
-        >
-          <UserSessionContext.Provider value={{ userSession, setUserSession }}>
-            <OrganizationContext.Provider
-              value={{ organization, setOrganization }}
-            >
-              <FirebaseAnalyticsProvider>
-                <AppRouteLoadingIndicator />
+      <FirebaseAuthProvider
+        userSession={userSession}
+        setUserSession={setUserSession}
+        useEmulator={emulator}
+      >
+        <UserSessionContext.Provider value={{ userSession, setUserSession }}>
+          <OrganizationContext.Provider
+            value={{ organization, setOrganization }}
+          >
+            <FirebaseAnalyticsProvider>
+              <AppRouteLoadingIndicator />
 
-                <UiStateProvider state={pageProps.ui}>
-                  <CsrfTokenContext.Provider value={pageProps.csrfToken}>
+              <UiStateProvider state={pageProps.ui}>
+                <CsrfTokenContext.Provider value={pageProps.csrfToken}>
+                  <LayoutStyleContext.Provider
+                    value={{ setLayoutStyle, layoutStyle }}
+                  >
                     <FontFamily />
                     <Component {...pageProps} />
-                  </CsrfTokenContext.Provider>
-                </UiStateProvider>
-              </FirebaseAnalyticsProvider>
-            </OrganizationContext.Provider>
-          </UserSessionContext.Provider>
-        </FirebaseAuthProvider>
-      </FirebaseAppCheckProvider>
+                  </LayoutStyleContext.Provider>
+                </CsrfTokenContext.Provider>
+              </UiStateProvider>
+            </FirebaseAnalyticsProvider>
+          </OrganizationContext.Provider>
+        </UserSessionContext.Provider>
+      </FirebaseAuthProvider>
     </FirebaseAppShell>
   );
 }

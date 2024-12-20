@@ -198,7 +198,7 @@ export async function inviteMembers(params: Params) {
   return Promise.allSettled(requests);
 }
 
-function sendInviteEmail(props: {
+async function sendInviteEmail(props: {
   invitedUserEmail: string;
   inviteCode: string;
   organizationName: string;
@@ -223,7 +223,7 @@ function sendInviteEmail(props: {
   const subject = 'You have been invited to join an organization!';
   const link = getInvitePageFullUrl(inviteCode);
 
-  const html = renderInviteEmail({
+  const html = await renderInviteEmail({
     productName,
     link,
     organizationName,

@@ -1,4 +1,3 @@
-import React from 'react';
 import AppHeaderWithMenu from './AppHeaderWithMenu';
 import Container from '~/core/ui/Container';
 

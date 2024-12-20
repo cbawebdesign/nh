@@ -102,7 +102,20 @@ const OrganizationsSelector = ({ displayName }: { displayName: boolean }) => {
                 return router.replace(getDeepLinkPath(organizationId));
               }}
             >
+              <SelectAction>
+                <span
+                  data-cy={'create-organization-button'}
+                  className={'flex flex-row items-center space-x-2 truncate'}
+                >
+                  <PlusCircleIcon className={'h-5'} />
 
+                  <span>
+                    <Trans
+                      i18nKey={'organization:createOrganizationDropdownLabel'}
+                    />
+                  </span>
+                </span>
+              </SelectAction>
             </CreateOrganizationModal>
           </SelectGroup>
         </SelectContent>

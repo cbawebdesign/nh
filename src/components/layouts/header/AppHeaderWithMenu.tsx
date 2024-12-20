@@ -1,6 +1,7 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useAuth } from 'reactfire';
 import dynamic from 'next/dynamic';
+import { Cog8ToothIcon } from '@heroicons/react/24/outline';
 
 import { useUserSession } from '~/core/hooks/use-user-session';
 
@@ -9,6 +10,8 @@ import Container from '~/core/ui/Container';
 
 import ProfileDropdown from '../../ProfileDropdown';
 import AppNavigation from './AppNavigation';
+import DemoSettingsModal from '~/components/DemoSettingsModal';
+import Button from '~/core/ui/Button';
 
 import HeaderSubscriptionStatusBadge from '~/components/subscriptions/HeaderSubscriptionStatusBadge';
 import OrganizationsSelector from '~/components/organizations/OrganizationsSelector';
@@ -18,6 +21,7 @@ const MobileNavigation = dynamic(() => import('~/components/MobileNavigation'));
 const AppHeaderWithMenu: React.FCC = ({ children }) => {
   const userSession = useUserSession();
   const auth = useAuth();
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const signOutRequested = useCallback(() => {
     return auth.signOut();
@@ -37,6 +41,19 @@ const AppHeaderWithMenu: React.FCC = ({ children }) => {
             </div>
 
             <div className={'flex flex-1 justify-end space-x-4'}>
+              <Button
+                size={'small'}
+                className={'hidden md:block'}
+                variant={'ghost'}
+                onClick={() => setSettingsOpen(true)}
+              >
+                <span className={'flex items-center space-x-2'}>
+                  <Cog8ToothIcon className={'h-6'} />
+
+                  <span>Demo Settings</span>
+                </span>
+              </Button>
+
               <div className={'hidden items-center lg:flex'}>
                 <HeaderSubscriptionStatusBadge />
               </div>
@@ -67,6 +84,8 @@ const AppHeaderWithMenu: React.FCC = ({ children }) => {
           </Container>
         </div>
       </div>
+
+      <DemoSettingsModal setIsOpen={setSettingsOpen} isOpen={settingsOpen} />
     </>
   );
 };

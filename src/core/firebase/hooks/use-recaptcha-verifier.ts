@@ -12,7 +12,7 @@ function useRecaptchaVerifier(id: string) {
       {
         size: 'invisible',
       },
-      auth
+      auth,
     );
   }, [auth, id]);
 }

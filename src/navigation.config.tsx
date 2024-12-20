@@ -3,20 +3,11 @@ import configuration from '~/configuration';
 import {
   CreditCardIcon,
   Squares2X2Icon,
+  Square3Stack3DIcon,
   UserGroupIcon,
   UserIcon,
-  ArchiveBoxArrowDownIcon,
-  ClipboardDocumentIcon,
-  NewspaperIcon,
-  ChevronRightIcon,
-  ShieldCheckIcon,
-  ChatBubbleBottomCenterIcon,
-  MapIcon,
-  ChartBarIcon,
-  CogIcon
-  
-
 } from '@heroicons/react/24/outline';
+import { BellIcon, CogIcon, ViewIcon } from 'lucide-react';
 
 type Divider = {
   divider: true;
@@ -45,33 +36,27 @@ type NavigationConfig = {
 const NAVIGATION_CONFIG: NavigationConfig = {
   items: [
     {
-      label: 'common:dashboardTabLabel',
-      path: '/dashboard',
+      label: 'common:watchlistlabel',
+      path: '/watchlist',
       Icon: ({ className }: { className: string }) => {
-        return <ChartBarIcon className={className} />;
+        return <ViewIcon className={className} />;
       },
     },
     {
-      label: 'common:CommunicationsLabel',
-      path: '/communication',
+      label: 'common:alertslabel',
+      path: configuration.paths.appHome,
+      Icon: ({ className }: { className: string }) => {
+        return <BellIcon className={className} />;
+      },
+    },
+    {
+      label: 'common:configlabel',
+      path: '/config',
       Icon: ({ className }: { className: string }) => {
         return <CogIcon className={className} />;
       },
     },
-    {
-      label: 'common:DistributionsLabel',
-      path: '/distributions',
-      Icon: ({ className }: { className: string }) => {
-        return <ArchiveBoxArrowDownIcon className={className} />;
-      },
-    },
-
-  
-  
-    {
-      label: 'common:settingsTabLabel',
-      collapsible: false,
-      children: [
+    
         {
           label: 'common:profileSettingsTabLabel',
           path: configuration.paths.settings.profile,
@@ -79,16 +64,9 @@ const NAVIGATION_CONFIG: NavigationConfig = {
             return <UserIcon className={className} />;
           },
         },
-     
-        {
-          label: 'common:AuthTabLabel',
-          path: configuration.paths.settings.authentication,
-          Icon: ({ className }: { className: string }) => {
-            return <ShieldCheckIcon className={className} />;
-          },
-        },
-      ],
-    },
+    
+  
+   
   ],
 };
 

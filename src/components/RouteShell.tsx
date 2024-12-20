@@ -6,6 +6,8 @@ import { useSigninCheck } from 'reactfire';
 import configuration from '~/configuration';
 import { LayoutStyle } from '~/core/layout-style';
 import Layout from '~/core/ui/Layout';
+import { LayoutStyleContext } from '~/lib/contexts/layout';
+import { isBrowser } from '~/core/generic/is-browser';
 
 const FirebaseFirestoreProvider = dynamic(
   () => import('~/core/firebase/components/FirebaseFirestoreProvider'),
@@ -51,11 +53,17 @@ const RouteShell: React.FCC<RouteShellProps> = (props) => {
       <GuardedPage whenSignedOut={redirectPath}>
         <SentryProvider>
           <Layout>
-            <Toaster position={'top-center'} />
+            <Toaster richColors={false} position={'top-center'} />
 
-            <LayoutRenderer {...props}>
-              <OnAuthReady>{props.children}</OnAuthReady>
-            </LayoutRenderer>
+            <LayoutStyleContext.Consumer>
+              {({ layoutStyle }) => {
+                return (
+                  <LayoutRenderer style={layoutStyle} {...props}>
+                    <OnAuthReady>{props.children}</OnAuthReady>
+                  </LayoutRenderer>
+                );
+              }}
+            </LayoutStyleContext.Consumer>
           </Layout>
         </SentryProvider>
       </GuardedPage>

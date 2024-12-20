@@ -1,3 +1,5 @@
+import { GetStaticPropsContext } from 'next';
+
 import Head from 'next/head';
 import { Trans } from 'next-i18next';
 
@@ -69,11 +71,11 @@ const NotFoundPage = () => {
   );
 };
 
-export async function getStaticProps() {
-  const { props } = await withTranslationProps();
+export async function getStaticProps({ locale }: GetStaticPropsContext) {
+  const { props } = await withTranslationProps({ locale });
 
   return {
-    props,
+    props
   };
 }
 

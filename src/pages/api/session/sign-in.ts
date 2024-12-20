@@ -18,7 +18,6 @@ import { withAdmin } from '~/core/middleware/with-admin';
 import { withPipe } from '~/core/middleware/with-pipe';
 import { withMethodsGuard } from '~/core/middleware/with-methods-guard';
 import { withExceptionFilter } from '~/core/middleware/with-exception-filter';
-import withCsrf from '~/core/middleware/with-csrf';
 
 const SUPPORTED_HTTP_METHODS: HttpMethod[] = ['POST'];
 
@@ -61,7 +60,6 @@ export default function sessionSignInHandler(
   res: NextApiResponse
 ) {
   const handler = withPipe(
-    withCsrf(),
     withMethodsGuard(SUPPORTED_HTTP_METHODS),
     withAdmin,
     signIn

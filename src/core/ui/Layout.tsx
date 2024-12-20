@@ -1,4 +1,5 @@
 import Head from 'next/head';
+
 import configuration from '~/configuration';
 import { useContext } from 'react';
 import { ThemeContext } from '~/core/contexts/theme';

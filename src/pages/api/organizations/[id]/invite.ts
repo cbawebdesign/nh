@@ -16,6 +16,7 @@ import { withPipe } from '~/core/middleware/with-pipe';
 import { withMethodsGuard } from '~/core/middleware/with-methods-guard';
 import { withExceptionFilter } from '~/core/middleware/with-exception-filter';
 import withCsrf from '~/core/middleware/with-csrf';
+import { withAppCheck } from '~/core/middleware/with-app-check';
 
 const SUPPORTED_METHODS: HttpMethod[] = ['POST'];
 
@@ -76,6 +77,7 @@ export default function inviteHandler(
     withMethodsGuard(SUPPORTED_METHODS),
     withCsrf(),
     withAuthedUser,
+    withAppCheck,
     inviteMembersToOrganizationHandler
   );
 

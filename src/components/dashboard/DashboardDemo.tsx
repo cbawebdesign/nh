@@ -1,226 +1,99 @@
-import React, { useState } from 'react';
-import {
-  ResponsiveContainer,
-  AreaChart,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Legend,
-  CartesianGrid,
-  Area,
-  Line,
-} from 'recharts';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import Link from 'next/link';
+import LogoImage from '~/core/ui/Logo/LogoImage';
 
-interface DataEntry {
-  month: string;
-  profit: number;
-  startingBalance: number;
-  endingBalance: number;
-  trades: { ticker: string; profit: number }[];
-  platformFee: number;
-  commissions: number;
-  cumulativeProfit: number;
+export interface AlertTrigger {
+    time: string;
+    alert: string;
+    alertName: string;
+    watchlist: string;
+    message: string;
+    symbol: string;
 }
 
 export default function DashboardDemo() {
-  const [includeFees, setIncludeFees] = useState(true);
-  const [expandedMonth, setExpandedMonth] = useState<string | null>(null);
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [alerts, setAlerts] = useState<AlertTrigger[]>([
+    { time: "10:00 AM", alert: "Price Drop", alertName: "Alert 1", watchlist: "Watchlist A", message: "Price dropped", symbol: "AAPL" },
+    { time: "11:00 AM", alert: "Price Rise", alertName: "Alert 2", watchlist: "Watchlist B", message: "Price rose", symbol: "MSFT" }
+  ]);
 
-  const initialBalance = 7930.02;
-  const platformFee = 250;
-
-  const data: Omit<DataEntry, 'startingBalance' | 'endingBalance' | 'cumulativeProfit'>[] = [
-    {
-      month: 'January',
-      profit: 1228.31,
-      trades: [
-        { ticker: 'NVDA', profit: 507.16 },
-        { ticker: 'SPY', profit: 400.00 },
-        { ticker: 'QQQ', profit: -120.90 },
-        { ticker: 'SMCI', profit: 328.31 }
-      ],
-      platformFee,
-      commissions: 49.80
-    },
-    {
-      month: 'February',
-      profit: -50.39,
-      trades: [
-        { ticker: 'GME', profit: -100.00 },
-        { ticker: 'TSLA', profit: 20.61 },
-        { ticker: 'AAPL', profit: 29.00 }
-      ],
-      platformFee,
-      commissions: 80.11
-    },
-    {
-      month: 'March',
-      profit: 852.97,
-      trades: [
-        { ticker: 'LRCX', profit: 500.00 },
-        { ticker: 'AVGO', profit: 300.00 },
-        { ticker: 'SMCI', profit: 52.97 }
-      ],
-      platformFee,
-      commissions: 76.83
-    },
-    {
-      month: 'April',
-      profit: 915.48,
-      trades: [
-        { ticker: 'TSLA', profit: 500.00 },
-        { ticker: 'QQQ', profit: 415.48 },
-        { ticker: 'AAPL', profit: -100.00 }
-      ],
-      platformFee,
-      commissions: 61.08
-    },
-    {
-      month: 'May',
-      profit: -210.85,
-      trades: [
-        { ticker: 'AVGO', profit: -150.00 },
-        { ticker: 'GME', profit: -60.85 }
-      ],
-      platformFee,
-      commissions: 48.92
-    },
-    {
-      month: 'June',
-      profit: 692.08,
-      trades: [
-        { ticker: 'SPY', profit: 300.00 },
-        { ticker: 'VIX', profit: 192.08 },
-        { ticker: 'AAPL', profit: 200.00 }
-      ],
-      platformFee,
-      commissions: 24.15
-    },
-    {
-      month: 'July',
-      profit: 926.43,
-      trades: [
-        { ticker: 'SPY', profit: 341.00 },
-        { ticker: 'TSLA', profit: 402.08 },
-        { ticker: 'QQQ', profit: -117.01 }
-      ],
-      platformFee,
-      commissions: 18.01
-    }
-  ];
-
-  let balance = initialBalance;
-  let cumulativeProfit = 0;
-  const processedData: DataEntry[] = data.map((entry) => {
-    const profit = includeFees ? entry.profit - entry.platformFee - entry.commissions : entry.profit;
-    cumulativeProfit += profit;
-    const startingBalance = balance;
-    const endingBalance = startingBalance + profit;
-    balance = endingBalance;
-    return { ...entry, profit, startingBalance, endingBalance, cumulativeProfit: parseFloat(cumulativeProfit.toFixed(2)) };
-  });
-
-  const toggleMonth = (month: string) => {
-    setExpandedMonth(expandedMonth === month ? null : month);
-  };
+  useEffect(() => {
+    const darkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    setTheme(darkMode ? "dark" : "light");
+  }, []);
 
   return (
-    <div className="flex flex-col min-h-screen p-6 space-y-6 text-sm">
-      <h1 className="text-xl font-bold mb-4">Monthly Trading Totals</h1>
+    <div
+      className={`relative min-h-screen ${
+        theme === "dark" ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-800"
+      }`}
+    >
+      {/* Dynamic Background */}
+      <div
+        className={`absolute inset-0 ${
+          theme === "dark"
+            ? "bg-gradient-to-br from-gray-800 via-gray-900 to-black"
+            : "bg-gradient-to-br from-blue-50 via-blue-100 to-purple-200"
+        } z-0`}
+        style={{
+          backgroundAttachment: "fixed",
+        }}
+      ></div>
 
-      <div className="flex justify-end mb-4">
-        <select defaultValue="2024">
-          <option value="2024">2024</option>
-        </select>
-      </div>
+      {/* Dashboard Content */}
+      <div className="relative z-10 flex flex-col items-center p-6 space-y-6">
+        {/* Logo and Header */}
+        <LogoImage style={{ width: "160px", height: "100px" }} />
+        <h1 className="text-4xl font-extrabold tracking-tight text-center">
+          Welcome to your Trade Companion Dashboard
+        </h1>
+        <p className="text-center max-w-prose text-lg italic">
+          Monitor your alerts and watchlists below.
+        </p>
 
-      <div className="w-full">
-        <ResponsiveContainer width="100%" height={400}>
-          <AreaChart data={processedData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="month" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Area type="monotone" dataKey="cumulativeProfit" stroke="#8884d8" fill="#8884d8" fillOpacity={0.8} />
-            <Line type="monotone" dataKey="platformFee" stroke="#FF0000" strokeWidth={2} />
-            <Line type="monotone" dataKey="commissions" stroke="#00FF00" strokeWidth={2} />
-          </AreaChart>
-        </ResponsiveContainer>
-      </div>
+        {/* Alerts List */}
+        <div className="w-full max-w-6xl bg-opacity-70 rounded-xl shadow-2xl backdrop-blur-lg p-6">
+          {/* Alerts Header */}
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-2xl font-bold tracking-wide">
+              Alerts
+            </h2>
+          </div>
 
-      <button
-        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded self-start"
-        onClick={() => setIncludeFees(!includeFees)}
-      >
-        {includeFees ? 'Exclude All Fees' : 'Include All Fees'}
-      </button>
-
-      <div className="w-full mt-6">
-        <table className="min-w-full divide-y divide-gray-200 text-left">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider">Month</th>
-              <th className="px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider">Profit/Loss</th>
-              <th className="px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider">Platform Fee</th>
-              <th className="px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider">Commissions</th>
-              <th className="px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider">Starting Balance</th>
-              <th className="px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider">Ending Balance</th>
-              <th className="px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {processedData.map((entry, index) => (
-              <React.Fragment key={index}>
-                <tr onClick={() => toggleMonth(entry.month)} className="cursor-pointer">
-                  <td className="px-4 py-2 whitespace-nowrap">{entry.month}</td>
-                  <td
-                    className={`px-4 py-2 whitespace-nowrap ${
-                      entry.profit < 0 ? 'text-red-500' : 'text-green-500'
-                    }`}
-                  >
-                    {entry.profit.toFixed(2)}
-                  </td>
-                  <td className="px-4 py-2 whitespace-nowrap text-red-500">{entry.platformFee.toFixed(2)}</td>
-                  <td className="px-4 py-2 whitespace-nowrap text-red-500">{entry.commissions.toFixed(2)}</td>
-                  <td className="px-4 py-2 whitespace-nowrap">{entry.startingBalance.toFixed(2)}</td>
-                  <td className="px-4 py-2 whitespace-nowrap">{entry.endingBalance.toFixed(2)}</td>
-                  <td className="px-4 py-2 whitespace-nowrap">
-                    {expandedMonth === entry.month ? '▲' : '▼'}
-                  </td>
+          {/* Alerts Table */}
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse">
+              <thead className="bg-gray-200 dark:bg-gray-700">
+                <tr>
+                  <th className="px-6 py-3 text-left">Time</th>
+                  <th className="px-6 py-3 text-left">Alert</th>
+                  <th className="px-6 py-3 text-left">Watchlist</th>
+                  <th className="px-6 py-3 text-left">Symbol</th>
+                  <th className="px-6 py-3 text-left">Message</th>
                 </tr>
-                {expandedMonth === entry.month && (
-                  <tr>
-                    <td colSpan={7} className="px-4 py-2 whitespace-nowrap bg-gray-50">
-                      <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-100">
-                          <tr>
-                            <th className="px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider">Ticker</th>
-                            <th className="px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider">Profit/Loss</th>
-                          </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                          {entry.trades.map((trade, tradeIndex) => (
-                            <tr key={tradeIndex}>
-                              <td className="px-4 py-2 whitespace-nowrap">{trade.ticker}</td>
-                              <td
-                                className={`px-4 py-2 whitespace-nowrap ${
-                                  trade.profit < 0 ? 'text-red-500' : 'text-green-500'
-                                }`}
-                              >
-                                {trade.profit.toFixed(2)}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </td>
+              </thead>
+              <tbody>
+                {alerts.map((alert, index) => (
+                  <tr
+                    key={index}
+                    className="transition duration-200 transform hover:scale-[1.01] hover:shadow-lg hover:rounded-lg hover:border-[2px] hover:border-transparent hover:bg-gradient-to-r hover:from-blue-500 hover:via-cyan-500 hover:to-purple-500"
+                  >
+                    <td className="px-6 py-3 font-medium">{alert.time}</td>
+                    <td className="px-6 py-3">{alert.alert}</td>
+                    <td className="px-6 py-3">{alert.watchlist}</td>
+                    <td className="px-6 py-3">{alert.symbol}</td>
+                    <td className="px-6 py-3">{alert.message}</td>
                   </tr>
-                )}
-              </React.Fragment>
-            ))}
-          </tbody>
-        </table>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <Link href="/anotherPage">
+          <a className="text-blue-500 hover:underline">Go to another page</a>
+        </Link>
       </div>
     </div>
   );
